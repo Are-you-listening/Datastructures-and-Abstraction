@@ -20,14 +20,3 @@ class Zaal:
         :param plaatsen: integer
         """
         pass
-
-    def get_plaatsen(self):
-        """
-        Geeft terug hoeveel plaatsen er in deze zaal zijn
-
-        precondities: Er worden geen parameters gegeven
-        postcondities: Er wordt teruggegeven hoeveel plaatsen er in de zaal zijn
-
-        :return: plaatsen: integer
-        """
-        pass

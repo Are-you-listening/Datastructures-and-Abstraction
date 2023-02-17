@@ -22,24 +22,7 @@ class Reservatie:
         :param aantal_plaatsen: integer
         :param tijdstip: integer
         :param gebruiker_id: integer
+        :param key: is gelijk aan een input variabel naar keuze (zoek in datastructuren)
         """
-        pass
 
-    def get_vertoning_id(self):
-        """
-        Geeft het vertonings-id terug dat overeenkomt met de reservatie
-        precondities: Het vertoning-id is een positieve integer
-        postcondities: Er wordt een vertongings-id teruggeven.
-        :return: geeft de integer self.vertoning_id terug.
-        """
         pass
-
-    def get_plaatsen(self):
-        """
-        Geeft terug voor hoeveel plaatsen de reservatie geldt.
-        precondities: Het aantal plaatsen is een integer groter dan 0
-        postcondities: Er wordt teruggeven voor hoeveel plaatsen de reservatie geldt.
-        :return: geeft de integer self.aantal_plaatsen terug.
-        """
-        pass
-

@@ -33,6 +33,7 @@ class Vertoning:
         :param zaalnummer: integer
         :param slot: integer
         :param vrije_plaatsen: integer
+        :param: afspelend: bool
         """
 
         pass
@@ -73,15 +74,8 @@ class Vertoning:
         """
         pass
 
-    def get_zaal_nummer(self):
-        """
-        Geeft het zaalnummer terug van de vertoning.
-
-        preconditie: self.zaalnummer is een positieve integer
-        postconditie: er wordt een zaalnummer teruggegeven
-
-        :return: geeft de integer self.zaalnummer terug
-        """
+    def check_vol(self):
         pass
+        """valideert of alle plaatsen vol is, geeft een bool terug"""
 
 

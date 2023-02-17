@@ -21,9 +21,13 @@ class Reservatiesysteem:
         precondities: er worden geen parameters gegeven
         postconditie: een Reservatiesysteem object wordt aangemaakt
         """
+        """
+        :param id counter (universeel)
+        :param interne paramater met alle tijdslots
+        """
         pass
 
-    def maak_gebruiker(self, id, voornaam, achternaam, mail):
+    def maak_gebruiker(self, voornaam, achternaam, mail):
         """
         Maakt een nieuwe gebruiker aan en bewaard die in self.gebruikers
 
@@ -37,7 +41,9 @@ class Reservatiesysteem:
         """
         pass
 
-    def maak_film(self, id, titel, rating):
+    #private hulpfunctie per klasse die aangeroepen wordt in maak_.... (roept constructor van klasse aan)
+
+    def maak_film(self,titel, rating):
         """
         Maakt een nieuwe film aan en bewaard die in self.films
 
@@ -63,7 +69,7 @@ class Reservatiesysteem:
         """
         pass
 
-    def maak_vertoning(self, id, filmid, zaalnummer, slot):
+    def maak_vertoning(self,filmid, zaalnummer, slot):
         """
         Maakt een nieuwe vertoning aan en bewaard die in self.vertoningen
 
@@ -103,6 +109,13 @@ class Reservatiesysteem:
 
         pass
 
+    def convert_date(self):
+        """converteert datum naar seconden"""
+        pass
+    def convert_time(self):
+        pass
+        """converteert seconden naar daum"""
+
     def set_time(self, value):
         """
         zet het huidige tijdstip naar een andere waarde
@@ -131,11 +144,20 @@ class Reservatiesysteem:
         precondities: er worden geen parameter gegeven.
         postconditie: er wordt een reservatie object teruggeven
 
+        A. getTop of queeue: & check voorwaarden
+
+        1. deque + lokaal opslagen
+        2. aantal personen in de zaal verminderen
+        3. check vol
+
+        END: voeg toe aan reservatie archive
+
         :return: reservatie object dat vanvoor aan de queu staat
+        :return: of de reservatie succersvol is verwerkt
         """
         pass
 
-    def verlaag_plaatsen(self, vertoningid, plaatsen):
+    def verlaag_plaatsen(self, vertoningid, plaatsen): #private functie
         """
         Verminderd het aantal vrije plaatsen in een voorstelling.
 
@@ -148,7 +170,7 @@ class Reservatiesysteem:
         """
         pass
 
-    def verwijder_reservatie(self):
+    def verwijder_reservatie(self): #private function
         """
         verwijder de reservatie van voren aan de queue en bewaar die in het reservatie archief
 
@@ -158,29 +180,6 @@ class Reservatiesysteem:
 
         pass
 
-    def start_vertoning(self, vertoningid):
-        """
-        De vertoning wordt gestart
-
-        precondities: het is het juiste tijdstip en het vertoning id is een geldig id
-        postconditie: de vertoning wordt gestart
-
-        :param vertoningid: (het id van de vertoning)
-
-        """
-        pass
-
-    def stop_vertoning(self, vertoningid):
-        """
-        De vertoning wordt gestopt en alle plaatsen voor de vertoning worden terug vrij gemaakt
-
-        precondities: het vertoning id is een geldig id
-        postconditie: de vertoning wordt gestart
-
-        :param vertoningid: (het id van de vertoning)
-        """
-        pass
-
     def verwijder_vertoningen(self):
         """
         Verwijdert alle vertoningen
@@ -188,6 +187,8 @@ class Reservatiesysteem:
         precondities: er worden geen parameters gegeven
         postconditie: er bestaan geen vertoningen meer
         """
+
+        """maak nieuwe ketting, overschrijf huidige ketting"""
         pass
 
     def verwijder_films(self):
@@ -197,6 +198,7 @@ class Reservatiesysteem:
         precondities: er worden geen parameters gegeven
         postconditie: er bestaan geen vertoningen meer
         """
+        """maak nieuwe ketting, overschrijf huidige ketting"""
         pass
 
     def verwijder_gebruikers(self):
@@ -206,6 +208,7 @@ class Reservatiesysteem:
         precondities: er worden geen parameters gegeven
         postconditie: er bestaan geen vertoningen meer
         """
+        """maak nieuwe ketting, overschrijf huidige ketting"""
         pass
 
 
