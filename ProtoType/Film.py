@@ -23,4 +23,7 @@ class Film:
         :param titel: string
         :param rating: float
         """
-        pass
+
+        self.id = id
+        self.titel = titel
+        self.rating = rating

@@ -19,4 +19,6 @@ class Zaal:
         :param nummer: integer
         :param plaatsen: integer
         """
-        pass
+
+        self.zaalnummer = nummer
+        self.plaatsen = plaatsen
