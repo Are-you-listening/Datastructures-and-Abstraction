@@ -1,6 +1,12 @@
+from ADT import MyBST, My_BinarySearchTree, MyCircularLinkedChain, MyLinkedChain, MyQueue_Linked, MyTwoThreeFourTree
+from Film import Film
+from Zaal import Zaal
+from Vertoning import Vertoning
+from Reservatie import Reservatie
+from Gebruiker import Gebruiker
 
 """
-Deze ADT geeft een reservatiesysteem weer dat gebruik maakt van de andere ADT's
+Deze ADT geeft een reservatiesysteem weer dat gebruik maakt van de andere ADT
 
 data:
 self.vertoningen: Boom van Vertoning objecten (de aangemaakte vertoningen worden hier bewaard)
@@ -25,7 +31,11 @@ class Reservatiesysteem:
         :param id counter (universeel)
         :param interne paramater met alle tijdslots
         """
-        pass
+
+        self.id_counter = 0
+
+        self.films = MyLinkedChain.LinkedChain()
+        self.zalen = MyLinkedChain.LinkedChain()
 
     def maak_gebruiker(self, voornaam, achternaam, mail):
         """
@@ -55,7 +65,11 @@ class Reservatiesysteem:
         :param titel: string (titel van film)
         :param rating: float (rating van film)
         """
-        pass
+        film_object = Film(self.id_counter, titel, rating)
+
+        self.id_counter += 1
+
+        self.films.insert(0, film_object)
 
     def maak_zaal(self, nummer, maxplaatsen):
         """
@@ -67,7 +81,10 @@ class Reservatiesysteem:
         :param nummer: integer (zaalnummer van de zaal)
         :param maxplaatsen: integer (max plaatsen van de zaal)
         """
-        pass
+
+        zaal_object = Zaal(nummer, maxplaatsen)
+
+        self.zalen.insert(0, zaal_object)
 
     def maak_vertoning(self,filmid, zaalnummer, slot):
         """
@@ -199,7 +216,7 @@ class Reservatiesysteem:
         postconditie: er bestaan geen vertoningen meer
         """
         """maak nieuwe ketting, overschrijf huidige ketting"""
-        pass
+        self.films = MyLinkedChain.LinkedChain()
 
     def verwijder_gebruikers(self):
         """
