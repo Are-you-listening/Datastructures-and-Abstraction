@@ -23,7 +23,10 @@ class Gebruiker:
         :param achternaam: string
         :param mail: string
         """
-        pass
+        self.id = id
+        self.vnaam = voornaam
+        self.anaam = achternaam
+        self.mail = mail
 
     def get_gegevens(self):
         """
@@ -32,4 +35,4 @@ class Gebruiker:
         postcondities: de gebruikers gegevens worden in een tuple teruggegeven (voornaam, achternaam, mail)
         :return: de gebruikersgegevens volgens volgend format (voornaam, achternaam, mail)
         """
-        pass
+        return (self.vnaam, self.anaam, self.mail)

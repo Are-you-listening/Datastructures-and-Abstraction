@@ -33,10 +33,12 @@ class Reservatiesysteem:
         """
 
         self.id_counter = 0
+        self.tijdsstip = 0
 
         self.films = MyLinkedChain.LinkedChain()
         self.zalen = MyLinkedChain.LinkedChain()
         self.vertoningen = My_BinarySearchTree.BSTTable()
+        self.gebruikers = MyLinkedChain.LinkedChain()
 
     def maak_gebruiker(self, voornaam, achternaam, mail):
         """
@@ -50,7 +52,9 @@ class Reservatiesysteem:
         :param achternaam: string (achternaam van de gebruiker)
         :param mail: string (e-amil adres van gebruiker)
         """
-        pass
+        newGebruiker = Gebruiker(self.id_counter, voornaam, achternaam, mail)
+        self.id_counter += 1
+        self.gebruikers.insert(0, newGebruiker)
 
     #private hulpfunctie per klasse die aangeroepen wordt in maak_.... (roept constructor van klasse aan)
 
