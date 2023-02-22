@@ -87,28 +87,6 @@ class Reservatiesysteem:
 
         self.zalen.insert(0, zaal_object)
 
-    def retrieveFilm(self, id): # interne functie. wij moeten nog bespreken hoe we dit soort functies regelen
-        """
-
-        :param id:
-        :return:
-        """
-        l = self.films.save()
-        for w in l:
-            if w.id == id:  # optioneel: dit zou een getter moeten zijn in het geval de datatype naam van self.id verandert. koppeling van software engineering
-                return w
-
-    def retrieveZaal(self, id): # interne functie. wij moeten nog bespreken hoe we dit soort functies regelen
-        """
-
-        :param id:
-        :return:
-        """
-        l = self.zalen.save()
-        for w in l:
-            if w.zaalnummer == id: # optioneel: dit zou een getter moeten zijn in het geval de datatype naam van self.zaalnummer verandert. koppeling van software engineering
-                return w
-
     def maak_vertoning(self, filmid, zaalnummer, slot):
         """
         Maakt een nieuwe vertoning aan en bewaard die in self.vertoningen
@@ -218,6 +196,46 @@ class Reservatiesysteem:
         :param plaatsen: integer (aantal plaatsen dat niet meer beschikbaar zijn)
         """
         pass
+
+    def start(self):
+        """
+        Start de vertoning
+        preconditie: De vertoning start op het juiste tijdstip en er mag geen andere vertoning bezig zijn in deze zaal
+        postconditie: De vertoning wordt gestart (gestart = true)
+        """
+
+        pass
+
+    def stop(self):
+        """
+        Stopt de vertoning
+        preconditie: De film moet al gestart zijn
+        postconditie: De vertoning wordt beëindigd (gestart = false)
+        """
+
+        pass
+
+    def retrieveFilm(self, id): # interne functie. wij moeten nog bespreken hoe we dit soort functies regelen
+        """
+
+        :param id:
+        :return:
+        """
+        l = self.films.save()
+        for w in l:
+            if w.id == id:  # optioneel: dit zou een getter moeten zijn in het geval de datatype naam van self.id verandert. koppeling van software engineering
+                return w
+
+    def retrieveZaal(self, id): # interne functie. wij moeten nog bespreken hoe we dit soort functies regelen
+        """
+
+        :param id:
+        :return:
+        """
+        l = self.zalen.save()
+        for w in l:
+            if w.zaalnummer == id: # optioneel: dit zou een getter moeten zijn in het geval de datatype naam van self.zaalnummer verandert. koppeling van software engineering
+                return w
 
     def verwijder_reservatie(self): #private function
         """
