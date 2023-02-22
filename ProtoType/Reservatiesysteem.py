@@ -91,18 +91,22 @@ class Reservatiesysteem:
         """
         Maakt een nieuwe vertoning aan en bewaard die in self.vertoningen
 
-        precondities: er worden 4 parameters gegeven, allemaal zijn ze positieve integers
+        precondities: er worden 3 parameters gegeven, allemaal zijn ze positieve integers
         postconditie: er wordt een nieuwe vertoningen aangemaakt en bewaard (de boom vertoningen wordt 1 groter)
 
-        :param id: integer (id van de vertoning)
         :param filmid: integer (id van de film)
         :param zaalnummer: integer (nummer van de zaal)
         :param slot: integer (tijdslot van vertoning, integer heeft volgend format uurMinuten vb. 23u30 -> 2330)
         """
-        vrijePlaatsen = self.zalen.retrieve()
-        vertoning_object = Vertoning(self.id_counter, filmid, zaalnummer, slot,)
-        self.vertoningen.tableInsert(self.id_counter, vertoning_object)
-        pass
+        if not self.zalen.retrieve(zaalnummer):
+            return False
+
+        if isinstance(filmid, int) and isinstance(zaalnummer, int) and isinstance(slot, int) and filmid >=0 and zaalnummer >=0 and slot >=0:
+            vrijePlaatsen = self.zalen.retrieve(zaalnummer)  # moet waarschijnlijk veranderd worden naar tableRetrieve
+            vertoning_object = Vertoning(self.id_counter, filmid, zaalnummer, slot, vrijePlaatsen)
+            self.vertoningen.tableInsert(self.id_counter, vertoning_object)
+            return True  # contract moet aangepast worden return
+        return False
 
     def maak_reservatie(self, vertooningID, hoeveel, tijdstip, gebruikerid):
         """
@@ -134,7 +138,7 @@ class Reservatiesysteem:
         pass
     def convert_time(self):
         pass
-        """converteert seconden naar daum"""
+        """converteert seconden naar datum"""
 
     def set_time(self, value):
         """

@@ -35,7 +35,6 @@ class Vertoning:
         :param vrije_plaatsen: integer
         :param: afspelend: bool
         """
-
         pass
 
     def verminder_plaatsen(self, hoeveelheid):
