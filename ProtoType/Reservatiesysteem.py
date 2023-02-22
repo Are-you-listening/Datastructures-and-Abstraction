@@ -87,7 +87,7 @@ class Reservatiesysteem:
 
         self.zalen.insert(0, zaal_object)
 
-    def maak_vertoning(self, filmid, zaalnummer, slot):
+    def maak_vertoning(self, zaalnummer, slot, datum, filmid): # contract moet veranderd worden, of zelfs heel de methode
         """
         Maakt een nieuwe vertoning aan en bewaard die in self.vertoningen
 
@@ -106,7 +106,7 @@ class Reservatiesysteem:
 
         if isinstance(filmid, int) and isinstance(zaalnummer, int) and isinstance(slot, int) and filmid >=0 and zaalnummer >=0 and slot >=0:
             vrije_plaatsen = self.zalen.retrieve(zaalnummer)  # moet waarschijnlijk veranderd worden naar tableRetrieve
-            vertoning_object = Vertoning(self.id_counter, filmid, zaalnummer, slot, vrije_plaatsen)
+            vertoning_object = Vertoning(self.id_counter, zaalnummer, slot, datum, filmid, vrije_plaatsen)
             self.vertoningen.tableInsert(self.id_counter, vertoning_object)
             return True  # contract moet aangepast worden return
         return False

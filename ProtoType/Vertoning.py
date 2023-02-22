@@ -12,10 +12,10 @@ self.gestart: boolean (geeft weer dat de film al dan niet gestart is)
 
 
 class Vertoning:
-    def __init__(self, id, filmid, zaalnummer, slot,  vrije_plaatsen):
+    def __init__(self, id, zaalnummer, slot, datum, filmid, vrije_plaatsen): # contract moet herbekeken worden
         """
         Een vertoning object wordt geinitialiseerd.
-        Een vertoning heeft een id, zaalnummer en tijdslot, filmid en aantal vrije plaatsen
+        Een vertoning heeft een id, zaalnummer, tijdslot, datum, filmid, aantal vrije plaatsen, afspelend
 
         precondities: Er worden 5 parameters gegeven, die allemaal integers en niet None zijn.
                       Er bestaat een film die overeenkomt met het gegeven filmid
@@ -29,18 +29,21 @@ class Vertoning:
         postcondities: Er wordt een nieuwe vertoning aangemaakt
 
         :param id: integer
-        :param filmid: integer
         :param zaalnummer: integer
         :param slot: integer
+        :param datum: integer
+        :param filmid: integer
         :param vrije_plaatsen: integer
-        :param: afspelend: bool
+        :data: afspelend: bool
         """
         if isinstance(id, int) and isinstance(filmid, int) and isinstance(zaalnummer, int) and isinstance(slot, int) and isinstance(vrije_plaatsen, int):
             self.id = id
-            self.filmid = filmid
             self.zaalnummer = zaalnummer
             self.slot = slot
+            self.datum = datum
+            self.filmid = filmid
             self.vrije_plaatsen = vrije_plaatsen
+            self.afspelend = None
 
     def verminder_plaatsen(self, hoeveelheid):
         """
