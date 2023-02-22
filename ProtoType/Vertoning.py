@@ -40,7 +40,7 @@ class Vertoning:
             self.id = id
             self.zaalnummer = zaalnummer
             self.slot = slot
-            self.datum = datum
+            self.datum = datum # datum moet waarschijnlijk nog aangepast worden naar juiste formaat
             self.filmid = filmid
             self.vrije_plaatsen = vrije_plaatsen
             self.afspelend = None
