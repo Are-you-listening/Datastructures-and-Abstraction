@@ -293,14 +293,15 @@ class BST:
         return TempBST
 
 
-class BSTTable():
+class BSTTable:
     def __init__(self):
         self.T = BST()
 
     def tableIsEmpty(self):
         return self.T.isEmpty()
 
-    def tableInsert(self,Tree):
+    def tableInsert(self, key, val):
+        Tree = createTreeItem(key,val)
         return self.T.searchTreeInsert(Tree)
 
     def tableRetrieve(self,key):

@@ -36,6 +36,7 @@ class Reservatiesysteem:
 
         self.films = MyLinkedChain.LinkedChain()
         self.zalen = MyLinkedChain.LinkedChain()
+        self.vertoningen = My_BinarySearchTree.BSTTable()
 
     def maak_gebruiker(self, voornaam, achternaam, mail):
         """
@@ -86,7 +87,7 @@ class Reservatiesysteem:
 
         self.zalen.insert(0, zaal_object)
 
-    def maak_vertoning(self,filmid, zaalnummer, slot):
+    def maak_vertoning(self, filmid, zaalnummer, slot):
         """
         Maakt een nieuwe vertoning aan en bewaard die in self.vertoningen
 
@@ -98,7 +99,9 @@ class Reservatiesysteem:
         :param zaalnummer: integer (nummer van de zaal)
         :param slot: integer (tijdslot van vertoning, integer heeft volgend format uurMinuten vb. 23u30 -> 2330)
         """
-
+        vrijePlaatsen = self.zalen.retrieve()
+        vertoning_object = Vertoning(self.id_counter, filmid, zaalnummer, slot,)
+        self.vertoningen.tableInsert(self.id_counter, vertoning_object)
         pass
 
     def maak_reservatie(self, vertooningID, hoeveel, tijdstip, gebruikerid):
