@@ -36,9 +36,11 @@ class Vertoning:
         :param: afspelend: bool
         """
         if isinstance(id, int) and isinstance(filmid, int) and isinstance(zaalnummer, int) and isinstance(slot, int) and isinstance(vrije_plaatsen, int):
-            if
-
-        pass
+            self.id = id
+            self.filmid = filmid
+            self.zaalnummer = zaalnummer
+            self.slot = slot
+            self.vrije_plaatsen = vrije_plaatsen
 
     def verminder_plaatsen(self, hoeveelheid):
         """

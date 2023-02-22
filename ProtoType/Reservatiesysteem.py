@@ -87,6 +87,28 @@ class Reservatiesysteem:
 
         self.zalen.insert(0, zaal_object)
 
+    def retrieveFilm(self, id): # interne functie. wij moeten nog bespreken hoe we dit soort functies regelen
+        """
+
+        :param id:
+        :return:
+        """
+        l = self.films.save()
+        for w in l:
+            if w.id == id:  # optioneel: dit zou een getter moeten zijn in het geval de datatype naam van self.id verandert. koppeling van software engineering
+                return w
+
+    def retrieveZaal(self, id): # interne functie. wij moeten nog bespreken hoe we dit soort functies regelen
+        """
+
+        :param id:
+        :return:
+        """
+        l = self.zalen.save()
+        for w in l:
+            if w.zaalnummer == id: # optioneel: dit zou een getter moeten zijn in het geval de datatype naam van self.zaalnummer verandert. koppeling van software engineering
+                return w
+
     def maak_vertoning(self, filmid, zaalnummer, slot):
         """
         Maakt een nieuwe vertoning aan en bewaard die in self.vertoningen
@@ -105,8 +127,8 @@ class Reservatiesysteem:
             return False
 
         if isinstance(filmid, int) and isinstance(zaalnummer, int) and isinstance(slot, int) and filmid >=0 and zaalnummer >=0 and slot >=0:
-            vrijePlaatsen = self.zalen.retrieve(zaalnummer)  # moet waarschijnlijk veranderd worden naar tableRetrieve
-            vertoning_object = Vertoning(self.id_counter, filmid, zaalnummer, slot, vrijePlaatsen)
+            vrije_plaatsen = self.zalen.retrieve(zaalnummer)  # moet waarschijnlijk veranderd worden naar tableRetrieve
+            vertoning_object = Vertoning(self.id_counter, filmid, zaalnummer, slot, vrije_plaatsen)
             self.vertoningen.tableInsert(self.id_counter, vertoning_object)
             return True  # contract moet aangepast worden return
         return False
