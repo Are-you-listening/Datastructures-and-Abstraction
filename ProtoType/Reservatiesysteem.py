@@ -101,6 +101,9 @@ class Reservatiesysteem:
         if not self.zalen.retrieve(zaalnummer):
             return False
 
+        if not self.films.retrieve(0): # subject to change: LinkedChain retrieve probleem
+            return False
+
         if isinstance(filmid, int) and isinstance(zaalnummer, int) and isinstance(slot, int) and filmid >=0 and zaalnummer >=0 and slot >=0:
             vrijePlaatsen = self.zalen.retrieve(zaalnummer)  # moet waarschijnlijk veranderd worden naar tableRetrieve
             vertoning_object = Vertoning(self.id_counter, filmid, zaalnummer, slot, vrijePlaatsen)

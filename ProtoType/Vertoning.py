@@ -35,6 +35,9 @@ class Vertoning:
         :param vrije_plaatsen: integer
         :param: afspelend: bool
         """
+        if isinstance(id, int) and isinstance(filmid, int) and isinstance(zaalnummer, int) and isinstance(slot, int) and isinstance(vrije_plaatsen, int):
+            if
+
         pass
 
     def verminder_plaatsen(self, hoeveelheid):
