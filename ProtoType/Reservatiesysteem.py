@@ -129,7 +129,7 @@ class Reservatiesysteem:
         """
         pass
 
-    def get_time(self):
+    def get_time(self): #Private
         """
         Geeft het huidige tijdstip terug
 
@@ -140,10 +140,10 @@ class Reservatiesysteem:
 
         pass
 
-    def convert_date(self):
+    def convert_date(self): #Private
         """converteert datum naar seconden"""
         pass
-    def convert_time(self):
+    def convert_time(self): #Private
         pass
         """converteert seconden naar datum"""
 
@@ -158,7 +158,7 @@ class Reservatiesysteem:
         """
         pass
 
-    def increase_time(self):
+    def increase_time(self): #Subject to be changed: #Private
         """
         Verhoogd de tijd met 1
 
@@ -201,12 +201,14 @@ class Reservatiesysteem:
         """
         pass
 
-    def start(self):
+    def start(self, vertoningid): #Public
         """
         Start de vertoning
         preconditie: De vertoning start op het juiste tijdstip en er mag geen andere vertoning bezig zijn in deze zaal
         postconditie: De vertoning wordt gestart (gestart = true)
         """
+
+        """Roept vertoning start aan"""
 
         pass
 

@@ -68,4 +68,22 @@ class Vertoning:
         pass
         """valideert of alle plaatsen vol is, geeft een bool terug"""
 
+    def start(self):  # Public
+        """
+        Start de vertoning
+        preconditie: De vertoning start op het juiste tijdstip en er mag geen andere vertoning bezig zijn in deze zaal
+        postconditie: De vertoning wordt gestart (gestart = true)
+        """
 
+
+
+        pass
+
+    def stop(self):
+        """
+        Stopt de vertoning
+        preconditie: De film moet al gestart zijn
+        postconditie: De vertoning wordt beëindigd (gestart = false)
+        """
+
+        pass
