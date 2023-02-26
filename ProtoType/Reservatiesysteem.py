@@ -1,4 +1,4 @@
-from ADT import MyBST, My_BinarySearchTree, MyCircularLinkedChain, MyLinkedChain, MyQueue_Linked, MyTwoThreeFourTree
+from ADT import MyBSTKars, My_BinarySearchTree, MyCircularLinkedChainKars, MyLinkedChain, MyQueue_LinkedKars, MyTwoThreeFourTreeKars
 from Film import Film
 from Zaal import Zaal
 from Vertoning import Vertoning
