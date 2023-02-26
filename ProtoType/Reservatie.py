@@ -25,4 +25,7 @@ class Reservatie:
         :param key: is gelijk aan een input variabel naar keuze (zoek in datastructuren)
         """
 
-        pass
+        self.vertoning_id = vertoning_id
+        self.aantal_plaatsen = aantal_plaatsen
+        self.tijdstip = tijdstip
+        self.gebruiker_id = gebruiker_id

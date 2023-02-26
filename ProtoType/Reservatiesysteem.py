@@ -39,6 +39,7 @@ class Reservatiesysteem:
         self.zalen = MyLinkedChain.LinkedChain()
         self.vertoningen = My_BinarySearchTree.BSTTable()
         self.gebruikers = MyLinkedChain.LinkedChain()
+        self.reservaties = MyQueue_LinkedKars.MyQueue()
 
     def maak_gebruiker(self, voornaam, achternaam, mail):
         """
@@ -115,19 +116,35 @@ class Reservatiesysteem:
             return True  # contract moet aangepast worden return
         return False
 
-    def maak_reservatie(self, vertooningID, hoeveel, tijdstip, gebruikerid):
+    def maak_reservatie(self, vertoning_id, aantal_plaatsen, tijdstip, gebruiker_id):
         """
         Maakt een nieuwe reservatie aan en bewaard die in self.reservaties
 
         precondities: er worden 4 parameters gegeven, allemaal zijn ze positieve integers
-        postconditie: er wordt een nieuwe vertoningen aangemaakt en bewaard (de queue reservaties wordt 1 groter)
+        postconditie: er wordt een nieuwe reser aangemaakt en bewaard (de queue reservaties wordt 1 groter)
 
-        :param vertooningID: integer (id van vertoning)
-        :param hoeveel: integer (aantal plaatsen voor reservatie)
-        :param tijdstip: integer (tijdstip van reservatie)
-        :param gebruikerid: integer (id van de gebruiker dat een reservatie maakt)
+        :param vertoning_id: integer>0 (id van vertoning)
+        :param aantal_plaatsen: integer>=0 (aantal plaatsen voor reservatie)
+        :param tijdstip: integer>=0 (tijdstip van reservatie)
+        :param gebruiker_id: integer>=0 (id van de gebruiker dat een reservatie maakt)
         """
-        pass
+        time = self.convert_date(tijdstip)
+
+        if not self.vertoningen.tableRetrieve(vertoning_id): #Dit is onhandig? Wat als we niet willen zoeken op vertoning_id? Zouden we hier bv geen object in kunnen stoppen? En dan de wrapper het laten oplossen? (Modularity)
+            return False
+
+        if not self.gebruikers.retrieve(gebruiker_id):
+            return False
+
+        if isinstance(vertoning_id, int) and isinstance(aantal_plaatsen, int) and isinstance(time,int) and isinstance(gebruiker_id,int) and vertoning_id >= 0 and aantal_plaatsen > 0 and gebruiker_id >= 0 and time>=0:
+            reservatie = Reservatie(vertoning_id, aantal_plaatsen, time, gebruiker_id)
+            self.reservaties.enqueue(reservatie)
+            return True
+        #Else
+        return False
+
+
+
 
     def get_time(self): #Private
         """
@@ -283,6 +300,3 @@ class Reservatiesysteem:
         """
         """maak nieuwe ketting, overschrijf huidige ketting"""
         pass
-
-
-
