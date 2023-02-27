@@ -1,9 +1,12 @@
 from ADT import MyBSTKars, My_BinarySearchTree, MyCircularLinkedChainKars, MyLinkedChain, MyQueue_LinkedKars, MyTwoThreeFourTreeKars
+from ADT import MyQueueLinkedTibo
 from Film import Film
 from Zaal import Zaal
 from Vertoning import Vertoning
 from Reservatie import Reservatie
 from Gebruiker import Gebruiker
+from InstructionParser import InstructionParser
+
 
 """
 Deze ADT geeft een reservatiesysteem weer dat gebruik maakt van de andere ADT
@@ -21,7 +24,7 @@ self.tijdstip: integer (= 0 default)  (geeft weer op welk tijdstip het programma
 
 
 class Reservatiesysteem:
-    def __init__(self):
+    def __init__(self, **kwargs):
         """
         Het object Reservatiesysteem wordt aangemaakt.
         precondities: er worden geen parameters gegeven
@@ -30,7 +33,13 @@ class Reservatiesysteem:
         """
         :param id counter (universeel)
         :param interne paramater met alle tijdslots
+        :param **kwargs, kan "displaymode" bevatten die weergeeft hoe we de data weergeven
         """
+
+        self.display_mode = None
+        if "display_mode" in kwargs:
+            self.display_mode = kwargs["display_mode"]
+
 
         self.id_counter = 0
         self.tijdsstip = 0
@@ -41,7 +50,12 @@ class Reservatiesysteem:
         self.gebruikers = MyLinkedChain.LinkedChain()
         self.reservaties = MyQueue_LinkedKars.MyQueue()
 
+        """init voor InputParser"""
+        self.instruction_parser = InstructionParser(self, MyQueueLinkedTibo.MyQueueTable())
+        self.instruction_parser.read_file()
+
     def maak_gebruiker(self, voornaam, achternaam, mail):
+        self.display(f"maak gebruiker: {voornaam} {achternaam} {mail}")
         """
         Maakt een nieuwe gebruiker aan en bewaard die in self.gebruikers
 
@@ -60,6 +74,7 @@ class Reservatiesysteem:
     #private hulpfunctie per klasse die aangeroepen wordt in maak_.... (roept constructor van klasse aan)
 
     def maak_film(self,titel, rating):
+        self.display(f"maakt film {titel} {rating}")
         """
         Maakt een nieuwe film aan en bewaard die in self.films
 
@@ -75,9 +90,10 @@ class Reservatiesysteem:
 
         self.id_counter += 1
 
-        self.films.insert(0, film_object)
+        self.films.insert(1, film_object)
 
     def maak_zaal(self, nummer, maxplaatsen):
+        self.display(f"maakt zaal {nummer} {maxplaatsen}")
         """
         Maakt een nieuwe zaal aan en bewaard die in self.zaal
 
@@ -90,9 +106,10 @@ class Reservatiesysteem:
 
         zaal_object = Zaal(nummer, maxplaatsen)
 
-        self.zalen.insert(0, zaal_object)
+        self.zalen.insert(1, zaal_object)
 
     def maak_vertoning(self, zaalnummer, slot, datum, filmid): # contract moet veranderd worden, of zelfs heel de methode
+        self.display(f"maakt vertoning: {zaalnummer} {slot} {datum} {filmid}")
         """
         Maakt een nieuwe vertoning aan en bewaard die in self.vertoningen
 
@@ -117,6 +134,7 @@ class Reservatiesysteem:
         return False
 
     def maak_reservatie(self, vertoning_id, aantal_plaatsen, tijdstip, gebruiker_id):
+        self.display(f"maakt reservatie: {vertoning_id} {aantal_plaatsen} {tijdstip} {gebruiker_id}")
         """
         Maakt een nieuwe reservatie aan en bewaard die in self.reservaties
 
@@ -128,8 +146,7 @@ class Reservatiesysteem:
         :param tijdstip: integer>=0 (tijdstip van reservatie)
         :param gebruiker_id: integer>=0 (id van de gebruiker dat een reservatie maakt)
         """
-        time = self.convert_date(tijdstip)
-
+        time = tijdstip
         if not self.vertoningen.tableRetrieve(vertoning_id): #Dit is onhandig? Wat als we niet willen zoeken op vertoning_id? Zouden we hier bv geen object in kunnen stoppen? En dan de wrapper het laten oplossen? (Modularity)
             return False
 
@@ -157,9 +174,15 @@ class Reservatiesysteem:
 
         pass
 
-    def convert_date(self): #Private
+    def convert_date(self, datum, hour, minutes, seconds): #Private
         """converteert datum naar seconden"""
-        pass
+        splitted_datum = datum.split("-")
+        jaar = splitted_datum[0]
+        maand = splitted_datum[1]
+        dag = splitted_datum[2]
+        total = jaar+maand+dag+str(hour*3600+minutes*60+seconds)
+        total = int(total)
+        return total
     def convert_time(self): #Private
         pass
         """converteert seconden naar datum"""
@@ -300,3 +323,12 @@ class Reservatiesysteem:
         """
         """maak nieuwe ketting, overschrijf huidige ketting"""
         pass
+
+    def display(self, msg):
+        """private function"""
+        if self.display_mode == "print":
+            print(msg)
+
+
+
+r = Reservatiesysteem(display_mode="print")
