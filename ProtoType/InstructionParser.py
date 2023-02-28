@@ -14,11 +14,13 @@ class InstructionParser:
         postcondities: een InstructionParser wordt geinitialiseerd
         """
 
+        """setup default var"""
         self.reservatie_systeem = reservatie_systeem
         self.init_mode = False
         self.start_mode = False
         self.use_adt = use_adt
 
+        """kan custom path"""
         if "path" in kwargs:
             self.path = kwargs["path"]
         else:
@@ -32,7 +34,6 @@ class InstructionParser:
         de tijd gerelateerde instructies worden bewaard in de gegeven ADT
         precondities: De file voldoet aan het gevraagde format en bevat geen onbekende instructies
         postcondities: de instructies worden geinitialiseerd/ klaargezet op hun juiste locatie
-
         """
         with open(self.path, 'rt') as f:
             for line in f.readlines():
@@ -43,23 +44,27 @@ class InstructionParser:
                 line = line.replace("\n", "")
                 line = line.replace("\u2028", "")
 
-                """zorg dat movies met spaties bij elkaar blijven"""
+                """zorg dat aanhalingstekens bij elkaar blijven"""
                 line_array = line.split('"')
-                if len(line_array) > 1:
-                    movie = line_array[1]
-                    movie_adapt = movie.replace(" ", "_")
-                    line = line.replace(f'"{movie}"', movie_adapt)
+                for i in range(1, len(line_array)-1):
+                    token = line_array[i]
+                    token_adapt = token.replace(" ", "_\u1000")
+                    line = line.replace(f'"{token}"', token_adapt)
 
+                """breng de verdwenen spaties terug"""
                 arguments = line.split(" ")
-                if len(arguments) > 2:
-                    arguments[2] = arguments[2].replace("_", " ")
+                for i, arg in enumerate(arguments):
+                    arguments[i] = arg.replace("_\u1000", " ")
 
+                """indien lege line, continue"""
                 if arguments[0] == '':
                     continue
 
+                """indien init fase, run init functies"""
                 if self.init_mode:
                     self.__init_commands(arguments)
 
+                """indien start fase, start setup (store in queue)"""
                 if self.start_mode:
                     self.__setup_commands(arguments)
 
@@ -79,7 +84,7 @@ class InstructionParser:
         if args[0] == "zaal":
             self.reservatie_systeem.maak_zaal(int(args[1]), int(args[2]))
         elif args[0] == "film":
-            self.reservatie_systeem.maak_film(args[2], args[3])
+            self.reservatie_systeem.maak_film(int(args[1]), args[2], float(args[3]))
         elif args[0] == "vertoning":
             self.reservatie_systeem.maak_vertoning(int(args[2]), int(args[3]), args[4], int(args[5]))
         elif args[0] == "gebruiker":
@@ -99,7 +104,6 @@ class InstructionParser:
         args[1] = time
 
         tup = tuple(args[1:])
-        #print(tup)
         if tup[1] == "reserveer":
             self.reservatie_systeem.maak_reservatie(int(tup[3]), int(tup[2]), tup[0], int(tup[2]))
             tup = (args[1], "lees_reservatie")
@@ -116,7 +120,6 @@ class InstructionParser:
         instruction = tup[1]
 
         if tup[0] == time:
-            #print(tup)
             if instruction == "lees_reserveer":
                 pass
             elif instruction == "ticket":

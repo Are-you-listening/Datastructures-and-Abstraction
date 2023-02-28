@@ -52,7 +52,10 @@ class Reservatiesysteem:
         self.reservatie_archief = MyLinkedChain.LinkedChain()
 
         """init voor InputParser"""
-        self.instruction_parser = InstructionParser(self, MyQueueLinkedTibo.MyQueueTable())
+        if "path" in kwargs:
+            self.instruction_parser = InstructionParser(self, MyQueueLinkedTibo.MyQueueTable(), path=kwargs["path"])
+        else:
+            self.instruction_parser = InstructionParser(self, MyQueueLinkedTibo.MyQueueTable())
         self.instruction_parser.read_file()
 
     def maak_gebruiker(self, voornaam, achternaam, mail):
@@ -74,8 +77,7 @@ class Reservatiesysteem:
 
     #private hulpfunctie per klasse die aangeroepen wordt in maak_.... (roept constructor van klasse aan)
 
-    def maak_film(self,titel, rating):
-        self.display(f"maakt film {titel} {rating}")
+    def maak_film(self, filmid, titel, rating):
         """
         Maakt een nieuwe film aan en bewaard die in self.films
 
@@ -87,14 +89,20 @@ class Reservatiesysteem:
         :param titel: string (titel van film)
         :param rating: float (rating van film)
         """
-        film_object = Film(self.id_counter, titel, rating)
+
+        if not (isinstance(filmid, int) and isinstance(titel, str) and isinstance(rating, float) and filmid >= 0):
+            raise Exception("Precondition Failed: in maak_film")
+
+        self.display(f"maakt film {titel} {rating}")
+
+        film_object = Film(filmid, titel, rating)
 
         self.id_counter += 1
 
         self.films.insert(1, film_object)
 
     def maak_zaal(self, nummer, maxplaatsen):
-        self.display(f"maakt zaal {nummer} {maxplaatsen}")
+
         """
         Maakt een nieuwe zaal aan en bewaard die in self.zaal
 
@@ -104,6 +112,11 @@ class Reservatiesysteem:
         :param nummer: integer (zaalnummer van de zaal)
         :param maxplaatsen: integer (max plaatsen van de zaal)
         """
+
+        if not (isinstance(nummer, int) and isinstance(maxplaatsen, int) and nummer >= 0 and maxplaatsen >= 0):
+            raise Exception("Precondition Failed: in maak_zaal")
+
+        self.display(f"maakt zaal {nummer} {maxplaatsen}")
 
         zaal_object = Zaal(nummer, maxplaatsen)
 
