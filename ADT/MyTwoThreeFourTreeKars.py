@@ -2373,4 +2373,26 @@ print(t.save())
 """
 
 class TwoThreeFourTreeTable:
-    pass
+    def __init__(self):
+        self.t = TwoThreeFourTree()
+
+    def tableIsEmpty(self):
+        return self.t.isEmpty()
+
+    def tableInsert(self,item):
+        return self.t.insertItem(item)
+
+    def tableRetrieve(self,key):
+        return self.t.retrieveItem(key)
+
+    def tableDelete(self,key):
+        return self.t.deleteItem(key)
+
+    def traverseTable(self,function):
+        return self.t.inorderTraverse(function)
+
+    def save(self):
+        return self.t.save()
+
+    def load(self,map):
+        return self.t.load(map)

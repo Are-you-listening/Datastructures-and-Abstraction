@@ -420,3 +420,27 @@ class BST:
         else: #ALs er geen kinderen zijn, stop
             self.count=0
             return
+
+class BSTTable:
+    def __init__(self):
+        self.boom = BST()
+
+    def tableIsEmpty(self):
+        return self.boom.isEmpty()
+
+    def tableInsert(self,itemtype):
+        return self.boom.searchTreeInsert(itemtype)
+
+    def tableDelete(self,searchkey):
+        return self.boom.searchTreeDelete(searchkey)
+    def tableRetrieve(self,searchkey):
+        return self.boom.searchTreeRetrieve(searchkey)
+
+    def traverseTable(self,function):
+        return self.boom.inorderTraverse(function)
+
+    def load(self,list):
+        return self.boom.load(list)
+
+    def save(self):
+        return self.boom.save()
