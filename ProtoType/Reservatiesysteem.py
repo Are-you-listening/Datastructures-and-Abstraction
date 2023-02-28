@@ -16,7 +16,7 @@ self.vertoningen: Boom van Vertoning objecten (de aangemaakte vertoningen worden
 self.films: ketting van Film objecten (de aangemaakte film worden hier bewaard)
 self.zalen: ketting van Zaal objecten (de aangemaakte zaal worden hier bewaard)
 self.gebruikers: ketting van aangemaakte Gebruiker objecten (de aangemaakte gebruiker worden hier bewaard)
-self.reservaties: queue van aangemaakte Reservatie Objecten
+self.reservaties: queue van tupels(tijdstip,aangemaakte Reservatie Objecten)
 self.reservaties_archief: ketting van aangemaakte Reservatie objecten die niet meer in de queue zitten 
                           (om later nog steeds reservaties terug te vinden)
 self.tijdstip: integer (= 0 default)  (geeft weer op welk tijdstip het programma zich bevindt)
@@ -155,22 +155,28 @@ class Reservatiesysteem:
         precondities: er worden 4 parameters gegeven, allemaal zijn ze positieve integers
         postconditie: er wordt een nieuwe reser aangemaakt en bewaard (de queue reservaties wordt 1 groter)
 
-        :param vertoning_id: integer>0 (id van vertoning)
-        :param aantal_plaatsen: integer>=0 (aantal plaatsen voor reservatie)
+        :param vertoning_id: integer>0 (id van vertoning) De vertoning met het bijbehorende ID moet bestaan. 
+        :param aantal_plaatsen: integer>=0 (aantal plaatsen voor reservatie) 
         :param tijdstip: integer>=0 (tijdstip van reservatie)
-        :param gebruiker_id: integer>=0 (id van de gebruiker dat een reservatie maakt)
+        :param gebruiker_id: integer>=0 (id van de gebruiker dat een reservatie maakt). De gebruiker moet bestaan met het bijbehorende ID. 
         """
+
+        # Subject to be changed: aantal_plaatsen; wanneer controleren?
+        # Question: Gebruiker zelf geeft wel handmatig een datum is, we would still need the convert-option?
+
         if not isinstance(vertoning_id, int) and isinstance(aantal_plaatsen, int) and isinstance(tijdstip,int) and isinstance(gebruiker_id,int) and vertoning_id >= 0 and aantal_plaatsen > 0 and gebruiker_id >= 0 and tijdstip>=0:
-            raise Exception("Precondition Error")
+            raise Exception("Precondition Error: maak_reservatie")
             return False
 
-        if not self.vertoningen.tableRetrieve(vertoning_id): #Dit is onhandig? Wat als we niet willen zoeken op vertoning_id? Zouden we hier bv geen object in kunnen stoppen? En dan de wrapper het laten oplossen? (Modularity)
-            raise Exception("Precondition Error") #Indien de vertoning niet bestaat
+        if not self.vertoningen.tableRetrieve(vertoning_id): #MODULARITY ERROR: Zouden we hier bv geen object in kunnen stoppen? En dan de wrapper het laten oplossen?
+            raise Exception("Precondition Error: maak_reservatie, vertoning bestaat niet")
             return False
 
         if not self.gebruikers.retrieve(gebruiker_id): #Zou dit niet nog een subscript operator moeten hebben "[1]" ?
-            raise Exception("Precondition Error") #Indien de gebruiker niet bestaat
+            raise Exception("Precondition Error: maak_reservatie, gebruiker bestaat niet")
             return False
+
+        #Kijk of er plek is in de zaal, bij het aanmaken van de reservatie, verlaag vervolgens het gereserveerd aantal plaatsen
 
         reservatie = Reservatie(vertoning_id, aantal_plaatsen, tijdstip, gebruiker_id)
         self.reservaties.enqueue(reservatie)
@@ -184,7 +190,6 @@ class Reservatiesysteem:
         postconditie: er wordt een integer teruggeven dat het tijdstip weergeeft.
         :return integer (van self.tijdstip) (geeft het huidige tijdstip weer)
         """
-
         pass
 
     def convert_date(self, datum, hour, minutes, seconds): #Private
@@ -224,10 +229,10 @@ class Reservatiesysteem:
 
     def lees_reservatie(self):
         """
-        Lees de reservatie dat eerst staat in de queue
+        Lees de oudste reservatie uit en verwerkt deze.
 
-        precondities: er worden geen parameter gegeven.
-        postconditie: er wordt een reservatie object teruggeven
+        precondities: Er worden geen parameters ingegeven.
+        postconditie: De reservatie is succesvol verwerkt. De vertoning heeft een aangepast aantal vrije_plaatsen.
 
         A. getTop of queeue: & check voorwaarden
 
@@ -236,19 +241,39 @@ class Reservatiesysteem:
         3. check vol
         4. END: voeg toe aan reservatie archive
 
-        :return: reservatie object dat vanvoor aan de queu staat
-        :return: of de reservatie succersvol is verwerkt
+        :return: bool:succes
         """
-        #Subject to be changed: check vrije plaatsen
-        reservatie = self.reservaties.getFront()
+        reservatie = self.reservaties.getFront()[1]
+        tijdstip = self.reservaties.getFront()[0]
+        vertoning = self.vertoningen.tableRetrieve(reservatie.vertoning_id) #Hier wordt nu gezocht op ID, NOT MODULAIR
 
-        self.verwijder_reservatie() #Verwijder reservatie & voeg toe aan archief
-        self.verlaag_plaatsen(id,reservatie.aantal_plaatsen) #Verlaag het aantal plaatsen
+        # Verwijder reservatie & voeg toe aan archief
+        self.verwijder_reservatie()
+        #self.verlaag_plaatsen(id,reservatie.aantal_plaatsen) #Subject to be changed: Verlaag het (fysiek) aantal plaatsen
+
+        # Update datum & tijd
+        self.set_time(tijdstip)
 
         #Welke output moet dit outten in de console ter verificatie // Voor de log file?
-        #Wat als plaatsene faalt? Output: "Reservation invalid"?
-        #Time setten? Met welke waarde?
+
+        # Subject to be changed: Kijk of de vertoning gestart kan worden?
+        self.start(reservatie.vertoning_id)
         return True
+
+    def archiveer_reservatie(self): #private function
+        """
+        verwijder de reservatie van voren aan de queue en bewaar die in het reservatie archief
+
+        precondities: er worden geen parameters gegeven en de queue is niet leeg
+        postconditie: de queue self.reservaties wordt 1 kleiner en self.reservatie_archief wordt 1 groter.
+        """
+        if not self.reservaties.isEmpty():
+            reservatie = self.reservaties.dequeue() #Dequeu
+            self.reservatie_archief.insert(self.reservatie_archief.getLength(),reservatie) #Insert reservatie
+            return True
+        else:
+            raise Exception("Precondition Failure: archiveer_reservatie | Er is geen reservatie meer om te archiveren. De queue is leeg")
+            return False
 
     def verlaag_plaatsen(self, vertoningid, plaatsen): #private functie
         """
@@ -261,6 +286,8 @@ class Reservatiesysteem:
         :param vertoningid: integer (id van de vertoning)
         :param plaatsen: integer (aantal plaatsen dat niet meer beschikbaar zijn)
         """
+
+        #To be changed: Whole function
 
         vertoning = self.vertoningen.tableRetrieve(vertoningid)
 
@@ -312,17 +339,6 @@ class Reservatiesysteem:
         for w in l:
             if w.zaalnummer == id: # optioneel: dit zou een getter moeten zijn in het geval de datatype naam van self.zaalnummer verandert. koppeling van software engineering
                 return w
-
-    def verwijder_reservatie(self): #private function
-        """
-        verwijder de reservatie van voren aan de queue en bewaar die in het reservatie archief
-
-        precondities: er worden geen parameters gegeven en de queue is niet leeg
-        postconditie: de queue self.reservaties wordt 1 kleiner en self.reservatie_archief wordt 1 groter.
-        """
-        reservatie = self.reservaties.dequeue() #Dequeu
-        self.reservatie_archief.insert(self.reservatie_archief.getLength(),reservatie) #Insert reservatie
-        return True
 
     def verwijder_vertoningen(self):
         """
