@@ -160,7 +160,7 @@ class Reservatiesysteem:
         :param tijdstip: integer>=0 (tijdstip van reservatie)
         :param gebruiker_id: integer>=0 (id van de gebruiker dat een reservatie maakt)
         """
-        if isinstance(vertoning_id, int) and isinstance(aantal_plaatsen, int) and isinstance(tijdstip,int) and isinstance(gebruiker_id,int) and vertoning_id >= 0 and aantal_plaatsen > 0 and gebruiker_id >= 0 and tijdstip>=0:
+        if not isinstance(vertoning_id, int) and isinstance(aantal_plaatsen, int) and isinstance(tijdstip,int) and isinstance(gebruiker_id,int) and vertoning_id >= 0 and aantal_plaatsen > 0 and gebruiker_id >= 0 and tijdstip>=0:
             raise Exception("Precondition Error")
             return False
 
