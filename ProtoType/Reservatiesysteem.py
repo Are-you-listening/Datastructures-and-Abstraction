@@ -49,6 +49,7 @@ class Reservatiesysteem:
         self.vertoningen = My_BinarySearchTree.BSTTable()
         self.gebruikers = MyLinkedChain.LinkedChain()
         self.reservaties = MyQueue_LinkedKars.MyQueue()
+        self.reservatie_archief = MyLinkedChain.LinkedChain()
 
         """init voor InputParser"""
         self.instruction_parser = InstructionParser(self, MyQueueLinkedTibo.MyQueueTable())
@@ -146,22 +147,21 @@ class Reservatiesysteem:
         :param tijdstip: integer>=0 (tijdstip van reservatie)
         :param gebruiker_id: integer>=0 (id van de gebruiker dat een reservatie maakt)
         """
-        time = tijdstip
+        if isinstance(vertoning_id, int) and isinstance(aantal_plaatsen, int) and isinstance(tijdstip,int) and isinstance(gebruiker_id,int) and vertoning_id >= 0 and aantal_plaatsen > 0 and gebruiker_id >= 0 and tijdstip>=0:
+            raise Exception("Precondition Error")
+            return False
+
         if not self.vertoningen.tableRetrieve(vertoning_id): #Dit is onhandig? Wat als we niet willen zoeken op vertoning_id? Zouden we hier bv geen object in kunnen stoppen? En dan de wrapper het laten oplossen? (Modularity)
+            raise Exception("Precondition Error") #Indien de vertoning niet bestaat
             return False
 
-        if not self.gebruikers.retrieve(gebruiker_id):
+        if not self.gebruikers.retrieve(gebruiker_id): #Zou dit niet nog een subscript operator moeten hebben "[1]" ?
+            raise Exception("Precondition Error") #Indien de gebruiker niet bestaat
             return False
 
-        if isinstance(vertoning_id, int) and isinstance(aantal_plaatsen, int) and isinstance(time,int) and isinstance(gebruiker_id,int) and vertoning_id >= 0 and aantal_plaatsen > 0 and gebruiker_id >= 0 and time>=0:
-            reservatie = Reservatie(vertoning_id, aantal_plaatsen, time, gebruiker_id)
-            self.reservaties.enqueue(reservatie)
-            return True
-        #Else
-        return False
-
-
-
+        reservatie = Reservatie(vertoning_id, aantal_plaatsen, tijdstip, gebruiker_id)
+        self.reservaties.enqueue(reservatie)
+        return True
 
     def get_time(self): #Private
         """
@@ -206,6 +206,7 @@ class Reservatiesysteem:
         postconditie: het tijdstip wordt met 1 verhoogd
         """
 
+        #Onnodige functie? We gaan nooit de tijd met 1 verhogen? EVt verhogen naar volgend tijdstip?
         pass
 
     def lees_reservatie(self):
@@ -220,13 +221,21 @@ class Reservatiesysteem:
         1. deque + lokaal opslagen
         2. aantal personen in de zaal verminderen
         3. check vol
-
-        END: voeg toe aan reservatie archive
+        4. END: voeg toe aan reservatie archive
 
         :return: reservatie object dat vanvoor aan de queu staat
         :return: of de reservatie succersvol is verwerkt
         """
-        pass
+        #Subject to be changed: check vrije plaatsen
+        reservatie = self.reservaties.getFront()
+
+        self.verwijder_reservatie() #Verwijder reservatie & voeg toe aan archief
+        self.verlaag_plaatsen(id,reservatie.aantal_plaatsen) #Verlaag het aantal plaatsen
+
+        #Welke output moet dit outten in de console ter verificatie // Voor de log file?
+        #Wat als plaatsene faalt? Output: "Reservation invalid"?
+        #Time setten? Met welke waarde?
+        return True
 
     def verlaag_plaatsen(self, vertoningid, plaatsen): #private functie
         """
@@ -239,7 +248,15 @@ class Reservatiesysteem:
         :param vertoningid: integer (id van de vertoning)
         :param plaatsen: integer (aantal plaatsen dat niet meer beschikbaar zijn)
         """
-        pass
+
+        vertoning = self.vertoningen.tableRetrieve(vertoningid)
+
+        vol = vertoning.verminder_plaatsen(plaatsen)
+
+        if vol:
+            raise Exception("Geen plek meer in deze zaal")         #To discuss: Dit toch checken voordat we uitlezen? Moeten we dit ergens aangeven?
+
+        return vol
 
     def start(self, vertoningid): #Public
         """
@@ -290,8 +307,9 @@ class Reservatiesysteem:
         precondities: er worden geen parameters gegeven en de queue is niet leeg
         postconditie: de queue self.reservaties wordt 1 kleiner en self.reservatie_archief wordt 1 groter.
         """
-
-        pass
+        reservatie = self.reservaties.dequeue() #Dequeu
+        self.reservatie_archief.insert(self.reservatie_archief.getLength(),reservatie) #Insert reservatie
+        return True
 
     def verwijder_vertoningen(self):
         """
