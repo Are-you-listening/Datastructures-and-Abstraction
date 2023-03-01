@@ -83,8 +83,10 @@ class Vertoning:
         pass
 
     def check_vol(self):
-        pass
         """valideert of alle plaatsen vol is, geeft een bool terug"""
+        if self.vrije_plaatsenFysiek == self.vrije_plaatsenVirtueel:
+            return True
+        return False
 
     def start(self):  # Public
         """

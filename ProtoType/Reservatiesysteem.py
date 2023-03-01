@@ -293,7 +293,7 @@ class Reservatiesysteem:
 
         vol = vertoning.verminder_plaatsenVirtueel(plaatsen)
 
-        if vol:
+        if not vol:
             raise Exception("Geen plek meer in deze zaal")         #To discuss: Dit toch checken voordat we uitlezen? Moeten we dit ergens aangeven?
 
         return vol
@@ -312,11 +312,15 @@ class Reservatiesysteem:
 
         #To be changed: Whole function
 
-        vertoning = self.vertoningen.tableRetrieve(vertoningid)
-
+        vertoning = self.vertoningen.tableRetrieve(vertoningid) # technisch gezien zou dit nooit een vol melding moeten geven als verlaagplaatsen virtueel correct werkt
+                                                                # behalve het geval dat mensen komen opdagen die niet geresveerd hebben en met te veel komen
         vol = vertoning.verminder_plaatsenFysiek(plaatsen)
 
         if vol:
+            if vertoning.check_vol():
+                self.start(vertoningid)
+
+        if not vol:
             self.start(vertoningid)       #To discuss: Dit toch checken voordat we uitlezen? Moeten we dit ergens aangeven?
 
         return vol
