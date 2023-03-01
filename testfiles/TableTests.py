@@ -7,7 +7,7 @@ from ADT.MyRedBlackTreeAnas import RedBlackTreeTable
 
 for w in os.listdir("./ADT"): # subject to be changed. dit is een soort van template maar moet nog aangepast worden
     try:
-        test = w.BSTTable()
+        test = w.BSTTable() # dit zal waarschijnlijk meerder malen gedaan moeten worden met verschillende namespaces maar moet ik nog uitesten, zie import voor waarom
     except AttributeError:
         test = None
     if isinstance(test, BSTTable):
