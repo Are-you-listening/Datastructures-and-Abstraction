@@ -44,7 +44,7 @@ class Reservatiesysteem:
         self.id_counter = 0
         self.tijdsstip = 0
 
-        self.films = MyLinkedChain.LinkedChain()
+        self.films = MyLinkedChain.LinkedChain() # dit moet veranderd worden naar de table, ik noem mijn table LCtable: Subject to be changed
         self.zalen = MyLinkedChain.LinkedChain()
         self.vertoningen = My_BinarySearchTree.BSTTable()
         self.gebruikers = MyLinkedChain.LinkedChain()
@@ -140,7 +140,7 @@ class Reservatiesysteem:
         if not self.films.retrieve(0): # subject to change: LinkedChain retrieve probleem
             return False
 
-        if isinstance(filmid, int) and isinstance(zaalnummer, int) and isinstance(slot, int) and filmid >=0 and zaalnummer >=0 and slot >=0:
+        if isinstance(filmid, int) and isinstance(zaalnummer, int) and isinstance(slot, int) and filmid >= 0 and zaalnummer >= 0 and slot >= 0:
             vrije_plaatsen = self.zalen.retrieve(zaalnummer)  # moet waarschijnlijk veranderd worden naar tableRetrieve
             vertoning_object = Vertoning(self.id_counter, zaalnummer, slot, datum, filmid, vrije_plaatsen)
             self.vertoningen.tableInsert(self.id_counter, vertoning_object)
@@ -275,7 +275,7 @@ class Reservatiesysteem:
             raise Exception("Precondition Failure: archiveer_reservatie | Er is geen reservatie meer om te archiveren. De queue is leeg")
             return False
 
-    def verlaag_plaatsen(self, vertoningid, plaatsen): #private functie
+    def verlaag_plaatsenVirtueel(self, vertoningid, plaatsen): #private functie
         """
         Verminderd het aantal vrije plaatsen in een voorstelling.
 
@@ -291,7 +291,30 @@ class Reservatiesysteem:
 
         vertoning = self.vertoningen.tableRetrieve(vertoningid)
 
-        vol = vertoning.verminder_plaatsen(plaatsen)
+        vol = vertoning.verminder_plaatsenVirtueel(plaatsen)
+
+        if vol:
+            raise Exception("Geen plek meer in deze zaal")         #To discuss: Dit toch checken voordat we uitlezen? Moeten we dit ergens aangeven?
+
+        return vol
+
+    def verlaag_plaatsenFysiek(self, vertoningid, plaatsen): #private functie
+        """
+        Verminderd het aantal vrije plaatsen in een voorstelling.
+
+        precondities: er zijn voldoende plaatsen in de vertoning
+        postconditie: het aantal plaatsen van de vertoning dat overeenkomt met het vertoning id
+                      wordt verminderd met het gegeven aantal plaatsen
+
+        :param vertoningid: integer (id van de vertoning)
+        :param plaatsen: integer (aantal plaatsen dat niet meer beschikbaar zijn)
+        """
+
+        #To be changed: Whole function
+
+        vertoning = self.vertoningen.tableRetrieve(vertoningid)
+
+        vol = vertoning.verminder_plaatsenFysiek(plaatsen)
 
         if vol:
             raise Exception("Geen plek meer in deze zaal")         #To discuss: Dit toch checken voordat we uitlezen? Moeten we dit ergens aangeven?

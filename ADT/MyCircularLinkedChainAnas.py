@@ -257,6 +257,14 @@ class LCTable:
     def tableRetrieve(self, index):
         return self.LC.retrieve(index)
 
+    def tableRetrieveTranverse(self, id):
+        count = 0
+        while self.tableRetrieve(count) != id:
+            if self.tableRetrieve(count) == False:
+                return False
+            count += 1
+        return self.tableRetrieve(count)
+
     def tableDelete(self, index):
         return self.LC.delete(index)
 

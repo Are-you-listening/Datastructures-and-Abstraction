@@ -34,18 +34,20 @@ class Vertoning:
         :param datum: integer
         :param filmid: integer
         :param vrije_plaatsen: integer
-        :data: afspelend: bool
+        :data afspelend: bool
+        :data vrije_plaatsenFysiek
         """
-        if isinstance(id, int) and isinstance(filmid, int) and isinstance(zaalnummer, int) and isinstance(slot, int) and isinstance(vrije_plaatsen, int):
+        if isinstance(id, int) and isinstance(filmid, int) and isinstance(zaalnummer, int) and isinstance(slot, int) and isinstance(vrije_plaatsen, int): # dit zal ik nog veranderen naar unsigend integers
             self.id = id
             self.zaalnummer = zaalnummer
             self.slot = slot
             self.datum = datum # datum moet waarschijnlijk nog aangepast worden naar juiste formaat
             self.filmid = filmid
-            self.vrije_plaatsen = vrije_plaatsen
+            self.vrije_plaatsenVirtueel = vrije_plaatsen
             self.afspelend = None
+            self.vrije_plaatsenFysiek = vrije_plaatsen
 
-    def verminder_plaatsen(self, hoeveelheid):
+    def verminder_plaatsenVirtueel(self, hoeveelheid):
         """
         Deze functie verminderd het aantal beschikbare plaatsen voor de vertoning
 
@@ -53,7 +55,23 @@ class Vertoning:
         postconditie: Het aantal plaatsen worden verminderd.
         :param hoeveelheid: integer (geeft weer hoeveel plaatsen minder er beschikbaar zijn)
         """
-        pass
+        if self.vrije_plaatsenVirtueel - hoeveelheid <0:
+            self.vrije_plaatsenVirtueel = self.vrije_plaatsenVirtueel - hoeveelheid
+            return True
+        return False
+
+    def verminder_plaatsenFysiek(self, hoeveelheid):
+        """
+        Deze functie verminderd het aantal beschikbare plaatsen voor de vertoning
+
+        preconditie: Er moeten meer plaatsen beschikbaar zijn dan dat er verdwijnen.
+        postconditie: Het aantal plaatsen worden verminderd.
+        :param hoeveelheid: integer (geeft weer hoeveel plaatsen minder er beschikbaar zijn)
+        """
+        if self.vrije_plaatsenFysiek - hoeveelheid <0:
+            self.vrije_plaatsenFysiek = self.vrije_plaatsenFysiek - hoeveelheid
+            return True
+        return False
 
     def set_plaatsen(self, plaatsen):
         """
