@@ -55,7 +55,7 @@ class Vertoning:
         postconditie: Het aantal plaatsen worden verminderd.
         :param hoeveelheid: integer (geeft weer hoeveel plaatsen minder er beschikbaar zijn)
         """
-        if self.vrije_plaatsenVirtueel - hoeveelheid <0:
+        if self.vrije_plaatsenVirtueel - hoeveelheid < 0:
             self.vrije_plaatsenVirtueel = self.vrije_plaatsenVirtueel - hoeveelheid
             return True
         return False
@@ -68,12 +68,12 @@ class Vertoning:
         postconditie: Het aantal plaatsen worden verminderd.
         :param hoeveelheid: integer (geeft weer hoeveel plaatsen minder er beschikbaar zijn)
         """
-        if self.vrije_plaatsenFysiek - hoeveelheid <0:
+        if self.vrije_plaatsenFysiek - hoeveelheid < 0:
             self.vrije_plaatsenFysiek = self.vrije_plaatsenFysiek - hoeveelheid
             return True
         return False
 
-    def set_plaatsen(self, plaatsen):
+    def set_plaatsen(self, plaatsen): # dit moet toch niet meer bestaan
         """
         Er wordt aangepast hoeveel vrije plaatsen er zijn
         preconditie: Er wordt 1 parameter gegeven dat een positieve integer is
@@ -92,10 +92,7 @@ class Vertoning:
         preconditie: De vertoning start op het juiste tijdstip en er mag geen andere vertoning bezig zijn in deze zaal
         postconditie: De vertoning wordt gestart (gestart = true)
         """
-
-
-
-        pass
+        self.afspelend = True
 
     def stop(self):
         """

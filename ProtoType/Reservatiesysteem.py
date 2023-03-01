@@ -69,7 +69,7 @@ class Reservatiesysteem:
         :param id: integer (id van de gebruiker)
         :param voornaam: string (voornaam van de gebruiker)
         :param achternaam: string (achternaam van de gebruiker)
-        :param mail: string (e-amil adres van gebruiker)
+        :param mail: string (e-mail adres van gebruiker)
         """
         newGebruiker = Gebruiker(self.id_counter, voornaam, achternaam, mail)
         self.id_counter += 1
@@ -317,7 +317,7 @@ class Reservatiesysteem:
         vol = vertoning.verminder_plaatsenFysiek(plaatsen)
 
         if vol:
-            raise Exception("Geen plek meer in deze zaal")         #To discuss: Dit toch checken voordat we uitlezen? Moeten we dit ergens aangeven?
+            self.start(vertoningid)       #To discuss: Dit toch checken voordat we uitlezen? Moeten we dit ergens aangeven?
 
         return vol
 
@@ -329,8 +329,11 @@ class Reservatiesysteem:
         """
 
         """Roept vertoning start aan"""
-
-        pass
+        if self.vertoningen.tableRetrieve(vertoningid)[1]:
+            vertoning_object = self.vertoningen.tableRetrieve(vertoningid)[0]
+            vertoning_object.start()
+            return True
+        raise Exception("Vertoning bestaat niet")
 
     def stop(self):
         """
