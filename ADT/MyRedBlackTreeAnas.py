@@ -917,7 +917,8 @@ class RedBlackTreeTable():
     def tableIsEmpty(self):
         return self.RBT.isEmpty()
 
-    def tableInsert(self,tree):
+    def tableInsert(self,key,val):
+        tree = createTreeItem(key,val)
         return self.RBT.insertItem(tree)
 
     def tableRetrieve(self,key):
