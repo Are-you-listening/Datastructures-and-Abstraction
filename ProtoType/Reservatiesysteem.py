@@ -137,7 +137,7 @@ class Reservatiesysteem:
         if not self.zalen.retrieve(zaalnummer):
             return False
 
-        if not self.films.retrieve(0): # subject to change: LinkedChain retrieve probleem
+        if not self.films.tableRetrieveTranverse(filmid): # subject to change: LinkedChain retrieve probleem
             return False
 
         if isinstance(filmid, int) and isinstance(zaalnummer, int) and isinstance(slot, int) and filmid >= 0 and zaalnummer >= 0 and slot >= 0:
@@ -333,20 +333,23 @@ class Reservatiesysteem:
         """
 
         """Roept vertoning start aan"""
-        if self.vertoningen.tableRetrieve(vertoningid)[1]:
+        if self.vertoningen.tableRetrieve(vertoningid)[1]: # ik denk dat een vertoning nooit kan overlappen door het slot systeem en altijd stop bij de volgende slot.
             vertoning_object = self.vertoningen.tableRetrieve(vertoningid)[0]
             vertoning_object.start()
             return True
         raise Exception("Vertoning bestaat niet")
 
-    def stop(self):
+    def stop(self, vertoningid): #Public
         """
         Stopt de vertoning
         preconditie: De film moet al gestart zijn
         postconditie: De vertoning wordt beëindigd (gestart = false)
         """
-
-        pass
+        if self.vertoningen.tableRetrieve(vertoningid)[1]: # ik denk dat een vertoning nooit kan overlappen door het slot systeem en altijd stop bij de volgende slot.
+            vertoning_object = self.vertoningen.tableRetrieve(vertoningid)[0]
+            vertoning_object.stop()
+            return True
+        raise Exception("Vertoning bestaat niet")
 
     def retrieveFilm(self, id): # interne functie. wij moeten nog bespreken hoe we dit soort functies regelen
         """

@@ -36,6 +36,7 @@ class Vertoning:
         :param vrije_plaatsen: integer
         :data afspelend: bool
         :data vrije_plaatsenFysiek
+        :data vrije_plaatsen
         """
         if isinstance(id, int) and isinstance(filmid, int) and isinstance(zaalnummer, int) and isinstance(slot, int) and isinstance(vrije_plaatsen, int): # dit zal ik nog veranderen naar unsigend integers
             self.id = id
@@ -46,6 +47,7 @@ class Vertoning:
             self.vrije_plaatsenVirtueel = vrije_plaatsen
             self.afspelend = None
             self.vrije_plaatsenFysiek = vrije_plaatsen
+            self.vrije_plaatsen = vrije_plaatsen
 
     def verminder_plaatsenVirtueel(self, hoeveelheid):
         """
@@ -102,5 +104,6 @@ class Vertoning:
         preconditie: De film moet al gestart zijn
         postconditie: De vertoning wordt beëindigd (gestart = false)
         """
-
-        pass
+        self.afspelend = False
+        self.vrije_plaatsenFysiek = self.vrije_plaatsen
+        self.vrije_plaatsenVirtueel = self.vrije_plaatsen
