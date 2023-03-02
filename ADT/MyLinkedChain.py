@@ -165,3 +165,41 @@ class LinkedChain:
         ketting = list(input)
         for i in range(len(ketting)):
             self.insert(i+1, ketting[i])
+
+class LinkedChainTable:
+
+    def __init__(self):
+        self.chain = LinkedChain()
+
+    def tableInsert(self, newItem):
+        self.chain.insert(0, newItem)
+
+    def tableRetrieve(self, searchkey):
+        currentNode = self.chain.dummyhead
+        while currentNode.next != self.chain.dummyhead:
+            if currentNode.value == searchkey:
+                return currentNode.value
+            currentNode = currentNode.next
+        return False
+
+    def tableDelete(self, key):
+        currentNode = self.chain.dummyhead
+        count = 0
+        while currentNode.next != self.chain.dummyhead:
+            if currentNode.value == key:
+                self.chain.delete(count)
+                return True
+            currentNode = currentNode.next
+            count += 1
+        return False
+
+    def traverseTable(self, visitfunction):
+        currentNode = self.chain.dummyhead
+        while currentNode.next != self.chain.dummyhead:
+            visitfunction(currentNode.value)
+
+    def save(self):
+        return self.chain.save()
+
+    def load(self, input):
+        return self.chain.load(input)

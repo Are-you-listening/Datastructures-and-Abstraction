@@ -190,22 +190,45 @@ class Reservatiesysteem:
         postconditie: er wordt een integer teruggeven dat het tijdstip weergeeft.
         :return integer (van self.tijdstip) (geeft het huidige tijdstip weer)
         """
-        pass
+        return self.tijdsstip
 
     def convert_date(self, datum, hour, minutes, seconds): #Private
-        """converteert datum naar seconden"""
+        """converteert datum naar seconden
+
+        preconditie: datum is een string en hour, minutes, seconds zijn integers
+        postconditie: er wordt een integer teruggegeven waarbij de eerste 8 cijfers de datum voorstellen, en de rest stelt hour:minutes:seconds in seconden voor
+        """
+        if not isinstance(datum, str) and isinstance(hour, int) and isinstance(minutes, int) and isinstance(seconds, int):
+            raise Exception("Precondition error: fout type argument in convert_date")
         splitted_datum = datum.split("-")
         jaar = splitted_datum[0]
         maand = splitted_datum[1]
-        dag = splitted_datum[2]
+        dag = splitted_datum[2]     #nieuwe functie om te controleren of een datum geldig is? misschien overbodig
         total = jaar+maand+dag+str(hour*3600+minutes*60+seconds)
         total = int(total)
         return total
-    def convert_time(self): #Private
-        pass
-        """converteert seconden naar datum"""
 
-    def set_time(self, value):
+    def convert_time(self, tijd): #Private
+        pass
+        """converteert seconden naar datum
+        
+        preconditie: het argument tijd is een positieve integer waarbij de eerste digits jjjjmmdd zijn, de rest is de tijd in seconden
+        postconditie: de tijd wordt omgezet en gereturned
+        """
+        if not isinstance(tijd, int):
+            raise Exception("Precondition error: tijd is niet van type int in convert_time")
+        if tijd < 0:
+            raise Exception("Precondition error: tijd kan niet negatief zijn in convert_time")
+        temp = str(tijd)
+        datum = f"{temp[:4]}-{temp[4:6]}-{temp[6:8]}"
+        seconds = int(temp[8:])
+        hours = seconds//3600
+        minutes = (seconds-hours*3600)//60
+        seconds = seconds - hours*3600 - minutes*60
+        return (datum, hours, minutes, seconds)
+
+
+    def set_time(self, tijd):
         """
         zet het huidige tijdstip naar een andere waarde
 
@@ -214,7 +237,11 @@ class Reservatiesysteem:
 
         :param value: integer (nieuwe waarde voor de tijd)
         """
-        pass
+        if not isinstance(tijd, int):
+            raise Exception("Precondition error: tijd is niet van type int in set_time")
+        if tijd < 0:
+            raise Exception("Precondition error: tijd kan niet negatief zijn in set_time")
+        self.tijdsstip = tijd
 
     def increase_time(self): #Subject to be changed: #Private
         """
