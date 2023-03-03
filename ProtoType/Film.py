@@ -27,3 +27,6 @@ class Film:
         self.id = id
         self.titel = titel
         self.rating = rating
+
+    def get_id(self):
+        return self.id

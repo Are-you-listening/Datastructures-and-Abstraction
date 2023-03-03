@@ -1,5 +1,4 @@
-from ADT import MyBSTKars, My_BinarySearchTree, MyCircularLinkedChainKars, MyLinkedChain, MyQueue_LinkedKars, MyTwoThreeFourTreeKars
-from ADT import MyQueueLinkedTibo
+from ADT import MyCircularLinkedChainAnas , MyQueue_LinkedKars , MyQueueLinkedTibo , My_BinarySearchTreeAnas
 from Film import Film
 from Zaal import Zaal
 from Vertoning import Vertoning
@@ -40,16 +39,15 @@ class Reservatiesysteem:
         if "display_mode" in kwargs:
             self.display_mode = kwargs["display_mode"]
 
-
-        self.id_counter = 0
         self.tijdsstip = 0
 
-        self.films = MyLinkedChain.LinkedChain() # dit moet veranderd worden naar de table, ik noem mijn table LCtable: Subject to be changed
-        self.zalen = MyLinkedChain.LinkedChain()
-        self.vertoningen = My_BinarySearchTree.BSTTable()
-        self.gebruikers = MyLinkedChain.LinkedChain()
+        self.films = MyCircularLinkedChainAnas.LCTable() # dit moet veranderd worden naar de table, ik noem mijn table LCtable: Subject to be changed
+        self.zalen = MyCircularLinkedChainAnas.LCTable()
+        self.gebruikers = MyCircularLinkedChainAnas.LCTable()
+        self.vertoningen = My_BinarySearchTreeAnas.BSTTable()
         self.reservaties = MyQueue_LinkedKars.MyQueue()
-        self.reservatie_archief = MyLinkedChain.LinkedChain()
+        self.reservatie_archief = MyCircularLinkedChainAnas.LCTable()
+        self.logs = MyCircularLinkedChainAnas.LCTable() #Opslag van Log Strings
 
         """init voor InputParser"""
         if "path" in kwargs:
@@ -58,7 +56,7 @@ class Reservatiesysteem:
             self.instruction_parser = InstructionParser(self, MyQueueLinkedTibo.MyQueueTable())
         self.instruction_parser.read_file()
 
-    def maak_gebruiker(self, voornaam, achternaam, mail):
+    def maak_gebruiker(self, id, voornaam, achternaam, mail):
         self.display(f"maak gebruiker: {voornaam} {achternaam} {mail}")
         """
         Maakt een nieuwe gebruiker aan en bewaard die in self.gebruikers
@@ -71,9 +69,8 @@ class Reservatiesysteem:
         :param achternaam: string (achternaam van de gebruiker)
         :param mail: string (e-mail adres van gebruiker)
         """
-        newGebruiker = Gebruiker(self.id_counter, voornaam, achternaam, mail)
-        self.id_counter += 1
-        self.gebruikers.insert(0, newGebruiker)
+        newGebruiker = Gebruiker(id , voornaam, achternaam, mail)
+        self.gebruikers.tableInsert(1, newGebruiker)
 
     #private hulpfunctie per klasse die aangeroepen wordt in maak_.... (roept constructor van klasse aan)
 
@@ -97,9 +94,7 @@ class Reservatiesysteem:
 
         film_object = Film(filmid, titel, rating)
 
-        self.id_counter += 1
-
-        self.films.insert(1, film_object)
+        self.films.tableInsert(1, film_object)
 
     def maak_zaal(self, nummer, maxplaatsen):
 
@@ -120,9 +115,9 @@ class Reservatiesysteem:
 
         zaal_object = Zaal(nummer, maxplaatsen)
 
-        self.zalen.insert(1, zaal_object)
+        self.zalen.tableInsert(1, zaal_object)
 
-    def maak_vertoning(self, zaalnummer, slot, datum, filmid): # contract moet veranderd worden, of zelfs heel de methode
+    def maak_vertoning(self, id, zaalnummer, slot, datum, filmid): # contract moet veranderd worden, of zelfs heel de methode
         self.display(f"maakt vertoning: {zaalnummer} {slot} {datum} {filmid}")
         """
         Maakt een nieuwe vertoning aan en bewaard die in self.vertoningen
@@ -134,20 +129,20 @@ class Reservatiesysteem:
         :param zaalnummer: integer (nummer van de zaal)
         :param slot: integer (tijdslot van vertoning, integer heeft volgend format uurMinuten vb. 23u30 -> 2330)
         """
-        if not self.zalen.retrieve(zaalnummer):
+        if not self.zalen.tableRetrieveTranverse(zaalnummer):
             return False
 
         if not self.films.tableRetrieveTranverse(filmid): # subject to change: LinkedChain retrieve probleem
             return False
 
         if isinstance(filmid, int) and isinstance(zaalnummer, int) and isinstance(slot, int) and filmid >= 0 and zaalnummer >= 0 and slot >= 0:
-            vrije_plaatsen = self.zalen.retrieve(zaalnummer)  # moet waarschijnlijk veranderd worden naar tableRetrieve
-            vertoning_object = Vertoning(self.id_counter, zaalnummer, slot, datum, filmid, vrije_plaatsen)
-            self.vertoningen.tableInsert(self.id_counter, vertoning_object)
+            vrije_plaatsen = self.zalen.tableRetrieveTranverse(zaalnummer)  # moet waarschijnlijk veranderd worden naar tableRetrieve
+            vertoning_object = Vertoning(id, zaalnummer, slot, datum, filmid, vrije_plaatsen)
+            self.vertoningen.tableInsert(id, vertoning_object)
             return True  # contract moet aangepast worden return
         return False
 
-    def maak_reservatie(self, vertoning_id, aantal_plaatsen, tijdstip, gebruiker_id):
+    def maak_reservatie(self, id , vertoning_id, aantal_plaatsen, tijdstip, gebruiker_id):
         self.display(f"maakt reservatie: {vertoning_id} {aantal_plaatsen} {tijdstip} {gebruiker_id}")
         """
         Maakt een nieuwe reservatie aan en bewaard die in self.reservaties
@@ -166,19 +161,16 @@ class Reservatiesysteem:
 
         if not isinstance(vertoning_id, int) and isinstance(aantal_plaatsen, int) and isinstance(tijdstip,int) and isinstance(gebruiker_id,int) and vertoning_id >= 0 and aantal_plaatsen > 0 and gebruiker_id >= 0 and tijdstip>=0:
             raise Exception("Precondition Error: maak_reservatie")
-            return False
 
         if not self.vertoningen.tableRetrieve(vertoning_id): #MODULARITY ERROR: Zouden we hier bv geen object in kunnen stoppen? En dan de wrapper het laten oplossen?
             raise Exception("Precondition Error: maak_reservatie, vertoning bestaat niet")
-            return False
 
-        if not self.gebruikers.retrieve(gebruiker_id): #Zou dit niet nog een subscript operator moeten hebben "[1]" ?
+        if not self.gebruikers.tableRetrieveTranverse(gebruiker_id): #Zou dit niet nog een subscript operator moeten hebben "[1]" ?
             raise Exception("Precondition Error: maak_reservatie, gebruiker bestaat niet")
-            return False
 
         #Kijk of er plek is in de zaal, bij het aanmaken van de reservatie, verlaag vervolgens het gereserveerd aantal plaatsen
 
-        reservatie = Reservatie(vertoning_id, aantal_plaatsen, tijdstip, gebruiker_id)
+        reservatie = Reservatie(id,vertoning_id, aantal_plaatsen, tijdstip, gebruiker_id)
         self.reservaties.enqueue(reservatie)
         return True
 
@@ -302,6 +294,11 @@ class Reservatiesysteem:
             raise Exception("Precondition Failure: archiveer_reservatie | Er is geen reservatie meer om te archiveren. De queue is leeg")
             return False
 
+    def lees_ticket(self):
+        #Roept Vertoning Lees Ticket aan = String
+        #self.logs.insert(String)
+        pass
+
     def verlaag_plaatsenVirtueel(self, vertoningid, plaatsen): #private functie
         """
         Verminderd het aantal vrije plaatsen in een voorstelling.
@@ -419,7 +416,7 @@ class Reservatiesysteem:
         postconditie: er bestaan geen vertoningen meer
         """
         """maak nieuwe ketting, overschrijf huidige ketting"""
-        self.films = MyLinkedChain.LinkedChain()
+        self.films = MyCircularLinkedChainAnas()
 
     def verwijder_gebruikers(self):
         """

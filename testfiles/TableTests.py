@@ -1,7 +1,7 @@
 import os
 import ADT
 from ADT.MyCircularLinkedChainAnas import LCTable
-from ADT.My_BinarySearchTree import BSTTable
+from ADT.My_BinarySearchTreeAnas import BSTTable
 from ADT.My234treeTibo import TwoThreeFourTreeTable
 from ADT.MyRedBlackTreeAnas import RedBlackTreeTable
 

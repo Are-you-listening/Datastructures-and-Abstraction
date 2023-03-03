@@ -22,3 +22,6 @@ class Zaal:
 
         self.zaalnummer = nummer
         self.plaatsen = plaatsen
+
+    def get_id(self):
+        return self.zaalnummer

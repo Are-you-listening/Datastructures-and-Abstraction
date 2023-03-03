@@ -134,7 +134,7 @@ class MyQueueTable:
     def tableInsert(self, value):
         return self.queue.enqueue(value)
 
-    def tableFront(self):
+    def tableFirst(self):
         return self.queue.getFront()
 
     def save(self):
@@ -145,3 +145,7 @@ class MyQueueTable:
 
     def tableDelete(self):
         return self.queue.dequeue()
+
+    def clear(self):
+        self.queue = MyQueue()
+

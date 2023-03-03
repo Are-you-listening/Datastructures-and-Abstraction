@@ -36,3 +36,6 @@ class Gebruiker:
         :return: de gebruikersgegevens volgens volgend format (voornaam, achternaam, mail)
         """
         return (self.vnaam, self.anaam, self.mail)
+
+    def get_id(self):
+        return self.id

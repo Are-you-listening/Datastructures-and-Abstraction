@@ -107,3 +107,6 @@ class Vertoning:
         self.afspelend = False
         self.vrije_plaatsenFysiek = self.vrije_plaatsen
         self.vrije_plaatsenVirtueel = self.vrije_plaatsen
+
+    def get_id(self):
+        return self.id

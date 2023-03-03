@@ -10,7 +10,7 @@ self.userid: integer (het id van de gebruiker dat de reservatie gemaakt heeft)
 
 
 class Reservatie:
-    def __init__(self, vertoning_id, aantal_plaatsen, tijdstip, gebruiker_id):
+    def __init__(self, id, vertoning_id, aantal_plaatsen, tijdstip, gebruiker_id):
         """
         Initialiseer de reservatie
 
@@ -25,7 +25,11 @@ class Reservatie:
         :param key: is gelijk aan een input variabel naar keuze (zoek in datastructuren)
         """
 
+        self.id = id
         self.vertoning_id = vertoning_id
         self.aantal_plaatsen = aantal_plaatsen
         self.tijdstip = tijdstip
         self.gebruiker_id = gebruiker_id
+
+    def get_id(self):
+        return self.id

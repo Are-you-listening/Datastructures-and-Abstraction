@@ -104,8 +104,9 @@ class InstructionParser:
         args[1] = time
 
         tup = tuple(args[1:])
+
         if tup[1] == "reserveer":
-            self.reservatie_systeem.maak_reservatie(int(tup[3]), int(tup[2]), tup[0], int(tup[2]))
+            self.reservatie_systeem.maak_reservatie(int(tup[2]),int(tup[3]), int(tup[2]), tup[0], int(tup[2]))
             tup = (args[1], "lees_reservatie")
 
         self.use_adt.tableInsert(tup)

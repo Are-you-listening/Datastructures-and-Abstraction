@@ -259,8 +259,8 @@ class LCTable:
 
     def tableRetrieveTranverse(self, id):
         count = 0
-        while self.tableRetrieve(count) != id:
-            if self.tableRetrieve(count) == False:
+        while self.tableRetrieve(count)[0].get_id() != id:
+            if self.tableRetrieve(count)[1] == False:
                 return False
             count += 1
         return self.tableRetrieve(count)
@@ -276,3 +276,6 @@ class LCTable:
 
     def save(self):
         return self.LC.save()
+
+    def clear(self):
+        self.LC = LinkedChain()
