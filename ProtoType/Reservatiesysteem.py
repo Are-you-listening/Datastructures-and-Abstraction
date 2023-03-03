@@ -187,7 +187,7 @@ class Reservatiesysteem:
     def convert_date(self, datum, hour, minutes, seconds): #Private
         """converteert datum naar seconden
 
-        preconditie: datum is een string en hour, minutes, seconds zijn integers
+        preconditie: datum is een string en hour, minutes, seconds zijn integers (de datum bestaat)
         postconditie: er wordt een integer teruggegeven waarbij de eerste 8 cijfers de datum voorstellen, en de rest stelt hour:minutes:seconds in seconden voor
         """
         if not isinstance(datum, str) and isinstance(hour, int) and isinstance(minutes, int) and isinstance(seconds, int):
@@ -234,17 +234,6 @@ class Reservatiesysteem:
         if tijd < 0:
             raise Exception("Precondition error: tijd kan niet negatief zijn in set_time")
         self.tijdsstip = tijd
-
-    def increase_time(self): #Subject to be changed: #Private
-        """
-        Verhoogd de tijd met 1
-
-        precondities: er worden geen parameter gegeven.
-        postconditie: het tijdstip wordt met 1 verhoogd
-        """
-
-        #Onnodige functie? We gaan nooit de tijd met 1 verhogen? EVt verhogen naar volgend tijdstip?
-        pass
 
     def lees_reservatie(self):
         """
