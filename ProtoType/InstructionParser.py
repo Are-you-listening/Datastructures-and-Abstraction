@@ -86,9 +86,9 @@ class InstructionParser:
         elif args[0] == "film":
             self.reservatie_systeem.maak_film(int(args[1]), args[2], float(args[3]))
         elif args[0] == "vertoning":
-            self.reservatie_systeem.maak_vertoning(int(args[2]), int(args[3]), args[4], int(args[5]))
+            self.reservatie_systeem.maak_vertoning(int(args[1]), int(args[2]), int(args[3]), args[4], int(args[5]))
         elif args[0] == "gebruiker":
-            self.reservatie_systeem.maak_gebruiker(args[2], args[3], args[4])
+            self.reservatie_systeem.maak_gebruiker(int(args[1]), args[2], args[3], args[4])
 
     def __setup_commands(self, args):
         """
@@ -106,10 +106,11 @@ class InstructionParser:
         tup = tuple(args[1:])
 
         if tup[1] == "reserveer":
-            self.reservatie_systeem.maak_reservatie(int(tup[2]),int(tup[3]), int(tup[2]), tup[0], int(tup[2]))
-            tup = (args[1], "lees_reservatie")
+            pass
+            #tup = (args[1], "lees_reservatie")
 
         self.use_adt.tableInsert(tup)
+        self.check_queue(tup[0])
 
     def check_queue(self, time):
         """
@@ -117,14 +118,18 @@ class InstructionParser:
         precondities: de tijd dat gegeven wordt is een integer
         postoconditie: indien de tijd matched wordt de instructie uitgevoerd
         """
-        tup = self.use_adt.tableFront()[0]
+        tup = self.use_adt.tableFirst()[0]
         instruction = tup[1]
 
         if tup[0] == time:
-            if instruction == "lees_reserveer":
+            if instruction == "reserveer":
+
+                """id moet wrs met counter want is niet in system.txt file"""
+                self.reservatie_systeem.maak_reservatie(int(tup[2]), int(tup[3]), int(tup[2]), tup[0], int(tup[2]))
+            elif instruction == "lees_reserveer":
                 pass
             elif instruction == "ticket":
-                pass
+                self.reservatie_systeem.lees_ticket(int(tup[2]), int(tup[3]))
             elif instruction == "log":
                 pass
 

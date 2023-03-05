@@ -283,7 +283,7 @@ class Reservatiesysteem:
             raise Exception("Precondition Failure: archiveer_reservatie | Er is geen reservatie meer om te archiveren. De queue is leeg")
             return False
 
-    def lees_ticket(self):
+    def lees_ticket(self, vertoningid, aantal_mensen):
         #Roept Vertoning Lees Ticket aan = String
         #self.logs.insert(String)
         pass
@@ -395,6 +395,7 @@ class Reservatiesysteem:
         """
 
         """maak nieuwe ketting, overschrijf huidige ketting"""
+        #self.vertoningen.clear()
         pass
 
     def verwijder_films(self):
@@ -405,7 +406,7 @@ class Reservatiesysteem:
         postconditie: er bestaan geen vertoningen meer
         """
         """maak nieuwe ketting, overschrijf huidige ketting"""
-        self.films = MyCircularLinkedChainAnas()
+        self.films.clear()
 
     def verwijder_gebruikers(self):
         """
@@ -415,7 +416,7 @@ class Reservatiesysteem:
         postconditie: er bestaan geen vertoningen meer
         """
         """maak nieuwe ketting, overschrijf huidige ketting"""
-        pass
+        self.gebruikers.clear()
 
     def display(self, msg):
         """private function"""

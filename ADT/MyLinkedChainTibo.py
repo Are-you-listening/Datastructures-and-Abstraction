@@ -159,27 +159,31 @@ class LinkedChain:
 
         return lst
 
-class LinkedChainTable():
+class LinkedChainTable:
     def __init__(self):
         self.l = LinkedChain()
 
     def tableIsEmpty(self):
         return self.l.isEmpty()
 
-    def tableInsert(self, item):
-        return self.l.insert(0, item)
+    def tableInsert(self, index, val):
+        return self.l.insert(index, val)
 
-    def tableRetrieve(self,key):
+    def tableRetrieve(self, index):
+        return self.l.retrieve(index)
+
+    def tableRetrieveTranverse(self, id):
         for i in range(self.l.length):
-            val = self.l.retrieve(i)
-            if val == key:
+            val = self.l.retrieve(i)[0]
+            if val.get_id() == id:
                 return val
         return False
 
-    def traverseTable(self, func):
-        for i in range(self.l.length):
-            val = self.l.retrieve(i)
-            func(val)
+    def tableDelete(self, index):
+        return self.l.delete(index)
+
+    def tableGetLength(self):
+        return self.l.getLength()
 
     def save(self):
         return self.l.save()
@@ -187,10 +191,5 @@ class LinkedChainTable():
     def load(self, dict):
         return self.l.load(dict)
 
-    def tableDelete(self, key):
-        for i in range(self.l.length):
-            val = self.l.retrieve(i)
-            if val == key:
-                self.l.delete(i)
-                return True
-        return False
+    def clear(self):
+        self.l = LinkedChain()

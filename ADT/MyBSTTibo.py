@@ -393,3 +393,6 @@ class BSTTable():
 
     def tableDelete(self, key):
         return self.bst.searchTreeDelete(key)
+
+    def clear(self):
+        self.bst = BST()
