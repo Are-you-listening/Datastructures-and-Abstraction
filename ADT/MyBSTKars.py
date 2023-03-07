@@ -444,3 +444,6 @@ class BSTTable:
 
     def save(self):
         return self.boom.save()
+
+    def clear(self):
+        self.boom = BST()

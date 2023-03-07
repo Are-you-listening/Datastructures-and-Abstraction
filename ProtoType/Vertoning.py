@@ -57,7 +57,7 @@ class Vertoning:
         postconditie: Het aantal plaatsen worden verminderd.
         :param hoeveelheid: integer (geeft weer hoeveel plaatsen minder er beschikbaar zijn)
         """
-        if self.vrije_plaatsenVirtueel - hoeveelheid < 0:
+        if self.vrije_plaatsenVirtueel - hoeveelheid < 0: #Moet dit niet groter zijn dan 0?
             self.vrije_plaatsenVirtueel = self.vrije_plaatsenVirtueel - hoeveelheid
             return True
         return False

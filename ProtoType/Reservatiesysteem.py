@@ -44,16 +44,16 @@ class Reservatiesysteem:
         self.films = MyCircularLinkedChainAnas.LCTable() # dit moet veranderd worden naar de table, ik noem mijn table LCtable: Subject to be changed
         self.zalen = MyCircularLinkedChainAnas.LCTable()
         self.gebruikers = MyCircularLinkedChainAnas.LCTable()
-        self.vertoningen = My_BinarySearchTreeAnas.BSTTable()
-        self.reservaties = MyQueue_LinkedKars.MyQueue()
+        self.vertoningen = MyBSTAnas.BSTTable()
+        self.reservaties = MyQueueKars.MyQueue()
         self.reservatie_archief = MyCircularLinkedChainAnas.LCTable()
         self.logs = MyCircularLinkedChainAnas.LCTable() #Opslag van Log Strings
 
         """init voor InputParser"""
         if "path" in kwargs:
-            self.instruction_parser = InstructionParser(self, MyQueueLinkedTibo.MyQueueTable(), path=kwargs["path"])
+            self.instruction_parser = InstructionParser(self, MyQueueTibo.MyQueueTable(), path=kwargs["path"])
         else:
-            self.instruction_parser = InstructionParser(self, MyQueueLinkedTibo.MyQueueTable())
+            self.instruction_parser = InstructionParser(self, MyQueueTibo.MyQueueTable())
         self.instruction_parser.read_file()
         self.instruction_parser.main_thread()
 
@@ -157,23 +157,22 @@ class Reservatiesysteem:
         :param gebruiker_id: integer>=0 (id van de gebruiker dat een reservatie maakt). De gebruiker moet bestaan met het bijbehorende ID. 
         """
 
-        # Subject to be changed: aantal_plaatsen; wanneer controleren?
-        # Question: Gebruiker zelf geeft wel handmatig een datum is, we would still need the convert-option?
-
         if not isinstance(vertoning_id, int) and isinstance(aantal_plaatsen, int) and isinstance(tijdstip,int) and isinstance(gebruiker_id,int) and vertoning_id >= 0 and aantal_plaatsen > 0 and gebruiker_id >= 0 and tijdstip>=0:
             raise Exception("Precondition Error: maak_reservatie")
 
-        if not self.vertoningen.tableRetrieve(vertoning_id): #MODULARITY ERROR: Zouden we hier bv geen object in kunnen stoppen? En dan de wrapper het laten oplossen?
+        if not self.vertoningen.tableRetrieve(vertoning_id):
             raise Exception("Precondition Error: maak_reservatie, vertoning bestaat niet")
 
-        if not self.gebruikers.tableRetrieveTranverse(gebruiker_id): #Zou dit niet nog een subscript operator moeten hebben "[1]" ?
+        if not self.gebruikers.tableRetrieveTranverse(gebruiker_id): #Subscript operator?
             raise Exception("Precondition Error: maak_reservatie, gebruiker bestaat niet")
 
-        #Kijk of er plek is in de zaal, bij het aanmaken van de reservatie, verlaag vervolgens het gereserveerd aantal plaatsen
-
-        reservatie = Reservatie(id,vertoning_id, aantal_plaatsen, tijdstip, gebruiker_id)
-        self.reservaties.enqueue(reservatie)
-        return True
+        #Verlaag virtuele plaatsen
+        if self.verlaag_plaatsenVirtueel(vertoning_id,aantal_plaatsen)==True: #Aantal plaatsen succesvol verlaagd
+            ReservatieItem = (tijdstip, Reservatie(id,vertoning_id, aantal_plaatsen, tijdstip, gebruiker_id) )
+            self.reservaties.enqueue(ReservatieItem)
+            return True
+        else:
+            return False
 
     def get_time(self): #Private
         """

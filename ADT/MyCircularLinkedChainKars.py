@@ -169,3 +169,43 @@ class MyLinkedChain:
             self.insert(positie,list[i])
             positie+=1
         return
+
+class LCTable:
+    def __init__(self):
+        self.chain = MyLinkedChain()
+
+    def tableIsEmpty(self):
+        return self.chain.isEmpty()
+
+    def tableInsert(self, index, val):
+        return self.chain.insert(index,val)
+
+    def tableRetrieve(self, index):
+        return self.chain.retrieve(index)
+
+    def tableRetrieveTranverse(self, id):
+        counts = 0
+        value = self.chain.head.value
+        while counts<self.chain.getLength():
+            tuple = self.chain.retrieve(self,counts)
+            if tuple[1]==False:
+                return False
+            if tuple[0].id == id:
+                return value
+            counts += 1
+        return False
+
+    def tableDelete(self, index):
+        return self.chain.delete(index)
+
+    def tableGetLength(self):
+        return self.chain.getLength()
+
+    def load(self, list):
+        return self.chain.load(list)
+
+    def save(self):
+        return self.chain.save()
+
+    def clear(self):
+        self.chain = MyLinkedChain()

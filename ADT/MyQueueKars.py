@@ -142,3 +142,27 @@ print(q.save())
 print(q.getFront()[0])
 print(q.save())"""
 
+class MyQueueTable:
+    def __init__(self):
+        self.queue = MyQueue()
+
+    def tableIsEmpty(self):
+        return self.queue.isEmpty()
+
+    def tableInsert(self, ItemType):
+        return self.queue.enqueue(ItemType)
+
+    def tableFirst(self):
+        return self.queue.getFront()
+
+    def save(self):
+        return self.queue.save()
+
+    def load(self, array):
+        return self.queue.load(array)
+
+    def tableDelete(self):
+        return self.queue.dequeue()
+
+    def clear(self):
+        self.queue = MyQueue()

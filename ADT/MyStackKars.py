@@ -120,3 +120,28 @@ class MyStack:
         z=len(aStack)
         for i in range(len(aStack)):
             self.push(aStack[i])
+
+class MyQueueTable:
+    def __init__(self):
+        self.stack = MyStack
+
+    def tableIsEmpty(self):
+        return self.stack.isEmpty()
+
+    def tableInsert(self, value):
+        self.stack.push(value)
+
+    def tableFirst(self):
+        return self.stack.getTop()
+
+    def save(self):
+        return self.stack.save()
+
+    def load(self, list):
+        return self.stack.load(list)
+
+    def tableDelete(self):
+        return self.stack.pop()
+
+    def clear(self):
+        self.stack = MyStack()
