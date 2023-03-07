@@ -1,8 +1,8 @@
 import os
 import ADT
 from ADT.MyCircularLinkedChainAnas import LCTable
-from ADT.My_BinarySearchTreeAnas import BSTTable
-from ADT.My234treeTibo import TwoThreeFourTreeTable
+from ADT.MyBSTAnas import BSTTable
+from ADT.MyTwoThreeFourTreeTibo import TwoThreeFourTreeTable
 from ADT.MyRedBlackTreeAnas import RedBlackTreeTable
 
 for w in os.listdir("./ADT"): # subject to be changed. dit is een soort van template maar moet nog aangepast worden

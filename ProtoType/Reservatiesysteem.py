@@ -1,4 +1,4 @@
-from ADT import MyCircularLinkedChainAnas , MyQueue_LinkedKars , MyQueueLinkedTibo , My_BinarySearchTreeAnas
+from ADT import MyCircularLinkedChainAnas , MyQueueKars , MyQueueTibo , MyBSTAnas
 from Film import Film
 from Zaal import Zaal
 from Vertoning import Vertoning
