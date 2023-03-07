@@ -6,7 +6,6 @@ from Reservatie import Reservatie
 from Gebruiker import Gebruiker
 from InstructionParser import InstructionParser
 
-
 """
 Deze ADT geeft een reservatiesysteem weer dat gebruik maakt van de andere ADT
 
@@ -21,15 +20,13 @@ self.reservaties_archief: ketting van aangemaakte Reservatie objecten die niet m
 self.tijdstip: integer (= 0 default)  (geeft weer op welk tijdstip het programma zich bevindt)
 """
 
-
 class Reservatiesysteem:
     def __init__(self, **kwargs):
         """
         Het object Reservatiesysteem wordt aangemaakt.
         precondities: er worden geen parameters gegeven
         postconditie: een Reservatiesysteem object wordt aangemaakt
-        """
-        """
+
         :param id counter (universeel)
         :param interne paramater met alle tijdslots
         :param **kwargs, kan "displaymode" bevatten die weergeeft hoe we de data weergeven
@@ -45,7 +42,7 @@ class Reservatiesysteem:
         self.zalen = MyCircularLinkedChainAnas.LCTable()
         self.gebruikers = MyCircularLinkedChainAnas.LCTable()
         self.vertoningen = MyBSTAnas.BSTTable()
-        self.reservaties = MyQueueKars.MyQueue()
+        self.reservaties = MyQueueKars.MyQueueTable()
         self.reservatie_archief = MyCircularLinkedChainAnas.LCTable()
         self.logs = MyCircularLinkedChainAnas.LCTable() #Opslag van Log Strings
 
@@ -72,8 +69,6 @@ class Reservatiesysteem:
         """
         newGebruiker = Gebruiker(id , voornaam, achternaam, mail)
         self.gebruikers.tableInsert(1, newGebruiker)
-
-    #private hulpfunctie per klasse die aangeroepen wordt in maak_.... (roept constructor van klasse aan)
 
     def maak_film(self, filmid, titel, rating):
         """
@@ -144,7 +139,6 @@ class Reservatiesysteem:
         return False
 
     def maak_reservatie(self, id , vertoning_id, aantal_plaatsen, tijdstip, gebruiker_id):
-        self.display(f"maakt reservatie: {vertoning_id} {aantal_plaatsen} {tijdstip} {gebruiker_id}")
         """
         Maakt een nieuwe reservatie aan en bewaard die in self.reservaties
 
@@ -156,6 +150,7 @@ class Reservatiesysteem:
         :param tijdstip: integer>=0 (tijdstip van reservatie)
         :param gebruiker_id: integer>=0 (id van de gebruiker dat een reservatie maakt). De gebruiker moet bestaan met het bijbehorende ID. 
         """
+        self.display(f"maakt reservatie: {vertoning_id} {aantal_plaatsen} {tijdstip} {gebruiker_id}")
 
         if not isinstance(vertoning_id, int) and isinstance(aantal_plaatsen, int) and isinstance(tijdstip,int) and isinstance(gebruiker_id,int) and vertoning_id >= 0 and aantal_plaatsen > 0 and gebruiker_id >= 0 and tijdstip>=0:
             raise Exception("Precondition Error: maak_reservatie")
@@ -166,13 +161,9 @@ class Reservatiesysteem:
         if not self.gebruikers.tableRetrieveTranverse(gebruiker_id): #Subscript operator?
             raise Exception("Precondition Error: maak_reservatie, gebruiker bestaat niet")
 
-        #Verlaag virtuele plaatsen
-        if self.verlaag_plaatsenVirtueel(vertoning_id,aantal_plaatsen)==True: #Aantal plaatsen succesvol verlaagd
-            ReservatieItem = (tijdstip, Reservatie(id,vertoning_id, aantal_plaatsen, tijdstip, gebruiker_id) )
-            self.reservaties.enqueue(ReservatieItem)
-            return True
-        else:
-            return False
+        ReservatieItem = (tijdstip, Reservatie(id,vertoning_id, aantal_plaatsen, tijdstip, gebruiker_id) )
+        self.reservaties.tableInsert(ReservatieItem)
+        return True
 
     def get_time(self): #Private
         """
@@ -219,7 +210,6 @@ class Reservatiesysteem:
         seconds = seconds - hours*3600 - minutes*60
         return (datum, hours, minutes, seconds)
 
-
     def set_time(self, tijd):
         """
         zet het huidige tijdstip naar een andere waarde
@@ -237,53 +227,41 @@ class Reservatiesysteem:
 
     def lees_reservatie(self):
         """
-        Lees de oudste reservatie uit en verwerkt deze.
+        Lees de reservaties uit self.reservaties en verwerkt deze.
 
-        precondities: Er worden geen parameters ingegeven.
-        postconditie: De reservatie is succesvol verwerkt. De vertoning heeft een aangepast aantal vrije_plaatsen.
-
-        A. getTop of queeue: & check voorwaarden
-
-        1. deque + lokaal opslagen
-        2. aantal personen in de zaal verminderen
-        3. check vol
-        4. END: voeg toe aan reservatie archive
+        precondities: Er worden geen parameters ingegeven. self.reservaties bevat enkel reservaties van eenzelfde tijdstip. self.verlaag_plaatsenVirtueel controleert autonoom of dat er plek is in het systeem.
+        postconditie: De reservatie is succesvol verwerkt en toegevoegd aan het archief. De vertoning heeft eventueel een aangepast aantal vrije_plaatsen.
 
         :return: bool:succes
         """
-        reservatie = self.reservaties.getFront()[1]
-        tijdstip = self.reservaties.getFront()[0]
-        vertoning = self.vertoningen.tableRetrieve(reservatie.vertoning_id) #Hier wordt nu gezocht op ID, NOT MODULAIR
+        while self.reservaties.tableIsEmpty()==False:
+            reservatie = self.reservaties.tableFirst()[0][1]
+            tijdstip = self.reservaties.tableFirst()[0][0]
 
-        # Verwijder reservatie & voeg toe aan archief
-        self.verwijder_reservatie()
-        #self.verlaag_plaatsen(id,reservatie.aantal_plaatsen) #Subject to be changed: Verlaag het (fysiek) aantal plaatsen
+            # Verlaag virtuele plaatsen (Independent of dit slaagt of niet)
+            self.verlaag_plaatsenVirtueel(reservatie.vertoning_id,reservatie.aantal_plaatsen)
 
-        # Update datum & tijd
-        self.set_time(tijdstip)
+            # Verwijder reservatie & voeg toe aan archief
+            self.archiveer_reservatie()
 
-        #Welke output moet dit outten in de console ter verificatie // Voor de log file?
+            # Update datum & tijd
+            self.set_time(tijdstip)
 
-        # Subject to be changed: Kijk of de vertoning gestart kan worden?
-        self.start(reservatie.vertoning_id)
         return True
 
-    def archiveer_reservatie(self): #private function
+    def archiveer_reservatie(self): #Private function
         """
-        verwijder de reservatie van voren aan de queue en bewaar die in het reservatie archief
+        Verplaats de reservatie van voor uit self.reservaties naar self.reservaties_archief.
 
-        precondities: er worden geen parameters gegeven en de queue is niet leeg
-        postconditie: de queue self.reservaties wordt 1 kleiner en self.reservatie_archief wordt 1 groter.
+        precondities: Er worden geen parameters ingegeven.
+        postconditie: self.reservaties wordt 1 kleiner en self.reservatie_archief wordt 1 groter.
         """
-        if not self.reservaties.isEmpty():
-            reservatie = self.reservaties.dequeue() #Dequeu
-            self.reservatie_archief.insert(self.reservatie_archief.getLength(),reservatie) #Insert reservatie
-            return True
-        else:
-            raise Exception("Precondition Failure: archiveer_reservatie | Er is geen reservatie meer om te archiveren. De queue is leeg")
-            return False
+        reservatie = self.reservaties.tableDelete()[0] #Dequeu
+        self.reservatie_archief.tableInsert(self.reservatie_archief.getLength(),reservatie) #Insert reservatie
 
-    def lees_ticket(self, vertoningid, aantal_mensen):
+        #To be discussed: self.reservatie_archief.getLength() als index?
+
+    def lees_ticket(self, vertoningid, aantal_mensen): #To be discussed: Private Function?
         #Roept Vertoning Lees Ticket aan = String
         #self.logs.insert(String)
         pass
@@ -366,7 +344,6 @@ class Reservatiesysteem:
 
     def retrieveFilm(self, id): # interne functie. wij moeten nog bespreken hoe we dit soort functies regelen
         """
-
         :param id:
         :return:
         """
@@ -377,7 +354,6 @@ class Reservatiesysteem:
 
     def retrieveZaal(self, id): # interne functie. wij moeten nog bespreken hoe we dit soort functies regelen
         """
-
         :param id:
         :return:
         """
@@ -388,41 +364,34 @@ class Reservatiesysteem:
 
     def verwijder_vertoningen(self):
         """
-        Verwijdert alle vertoningen
+        Verwijdert alle vertoningen.
 
-        precondities: er worden geen parameters gegeven
-        postconditie: er bestaan geen vertoningen meer
+        precondities: Er worden geen parameters ingegeven.
+        postconditie: self.vertoningen is gecleared.
         """
-
-        """maak nieuwe ketting, overschrijf huidige ketting"""
-        #self.vertoningen.clear()
-        pass
+        self.vertoningen.clear()
 
     def verwijder_films(self):
         """
-        Verwijdert alle films
+        Verwijdert alle films.
 
-        precondities: er worden geen parameters gegeven
-        postconditie: er bestaan geen vertoningen meer
+        precondities: Er worden geen parameters ingegeven
+        postconditie: self.films is gecleared.
         """
-        """maak nieuwe ketting, overschrijf huidige ketting"""
         self.films.clear()
 
     def verwijder_gebruikers(self):
         """
         Verwijdert alle gebruikers
 
-        precondities: er worden geen parameters gegeven
-        postconditie: er bestaan geen vertoningen meer
+        precondities: Er worden geen parameters ingegeven
+        postconditie: self.gebruikers is gecleared.
         """
-        """maak nieuwe ketting, overschrijf huidige ketting"""
         self.gebruikers.clear()
 
     def display(self, msg):
         """private function"""
         if self.display_mode == "print":
             print(msg)
-
-
 
 r = Reservatiesysteem(display_mode="print")
