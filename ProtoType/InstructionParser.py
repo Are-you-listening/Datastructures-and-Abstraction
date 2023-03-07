@@ -20,6 +20,9 @@ class InstructionParser:
         self.start_mode = False
         self.use_adt = use_adt
 
+        self.reservaties_waiting = 0
+        self.last_reservatie_time = 0
+
         """kan custom path"""
         if "path" in kwargs:
             self.path = kwargs["path"]
@@ -105,12 +108,7 @@ class InstructionParser:
 
         tup = tuple(args[1:])
 
-        if tup[1] == "reserveer":
-            pass
-            #tup = (args[1], "lees_reservatie")
-
         self.use_adt.tableInsert(tup)
-        self.check_queue(tup[0])
 
     def check_queue(self, time):
         """
@@ -121,13 +119,19 @@ class InstructionParser:
         tup = self.use_adt.tableFirst()[0]
         instruction = tup[1]
 
+        if self.last_reservatie_time != time and self.reservaties_waiting > 0:
+            self.reservatie_systeem.lees_reservatie()
+
+            self.reservaties_waiting -= 1
+            return
+
+        self.last_reservatie_time = time
+
         if tup[0] == time:
             if instruction == "reserveer":
-
                 """id moet wrs met counter want is niet in system.txt file"""
                 self.reservatie_systeem.maak_reservatie(int(tup[2]), int(tup[3]), int(tup[2]), tup[0], int(tup[2]))
-            elif instruction == "lees_reserveer":
-                pass
+                self.reservaties_waiting += 1
             elif instruction == "ticket":
                 self.reservatie_systeem.lees_ticket(int(tup[2]), int(tup[3]))
             elif instruction == "log":
@@ -136,7 +140,10 @@ class InstructionParser:
             self.use_adt.tableDelete()
 
     def get_time(self):
-        return self.use_adt.tableFront()[0][0]
+        if self.use_adt.tableIsEmpty():
+            return None
+        else:
+            return self.use_adt.tableFirst()[0][0]
 
     def __str__(self):
         """
@@ -146,4 +153,10 @@ class InstructionParser:
         """
 
         return str(self.use_adt.tableRetrieve(None))
+
+    def main_thread(self):
+        time = self.get_time()
+        while time is not None:
+            self.check_queue(time)
+            time = self.get_time()
 

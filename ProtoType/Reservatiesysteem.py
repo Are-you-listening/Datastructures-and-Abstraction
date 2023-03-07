@@ -55,6 +55,7 @@ class Reservatiesysteem:
         else:
             self.instruction_parser = InstructionParser(self, MyQueueLinkedTibo.MyQueueTable())
         self.instruction_parser.read_file()
+        self.instruction_parser.main_thread()
 
     def maak_gebruiker(self, id, voornaam, achternaam, mail):
         self.display(f"maak gebruiker: {voornaam} {achternaam} {mail}")
