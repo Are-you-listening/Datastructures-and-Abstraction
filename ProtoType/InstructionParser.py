@@ -29,7 +29,6 @@ class InstructionParser:
         else:
             self.path = "../testfiles/system.txt"
 
-
     def read_file(self):
         """
         functie om de file uit te lezen
