@@ -44,7 +44,7 @@ class Reservatiesysteem:
         self.vertoningen = MyBSTAnas.BSTTable()
         self.reservaties = MyQueueKars.MyQueueTable()
         self.reservatie_archief = MyCircularLinkedChainAnas.LCTable()
-        
+
         """init voor InputParser"""
         if "path" in kwargs:
             self.instruction_parser = InstructionParser(self, MyQueueTibo.MyQueueTable(), path=kwargs["path"])
@@ -304,10 +304,10 @@ class Reservatiesysteem:
         """
 
         # To be changed: Whole function
-        vol =self.vertoningen.tableRetrieve(vertoningid)[0][0].verhoog_plaatsenfysiek(plaatsen)
-        if vol:
+        notVol = self.vertoningen.tableRetrieve(vertoningid)[0][0].verhoog_plaatsenFysiek(plaatsen)
+        if notVol:
             for i in range(plaatsen):
-                self.vertoningen.tableRetrieve(vertoningid)[0][1].tablePop()
+                self.vertoningen.tableRetrieve(vertoningid)[0][1].tableDelete()
             return
         raise Exception("Stack overflow")
 
@@ -319,45 +319,12 @@ class Reservatiesysteem:
         postconditie: De vertoning wordt gestart (gestart = true)
         """
 
-        """Roept vertoning start aan"""
-        if self.vertoningen.tableRetrieve(vertoningid)[1]:  # ik denk dat een vertoning nooit kan overlappen door het slot systeem en altijd stop bij de volgende slot.
-            vertoning_object = self.vertoningen.tableRetrieve(vertoningid)[0]
-            vertoning_object.start()
+        if self.vertoningen.tableRetrieve(vertoningid)[1]: #Indien de vertoning bestaat
+            if self.vertoningen.tableRetrieve(vertoningid)[0][1].tableIsEmpty(): #Kijk of de stack empty is (geen reservaties meer)
+                vertoning_object = self.vertoningen.tableRetrieve(vertoningid)[0][0]
+                vertoning_object.start()
             return True
         raise Exception("Vertoning bestaat niet")
-
-    def stop(self, vertoningid):  # Public
-        """
-        Stopt de vertoning
-        preconditie: De film moet al gestart zijn
-        postconditie: De vertoning wordt beëindigd (gestart = false)
-        """
-        if self.vertoningen.tableRetrieve(vertoningid)[
-            1]:  # ik denk dat een vertoning nooit kan overlappen door het slot systeem en altijd stop bij de volgende slot.
-            vertoning_object = self.vertoningen.tableRetrieve(vertoningid)[0]
-            vertoning_object.stop()
-            return True
-        raise Exception("Vertoning bestaat niet")
-
-    def retrieveFilm(self, id):  # interne functie. wij moeten nog bespreken hoe we dit soort functies regelen
-        """
-        :param id:
-        :return:
-        """
-        l = self.films.save()
-        for w in l:
-            if w.id == id:  # optioneel: dit zou een getter moeten zijn in het geval de datatype naam van self.id verandert. koppeling van software engineering
-                return w
-
-    def retrieveZaal(self, id):  # interne functie. wij moeten nog bespreken hoe we dit soort functies regelen
-        """
-        :param id:
-        :return:
-        """
-        l = self.zalen.save()
-        for w in l:
-            if w.zaalnummer == id:  # optioneel: dit zou een getter moeten zijn in het geval de datatype naam van self.zaalnummer verandert. koppeling van software engineering
-                return w
 
     def verwijder_vertoningen(self):
         """

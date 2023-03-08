@@ -45,7 +45,7 @@ class Vertoning:
         self.filmid = filmid
         self.vrije_plaatsenVirtueel = vrije_plaatsen
         self.afspelend = None
-        self.vrije_plaatsenFysiek = vrije_plaatsen
+        self.vrije_plaatsenFysiek = 0
         self.vrije_plaatsen = vrije_plaatsen
 
     def verminder_plaatsenVirtueel(self, hoeveelheid):
@@ -69,7 +69,7 @@ class Vertoning:
         postconditie: Het aantal plaatsen worden verminderd.
         :param hoeveelheid: integer (geeft weer hoeveel plaatsen minder er beschikbaar zijn)
         """
-        if self.vrije_plaatsenFysiek + hoeveelheid > self.vrije_plaatsen:
+        if self.vrije_plaatsenFysiek + hoeveelheid < self.vrije_plaatsen:
             self.vrije_plaatsenFysiek = self.vrije_plaatsenFysiek - hoeveelheid
             return True
         return False
@@ -96,16 +96,6 @@ class Vertoning:
         postconditie: De vertoning wordt gestart (gestart = true)
         """
         self.afspelend = True
-
-    def stop(self):
-        """
-        Stopt de vertoning
-        preconditie: De film moet al gestart zijn
-        postconditie: De vertoning wordt beëindigd (gestart = false)
-        """
-        self.afspelend = False
-        self.vrije_plaatsenFysiek = self.vrije_plaatsen
-        self.vrije_plaatsenVirtueel = self.vrije_plaatsen
 
     def get_id(self):
         return self.id
