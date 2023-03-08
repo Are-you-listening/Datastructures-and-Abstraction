@@ -46,6 +46,7 @@ class InstructionParser:
                 """verwijder useless data"""
                 line = line.replace("\n", "")
                 line = line.replace("\u2028", "")
+                line = line.replace("â€¨", "")
 
                 """zorg dat aanhalingstekens bij elkaar blijven"""
                 line_array = line.split('"')
@@ -89,7 +90,7 @@ class InstructionParser:
         elif args[0] == "film":
             self.reservatie_systeem.maak_film(int(args[1]), args[2], float(args[3]))
         elif args[0] == "vertoning":
-            self.reservatie_systeem.maak_vertoning(int(args[1]), int(args[2]), int(args[3]), args[4], int(args[5]))
+            self.reservatie_systeem.maak_vertoning(int(args[1]), int(args[2]), int(args[3]), args[4], int(args[5]), int(args[6]))
         elif args[0] == "gebruiker":
             self.reservatie_systeem.maak_gebruiker(int(args[1]), args[2], args[3], args[4])
 

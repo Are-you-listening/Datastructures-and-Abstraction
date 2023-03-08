@@ -226,6 +226,7 @@ class Reservatiesysteem:
         self.tijdsstip = tijd
 
     def lees_reservatie(self):
+        self.display(f"leest reservatie")
         """
         Lees de reservaties uit self.reservaties en verwerkt deze.
 
@@ -280,8 +281,7 @@ class Reservatiesysteem:
 
         #To be changed: Whole function
 
-        vertoning = self.vertoningen.tableRetrieve(vertoningid)
-
+        vertoning = self.vertoningen.tableRetrieve(vertoningid)[0]
         vol = vertoning.verminder_plaatsenVirtueel(plaatsen)
 
         return vol
