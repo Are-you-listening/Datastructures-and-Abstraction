@@ -1,4 +1,4 @@
-from ADT import MyCircularLinkedChainAnas , MyQueueKars , MyQueueTibo , MyBSTAnas
+from ADT import MyCircularLinkedChainAnas, MyQueueKars, MyQueueTibo, MyBSTAnas, MyStackKars
 from Film import Film
 from Zaal import Zaal
 from Vertoning import Vertoning
@@ -44,8 +44,8 @@ class Reservatiesysteem:
         self.vertoningen = MyBSTAnas.BSTTable()
         self.reservaties = MyQueueKars.MyQueueTable()
         self.reservatie_archief = MyCircularLinkedChainAnas.LCTable()
-        self.logs = MyCircularLinkedChainAnas.LCTable() #Opslag van Log Strings
-        self.reservatieStack = MyStack
+        self.logs = MyCircularLinkedChainAnas.LCTable()  # Opslag van Log Strings
+        self.reservatieStack = MyStackKars.MyStackTable()
 
         """init voor InputParser"""
         if "path" in kwargs:
@@ -257,8 +257,8 @@ class Reservatiesysteem:
         precondities: Er worden geen parameters ingegeven.
         postconditie: self.reservaties wordt 1 kleiner en self.reservatie_archief wordt 1 groter.
         """
-        reservatie = self.reservaties.tableDelete()[0] #Dequeu
-        self.reservatie_archief.tableInsert(self.reservatie_archief.getLength(),reservatie) #Insert reservatie
+        reservatie = self.reservaties.tableDelete()[0]  # Dequeu
+        self.reservatie_archief.tableInsert(1, reservatie)  # Insert reservatie
 
         #To be discussed: self.reservatie_archief.getLength() als index?
 

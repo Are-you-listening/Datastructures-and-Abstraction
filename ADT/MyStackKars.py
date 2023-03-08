@@ -121,7 +121,7 @@ class MyStack:
         for i in range(len(aStack)):
             self.push(aStack[i])
 
-class MyQueueTable:
+class MyStackTable:
     def __init__(self):
         self.stack = MyStack
 
