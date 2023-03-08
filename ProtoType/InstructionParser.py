@@ -107,15 +107,13 @@ class InstructionParser:
         time = self.reservatie_systeem.convert_date(datum, hour, minutes, 0)
         args[1] = time
 
-        tup = tuple(args[1:])
-
+        tup = (args[1])
         if args[2] == "reserveer":
             tup = (args[1], args[2], args[3], args[4], args[5])
         elif args[2] == "ticket":
             tup = (args[1], args[2], args[3], args[4])
         elif args[2] == "log":
             tup = (args[1], args[2])
-
 
         self.use_adt.tableInsert(tup)
 
