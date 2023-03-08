@@ -61,7 +61,7 @@ class Vertoning:
             return True
         return False
 
-    def verminder_plaatsenFysiek(self, hoeveelheid):
+    def verhoog_plaatsenFysiek(self, hoeveelheid):
         """
         Deze functie verminderd het aantal beschikbare plaatsen voor de vertoning
 
@@ -69,7 +69,7 @@ class Vertoning:
         postconditie: Het aantal plaatsen worden verminderd.
         :param hoeveelheid: integer (geeft weer hoeveel plaatsen minder er beschikbaar zijn)
         """
-        if self.vrije_plaatsenFysiek - hoeveelheid < 0:
+        if self.vrije_plaatsenFysiek + hoeveelheid > self.vrije_plaatsen:
             self.vrije_plaatsenFysiek = self.vrije_plaatsenFysiek - hoeveelheid
             return True
         return False

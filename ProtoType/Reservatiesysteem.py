@@ -45,9 +45,7 @@ class Reservatiesysteem:
         self.vertoningen = MyBSTAnas.BSTTable()
         self.reservaties = MyQueueKars.MyQueueTable()
         self.reservatie_archief = MyCircularLinkedChainAnas.LCTable()
-        self.logs = MyCircularLinkedChainAnas.LCTable()  # Opslag van Log Strings
-        self.reservatieStack = MyStackKars.MyStackTable()
-
+        
         """init voor InputParser"""
         if "path" in kwargs:
             self.instruction_parser = InstructionParser(self, MyQueueTibo.MyQueueTable(), path=kwargs["path"])
@@ -137,7 +135,9 @@ class Reservatiesysteem:
         if isinstance(filmid, int) and isinstance(zaalnummer, int) and isinstance(slot,
                                                                                   int) and filmid >= 0 and zaalnummer >= 0 and slot >= 0:
             vertoning_object = Vertoning(id, zaalnummer, slot, datum, filmid, vrije_plaatsen)
-            self.vertoningen.tableInsert(id, vertoning_object)
+            stack = MyStackKars.MyStackTable()
+            self.vertoningen.tableInsert(id, (vertoning_object,stack) ) # kijk uit met tuple van drie waarden, vraag meneer als dit mag
+
             return True  # contract moet aangepast worden return
         return False
 
@@ -306,20 +306,13 @@ class Reservatiesysteem:
         """
 
         # To be changed: Whole function
-
-        vertoning = self.vertoningen.tableRetrieve(
-            vertoningid)  # technisch gezien zou dit nooit een vol melding moeten geven als verlaagplaatsen virtueel correct werkt
-        # behalve het geval dat mensen komen opdagen die niet geresveerd hebben en met te veel komen
-        vol = vertoning.verminder_plaatsenFysiek(plaatsen)
-
+        vol =self.vertoningen.tableRetrieve(vertoningid)[0][0].verhoog_plaatsenfysiek(plaatsen)
         if vol:
-            if vertoning.check_vol():
-                self.start(vertoningid)
+            for i in range(plaatsen):
+                self.vertoningen.tableRetrieve(vertoningid)[0][1].tablePop()
+            return
+        raise Exception("Stack overflow")
 
-        if not vol:
-            self.start(vertoningid)  # To discuss: Dit toch checken voordat we uitlezen? Moeten we dit ergens aangeven?
-
-        return vol
 
     def start(self, vertoningid):  # Public
         """
