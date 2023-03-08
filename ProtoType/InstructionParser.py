@@ -6,7 +6,7 @@ class InstructionParser:
         Alle commandos dat door dit object wordt aangeroepen moet publiek zijn
 
         :param reservatie_systeem: refrence naar reservatiesysteem
-        :param use_adt: de adt (queue) dat gebruikt wordt om de toekomstige orders (in tupel vorm) te bewren
+        :param use_adt: de adt (queue) dat gebruikt wordt om de toekomstige orders (in tupel vorm) te between
                         volgens format (timestamp, order)
         :param kwargs:kan de key "path" bevatten die een relatief path geeft naar de file die uitgelezen moet worden
 
@@ -108,6 +108,14 @@ class InstructionParser:
         args[1] = time
 
         tup = tuple(args[1:])
+
+        if args[2] == "reserveer":
+            tup = (args[1], args[2], args[3], args[4], args[5])
+        elif args[2] == "ticket":
+            tup = (args[1], args[2], args[3], args[4])
+        elif args[2] == "log":
+            tup = (args[1], args[2])
+
 
         self.use_adt.tableInsert(tup)
 
