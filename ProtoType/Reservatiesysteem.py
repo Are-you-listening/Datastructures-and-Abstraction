@@ -20,6 +20,7 @@ self.reservaties_archief: ketting van aangemaakte Reservatie objecten die niet m
 self.tijdstip: integer (= 0 default)  (geeft weer op welk tijdstip het programma zich bevindt)
 """
 
+
 class Reservatiesysteem:
     def __init__(self, **kwargs):
         """
@@ -38,7 +39,7 @@ class Reservatiesysteem:
 
         self.tijdsstip = 0
 
-        self.films = MyCircularLinkedChainAnas.LCTable() # dit moet veranderd worden naar de table, ik noem mijn table LCtable: Subject to be changed
+        self.films = MyCircularLinkedChainAnas.LCTable()  # dit moet veranderd worden naar de table, ik noem mijn table LCtable: Subject to be changed
         self.zalen = MyCircularLinkedChainAnas.LCTable()
         self.gebruikers = MyCircularLinkedChainAnas.LCTable()
         self.vertoningen = MyBSTAnas.BSTTable()
@@ -68,7 +69,7 @@ class Reservatiesysteem:
         :param achternaam: string (achternaam van de gebruiker)
         :param mail: string (e-mail adres van gebruiker)
         """
-        newGebruiker = Gebruiker(id , voornaam, achternaam, mail)
+        newGebruiker = Gebruiker(id, voornaam, achternaam, mail)
         self.gebruikers.tableInsert(1, newGebruiker)
 
     def maak_film(self, filmid, titel, rating):
@@ -114,7 +115,8 @@ class Reservatiesysteem:
 
         self.zalen.tableInsert(1, zaal_object)
 
-    def maak_vertoning(self, id, zaalnummer, slot, datum, filmid, vrije_plaatsen): # contract moet veranderd worden, of zelfs heel de methode
+    def maak_vertoning(self, id, zaalnummer, slot, datum, filmid,
+                       vrije_plaatsen):  # contract moet veranderd worden, of zelfs heel de methode
         self.display(f"maakt vertoning: {zaalnummer} {slot} {datum} {filmid}")
         """
         Maakt een nieuwe vertoning aan en bewaard die in self.vertoningen
@@ -129,16 +131,17 @@ class Reservatiesysteem:
         if not self.zalen.tableRetrieveTranverse(zaalnummer):
             return False
 
-        if not self.films.tableRetrieveTranverse(filmid): # subject to change: LinkedChain retrieve probleem
+        if not self.films.tableRetrieveTranverse(filmid):  # subject to change: LinkedChain retrieve probleem
             return False
 
-        if isinstance(filmid, int) and isinstance(zaalnummer, int) and isinstance(slot, int) and filmid >= 0 and zaalnummer >= 0 and slot >= 0:
+        if isinstance(filmid, int) and isinstance(zaalnummer, int) and isinstance(slot,
+                                                                                  int) and filmid >= 0 and zaalnummer >= 0 and slot >= 0:
             vertoning_object = Vertoning(id, zaalnummer, slot, datum, filmid, vrije_plaatsen)
             self.vertoningen.tableInsert(id, vertoning_object)
             return True  # contract moet aangepast worden return
         return False
 
-    def maak_reservatie(self, id , vertoning_id, aantal_plaatsen, tijdstip, gebruiker_id):
+    def maak_reservatie(self, id, vertoning_id, aantal_plaatsen, tijdstip, gebruiker_id):
         """
         Maakt een nieuwe reservatie aan en bewaard die in self.reservaties
 
@@ -152,20 +155,23 @@ class Reservatiesysteem:
         """
         self.display(f"maakt reservatie: {vertoning_id} {aantal_plaatsen} {tijdstip} {gebruiker_id}")
 
-        if not isinstance(vertoning_id, int) and isinstance(aantal_plaatsen, int) and isinstance(tijdstip,int) and isinstance(gebruiker_id,int) and vertoning_id >= 0 and aantal_plaatsen > 0 and gebruiker_id >= 0 and tijdstip>=0:
+        if not isinstance(vertoning_id, int) and isinstance(aantal_plaatsen, int) and isinstance(tijdstip,
+                                                                                                 int) and isinstance(
+                gebruiker_id,
+                int) and vertoning_id >= 0 and aantal_plaatsen > 0 and gebruiker_id >= 0 and tijdstip >= 0:
             raise Exception("Precondition Error: maak_reservatie")
 
         if not self.vertoningen.tableRetrieve(vertoning_id):
             raise Exception("Precondition Error: maak_reservatie, vertoning bestaat niet")
 
-        if not self.gebruikers.tableRetrieveTranverse(gebruiker_id): #Subscript operator?
+        if not self.gebruikers.tableRetrieveTranverse(gebruiker_id):  # Subscript operator?
             raise Exception("Precondition Error: maak_reservatie, gebruiker bestaat niet")
 
-        ReservatieItem = (tijdstip, Reservatie(id,vertoning_id, aantal_plaatsen, tijdstip, gebruiker_id) )
+        ReservatieItem = (tijdstip, Reservatie(id, vertoning_id, aantal_plaatsen, tijdstip, gebruiker_id))
         self.reservaties.tableInsert(ReservatieItem)
         return True
 
-    def get_time(self): #Private
+    def get_time(self):  # Private
         """
         Geeft het huidige tijdstip terug
 
@@ -175,26 +181,27 @@ class Reservatiesysteem:
         """
         return self.tijdsstip
 
-    def convert_date(self, datum, hour, minutes, seconds): #Private
+    def convert_date(self, datum, hour, minutes, seconds):  # Private
         """converteert datum naar seconden
 
         preconditie: datum is een string en hour, minutes, seconds zijn integers (de datum bestaat)
         postconditie: er wordt een integer teruggegeven waarbij de eerste 8 cijfers de datum voorstellen, en de rest stelt hour:minutes:seconds in seconden voor
         """
-        if not isinstance(datum, str) and isinstance(hour, int) and isinstance(minutes, int) and isinstance(seconds, int):
+        if not isinstance(datum, str) and isinstance(hour, int) and isinstance(minutes, int) and isinstance(seconds,
+                                                                                                            int):
             raise Exception("Precondition error: fout type argument in convert_date")
         splitted_datum = datum.split("-")
         jaar = splitted_datum[0]
         maand = splitted_datum[1]
-        dag = splitted_datum[2]     #nieuwe functie om te controleren of een datum geldig is? misschien overbodig
-        total = jaar+maand+dag+str(hour*3600+minutes*60+seconds)
+        dag = splitted_datum[2]  # nieuwe functie om te controleren of een datum geldig is? misschien overbodig
+        total = jaar + maand + dag + str(hour * 3600 + minutes * 60 + seconds)
         total = int(total)
         return total
 
-    def convert_time(self, tijd): #Private
+    def convert_time(self, tijd):  # Private
         pass
         """converteert seconden naar datum
-        
+
         preconditie: het argument tijd is een positieve integer waarbij de eerste digits jjjjmmdd zijn, de rest is de tijd in seconden
         postconditie: de tijd wordt omgezet en gereturned
         """
@@ -205,9 +212,9 @@ class Reservatiesysteem:
         temp = str(tijd)
         datum = f"{temp[:4]}-{temp[4:6]}-{temp[6:8]}"
         seconds = int(temp[8:])
-        hours = seconds//3600
-        minutes = (seconds-hours*3600)//60
-        seconds = seconds - hours*3600 - minutes*60
+        hours = seconds // 3600
+        minutes = (seconds - hours * 3600) // 60
+        seconds = seconds - hours * 3600 - minutes * 60
         return (datum, hours, minutes, seconds)
 
     def set_time(self, tijd):
@@ -235,12 +242,12 @@ class Reservatiesysteem:
 
         :return: bool:succes
         """
-        while self.reservaties.tableIsEmpty()==False:
+        while self.reservaties.tableIsEmpty() == False:
             reservatie = self.reservaties.tableFirst()[0][1]
             tijdstip = self.reservaties.tableFirst()[0][0]
 
             # Verlaag virtuele plaatsen (Independent of dit slaagt of niet)
-            self.verlaag_plaatsenVirtueel(reservatie.vertoning_id,reservatie.aantal_plaatsen)
+            self.verlaag_plaatsenVirtueel(reservatie.vertoning_id, reservatie.aantal_plaatsen)
 
             # Verwijder reservatie & voeg toe aan archief
             self.archiveer_reservatie()
@@ -250,7 +257,7 @@ class Reservatiesysteem:
 
         return True
 
-    def archiveer_reservatie(self): #Private function
+    def archiveer_reservatie(self):  # Private function
         """
         Verplaats de reservatie van voor uit self.reservaties naar self.reservaties_archief.
 
@@ -260,14 +267,14 @@ class Reservatiesysteem:
         reservatie = self.reservaties.tableDelete()[0]  # Dequeu
         self.reservatie_archief.tableInsert(1, reservatie)  # Insert reservatie
 
-        #To be discussed: self.reservatie_archief.getLength() als index?
+        # To be discussed: self.reservatie_archief.getLength() als index?
 
-    def lees_ticket(self, vertoningid, aantal_mensen): #To be discussed: Private Function?
-        #Roept Vertoning Lees Ticket aan = String
-        #self.logs.insert(String)
+    def lees_ticket(self, vertoningid, aantal_mensen):  # To be discussed: Private Function?
+        # Roept Vertoning Lees Ticket aan = String
+        # self.logs.insert(String)
         pass
 
-    def verlaag_plaatsenVirtueel(self, vertoningid, plaatsen): #private functie
+    def verlaag_plaatsenVirtueel(self, vertoningid, plaatsen):  # private functie
         """
         Verminderd het aantal vrije plaatsen in een voorstelling.
 
@@ -279,14 +286,14 @@ class Reservatiesysteem:
         :param plaatsen: integer (aantal plaatsen dat niet meer beschikbaar zijn)
         """
 
-        #To be changed: Whole function
+        # To be changed: Whole function
 
         vertoning = self.vertoningen.tableRetrieve(vertoningid)[0]
         vol = vertoning.verminder_plaatsenVirtueel(plaatsen)
 
         return vol
 
-    def verlaag_plaatsenFysiek(self, vertoningid, plaatsen): #private functie
+    def verlaag_plaatsenFysiek(self, vertoningid, plaatsen):  # private functie
         """
         Verminderd het aantal vrije plaatsen in een voorstelling.
 
@@ -298,10 +305,11 @@ class Reservatiesysteem:
         :param plaatsen: integer (aantal plaatsen dat niet meer beschikbaar zijn)
         """
 
-        #To be changed: Whole function
+        # To be changed: Whole function
 
-        vertoning = self.vertoningen.tableRetrieve(vertoningid) # technisch gezien zou dit nooit een vol melding moeten geven als verlaagplaatsen virtueel correct werkt
-                                                                # behalve het geval dat mensen komen opdagen die niet geresveerd hebben en met te veel komen
+        vertoning = self.vertoningen.tableRetrieve(
+            vertoningid)  # technisch gezien zou dit nooit een vol melding moeten geven als verlaagplaatsen virtueel correct werkt
+        # behalve het geval dat mensen komen opdagen die niet geresveerd hebben en met te veel komen
         vol = vertoning.verminder_plaatsenFysiek(plaatsen)
 
         if vol:
@@ -309,11 +317,11 @@ class Reservatiesysteem:
                 self.start(vertoningid)
 
         if not vol:
-            self.start(vertoningid)       #To discuss: Dit toch checken voordat we uitlezen? Moeten we dit ergens aangeven?
+            self.start(vertoningid)  # To discuss: Dit toch checken voordat we uitlezen? Moeten we dit ergens aangeven?
 
         return vol
 
-    def start(self, vertoningid): #Public
+    def start(self, vertoningid):  # Public
         """
         Start de vertoning
         preconditie: De vertoning start op het juiste tijdstip en er mag geen andere vertoning bezig zijn in deze zaal
@@ -321,25 +329,27 @@ class Reservatiesysteem:
         """
 
         """Roept vertoning start aan"""
-        if self.vertoningen.tableRetrieve(vertoningid)[1]: # ik denk dat een vertoning nooit kan overlappen door het slot systeem en altijd stop bij de volgende slot.
+        if self.vertoningen.tableRetrieve(vertoningid)[
+            1]:  # ik denk dat een vertoning nooit kan overlappen door het slot systeem en altijd stop bij de volgende slot.
             vertoning_object = self.vertoningen.tableRetrieve(vertoningid)[0]
             vertoning_object.start()
             return True
         raise Exception("Vertoning bestaat niet")
 
-    def stop(self, vertoningid): #Public
+    def stop(self, vertoningid):  # Public
         """
         Stopt de vertoning
         preconditie: De film moet al gestart zijn
         postconditie: De vertoning wordt beëindigd (gestart = false)
         """
-        if self.vertoningen.tableRetrieve(vertoningid)[1]: # ik denk dat een vertoning nooit kan overlappen door het slot systeem en altijd stop bij de volgende slot.
+        if self.vertoningen.tableRetrieve(vertoningid)[
+            1]:  # ik denk dat een vertoning nooit kan overlappen door het slot systeem en altijd stop bij de volgende slot.
             vertoning_object = self.vertoningen.tableRetrieve(vertoningid)[0]
             vertoning_object.stop()
             return True
         raise Exception("Vertoning bestaat niet")
 
-    def retrieveFilm(self, id): # interne functie. wij moeten nog bespreken hoe we dit soort functies regelen
+    def retrieveFilm(self, id):  # interne functie. wij moeten nog bespreken hoe we dit soort functies regelen
         """
         :param id:
         :return:
@@ -349,14 +359,14 @@ class Reservatiesysteem:
             if w.id == id:  # optioneel: dit zou een getter moeten zijn in het geval de datatype naam van self.id verandert. koppeling van software engineering
                 return w
 
-    def retrieveZaal(self, id): # interne functie. wij moeten nog bespreken hoe we dit soort functies regelen
+    def retrieveZaal(self, id):  # interne functie. wij moeten nog bespreken hoe we dit soort functies regelen
         """
         :param id:
         :return:
         """
         l = self.zalen.save()
         for w in l:
-            if w.zaalnummer == id: # optioneel: dit zou een getter moeten zijn in het geval de datatype naam van self.zaalnummer verandert. koppeling van software engineering
+            if w.zaalnummer == id:  # optioneel: dit zou een getter moeten zijn in het geval de datatype naam van self.zaalnummer verandert. koppeling van software engineering
                 return w
 
     def verwijder_vertoningen(self):
@@ -390,5 +400,6 @@ class Reservatiesysteem:
         """private function"""
         if self.display_mode == "print":
             print(msg)
+
 
 r = Reservatiesysteem(display_mode="print")
