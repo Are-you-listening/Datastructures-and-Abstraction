@@ -71,8 +71,8 @@ class Vertoning:
         """
         if self.vrije_plaatsenFysiek + hoeveelheid < self.vrije_plaatsen:
             self.vrije_plaatsenFysiek = self.vrije_plaatsenFysiek - hoeveelheid
-            return True
-        return False
+            return True #Operatie geslaagd
+        return False #Operatie niet geslaagd
 
     def set_plaatsen(self, plaatsen): # dit moet toch niet meer bestaan
         """

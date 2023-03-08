@@ -270,8 +270,11 @@ class Reservatiesysteem:
         #Verlaag aantal plaatsen & chance stack
         self.verlaag_plaatsenFysiek(vertoningid,aantal_mensen)
 
-        #Push back logs
-        print("["+self.convert_time(self.tijdsstip)+"] De vertoning met ID: "+vertoningid+" is verlaagd met: "+aantal_mensen)
+        #Out logs
+        self.display("["+str(self.convert_time(self.tijdsstip))+"] De vertoning met ID: "+str(vertoningid)+" is verlaagd met: "+str(aantal_mensen))
+
+        #Check of de film gestart kan worden
+        self.start(vertoningid)
 
     def verhoog_plaatsenVirtueel(self, vertoningid, plaatsen):  # private functie
         """
@@ -308,7 +311,6 @@ class Reservatiesysteem:
                 self.vertoningen.tableRetrieve(vertoningid)[0][1].tableDelete()
             return
         raise Exception("Stack overflow")
-
 
     def start(self, vertoningid):  # Public
         """

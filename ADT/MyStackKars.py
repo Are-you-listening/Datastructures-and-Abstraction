@@ -123,7 +123,7 @@ class MyStack:
 
 class MyStackTable:
     def __init__(self):
-        self.stack = MyStack
+        self.stack = MyStack()
 
     def tableIsEmpty(self):
         return self.stack.isEmpty()
