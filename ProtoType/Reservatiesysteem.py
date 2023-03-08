@@ -198,7 +198,6 @@ class Reservatiesysteem:
         return total
 
     def convert_time(self, tijd):  # Private
-        pass
         """converteert seconden naar datum
 
         preconditie: het argument tijd is een positieve integer waarbij de eerste digits jjjjmmdd zijn, de rest is de tijd in seconden
@@ -267,7 +266,6 @@ class Reservatiesysteem:
         self.reservatie_archief.tableInsert(1, reservatie)  # Insert reservatie
 
     def lees_ticket(self, vertoningid, aantal_mensen):  # To be discussed: Private Function?
-
 
         #Verlaag aantal plaatsen & chance stack
         self.verlaag_plaatsenFysiek(vertoningid,aantal_mensen)
