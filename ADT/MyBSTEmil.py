@@ -269,3 +269,6 @@ class BSTTable:
 
     def load(self, input):
         return self.BST.load(input)
+
+    def clear(self):
+       self.BST = BST()

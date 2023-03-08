@@ -658,7 +658,7 @@ class TwoThreeFourTable:
     def tableDelete(self, key):
         return self.tree.deleteItem(key)
 
-    def tableTraverse(self, visitfunction):
+    def traverseTable(self, visitfunction):
         self.tree.inorderTraverse(visitfunction)
 
     def save(self):
@@ -666,3 +666,6 @@ class TwoThreeFourTable:
 
     def load(self, input):
         return self.tree.load(input)
+
+    def clear(self):
+        self.tree = TwoThreeFourTree()

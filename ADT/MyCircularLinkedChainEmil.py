@@ -171,10 +171,16 @@ class LinkedChainTable:
     def __init__(self):
         self.chain = LinkedChain()
 
+    def tableIsEmpty(self):
+        return self.chain.isEmpty()
+
     def tableInsert(self, newItem):
         self.chain.insert(0, newItem)
 
-    def tableRetrieve(self, searchkey):
+    def tableRetrieve(self, plaats):
+        return self.chain.retrieve(plaats)
+
+    def tableRetrieveTranverse(self, searchkey):
         currentNode = self.chain.dummyhead
         while currentNode.next != self.chain.dummyhead:
             if currentNode.value == searchkey:
@@ -198,8 +204,14 @@ class LinkedChainTable:
         while currentNode.next != self.chain.dummyhead:
             visitfunction(currentNode.value)
 
+    def tableGetLength(self):
+        return self.chain.getLength()
+
     def save(self):
         return self.chain.save()
 
     def load(self, input):
         return self.chain.load(input)
+
+    def clear(self):
+        self.chain = LinkedChain()

@@ -109,7 +109,7 @@ class QueueTable:
     def tableInsert(self, newItem):
         return self.queue.enqueue(newItem)
 
-    def tableRetrieve(self):
+    def tableFirst(self):
         return self.queue.getFront()
 
     def tableDelete(self):
@@ -120,3 +120,6 @@ class QueueTable:
 
     def load(self, input):
         return self.queue.load(input)
+
+    def clear(self):
+        self.queue = MyQueue()
