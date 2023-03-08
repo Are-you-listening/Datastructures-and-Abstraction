@@ -32,7 +32,6 @@ class Reservatiesysteem:
         :param interne paramater met alle tijdslots
         :param **kwargs, kan "displaymode" bevatten die weergeeft hoe we de data weergeven
         """
-
         self.display_mode = None
         if "display_mode" in kwargs:
             self.display_mode = kwargs["display_mode"]
@@ -113,8 +112,7 @@ class Reservatiesysteem:
 
         self.zalen.tableInsert(1, zaal_object)
 
-    def maak_vertoning(self, id, zaalnummer, slot, datum, filmid,
-                       vrije_plaatsen):  # contract moet veranderd worden, of zelfs heel de methode
+    def maak_vertoning(self, id, zaalnummer, slot, datum, filmid,vrije_plaatsen):  # contract moet veranderd worden, of zelfs heel de methode
         self.display(f"maakt vertoning: {zaalnummer} {slot} {datum} {filmid}")
         """
         Maakt een nieuwe vertoning aan en bewaard die in self.vertoningen
@@ -169,6 +167,7 @@ class Reservatiesysteem:
 
         ReservatieItem = (tijdstip, Reservatie(id, vertoning_id, aantal_plaatsen, tijdstip, gebruiker_id))
         self.reservaties.tableInsert(ReservatieItem)
+
         return True
 
     def get_time(self):  # Private
@@ -247,7 +246,7 @@ class Reservatiesysteem:
             tijdstip = self.reservaties.tableFirst()[0][0]
 
             # Verlaag virtuele plaatsen (Independent of dit slaagt of niet)
-            self.verlaag_plaatsenVirtueel(reservatie.vertoning_id, reservatie.aantal_plaatsen)
+            self.verhoog_plaatsenVirtueel(reservatie.vertoning_id, reservatie.aantal_plaatsen)
 
             # Verwijder reservatie & voeg toe aan archief
             self.archiveer_reservatie()
@@ -267,14 +266,16 @@ class Reservatiesysteem:
         reservatie = self.reservaties.tableDelete()[0]  # Dequeu
         self.reservatie_archief.tableInsert(1, reservatie)  # Insert reservatie
 
-        # To be discussed: self.reservatie_archief.getLength() als index?
-
     def lees_ticket(self, vertoningid, aantal_mensen):  # To be discussed: Private Function?
-        # Roept Vertoning Lees Ticket aan = String
-        # self.logs.insert(String)
-        pass
 
-    def verlaag_plaatsenVirtueel(self, vertoningid, plaatsen):  # private functie
+
+        #Verlaag aantal plaatsen & chance stack
+        self.verlaag_plaatsenFysiek(vertoningid,aantal_mensen)
+
+        #Push back logs
+        print("["+self.convert_time(self.tijdsstip)+"] De vertoning met ID: "+vertoningid+" is verlaagd met: "+aantal_mensen)
+
+    def verhoog_plaatsenVirtueel(self, vertoningid, plaatsen):  # private functie
         """
         Verminderd het aantal vrije plaatsen in een voorstelling.
 
@@ -285,13 +286,10 @@ class Reservatiesysteem:
         :param vertoningid: integer (id van de vertoning)
         :param plaatsen: integer (aantal plaatsen dat niet meer beschikbaar zijn)
         """
+        for i in range(plaatsen):
+            self.vertoningen.tableRetrieve(vertoningid)[0][1].tableInsert(i)  #[0] = value-type, hiervan [1]: de stack
 
-        # To be changed: Whole function
-
-        vertoning = self.vertoningen.tableRetrieve(vertoningid)[0]
-        vol = vertoning.verminder_plaatsenVirtueel(plaatsen)
-
-        return vol
+        return self.vertoningen.tableRetrieve(vertoningid)[0][0].verminder_plaatsenVirtueel(plaatsen)
 
     def verlaag_plaatsenFysiek(self, vertoningid, plaatsen):  # private functie
         """
@@ -322,8 +320,7 @@ class Reservatiesysteem:
         """
 
         """Roept vertoning start aan"""
-        if self.vertoningen.tableRetrieve(vertoningid)[
-            1]:  # ik denk dat een vertoning nooit kan overlappen door het slot systeem en altijd stop bij de volgende slot.
+        if self.vertoningen.tableRetrieve(vertoningid)[1]:  # ik denk dat een vertoning nooit kan overlappen door het slot systeem en altijd stop bij de volgende slot.
             vertoning_object = self.vertoningen.tableRetrieve(vertoningid)[0]
             vertoning_object.start()
             return True
@@ -393,6 +390,10 @@ class Reservatiesysteem:
         """private function"""
         if self.display_mode == "print":
             print(msg)
+
+    def log(self):
+
+        pass
 
 
 r = Reservatiesysteem(display_mode="print")
