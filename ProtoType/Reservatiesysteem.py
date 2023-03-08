@@ -45,6 +45,7 @@ class Reservatiesysteem:
         self.reservaties = MyQueueKars.MyQueueTable()
         self.reservatie_archief = MyCircularLinkedChainAnas.LCTable()
         self.logs = MyCircularLinkedChainAnas.LCTable() #Opslag van Log Strings
+        self.reservatieStack = MyStack
 
         """init voor InputParser"""
         if "path" in kwargs:
@@ -113,7 +114,7 @@ class Reservatiesysteem:
 
         self.zalen.tableInsert(1, zaal_object)
 
-    def maak_vertoning(self, id, zaalnummer, slot, datum, filmid): # contract moet veranderd worden, of zelfs heel de methode
+    def maak_vertoning(self, id, zaalnummer, slot, datum, filmid, vrije_plaatsen): # contract moet veranderd worden, of zelfs heel de methode
         self.display(f"maakt vertoning: {zaalnummer} {slot} {datum} {filmid}")
         """
         Maakt een nieuwe vertoning aan en bewaard die in self.vertoningen
@@ -132,7 +133,6 @@ class Reservatiesysteem:
             return False
 
         if isinstance(filmid, int) and isinstance(zaalnummer, int) and isinstance(slot, int) and filmid >= 0 and zaalnummer >= 0 and slot >= 0:
-            vrije_plaatsen = self.zalen.tableRetrieveTranverse(zaalnummer)  # moet waarschijnlijk veranderd worden naar tableRetrieve
             vertoning_object = Vertoning(id, zaalnummer, slot, datum, filmid, vrije_plaatsen)
             self.vertoningen.tableInsert(id, vertoning_object)
             return True  # contract moet aangepast worden return
@@ -283,9 +283,6 @@ class Reservatiesysteem:
         vertoning = self.vertoningen.tableRetrieve(vertoningid)
 
         vol = vertoning.verminder_plaatsenVirtueel(plaatsen)
-
-        if not vol:
-            raise Exception("Geen plek meer in deze zaal")         #To discuss: Dit toch checken voordat we uitlezen? Moeten we dit ergens aangeven?
 
         return vol
 

@@ -38,16 +38,15 @@ class Vertoning:
         :data vrije_plaatsenFysiek
         :data vrije_plaatsen
         """
-        if isinstance(id, int) and isinstance(filmid, int) and isinstance(zaalnummer, int) and isinstance(slot, int) and isinstance(vrije_plaatsen, int): # dit zal ik nog veranderen naar unsigend integers
-            self.id = id
-            self.zaalnummer = zaalnummer
-            self.slot = slot
-            self.datum = datum # datum moet waarschijnlijk nog aangepast worden naar juiste formaat
-            self.filmid = filmid
-            self.vrije_plaatsenVirtueel = vrije_plaatsen
-            self.afspelend = None
-            self.vrije_plaatsenFysiek = vrije_plaatsen
-            self.vrije_plaatsen = vrije_plaatsen
+        self.id = id
+        self.zaalnummer = zaalnummer
+        self.slot = slot
+        self.datum = datum # datum moet waarschijnlijk nog aangepast worden naar juiste formaat
+        self.filmid = filmid
+        self.vrije_plaatsenVirtueel = vrije_plaatsen
+        self.afspelend = None
+        self.vrije_plaatsenFysiek = vrije_plaatsen
+        self.vrije_plaatsen = vrije_plaatsen
 
     def verminder_plaatsenVirtueel(self, hoeveelheid):
         """
@@ -57,7 +56,7 @@ class Vertoning:
         postconditie: Het aantal plaatsen worden verminderd.
         :param hoeveelheid: integer (geeft weer hoeveel plaatsen minder er beschikbaar zijn)
         """
-        if self.vrije_plaatsenVirtueel - hoeveelheid < 0: #Moet dit niet groter zijn dan 0?
+        if self.vrije_plaatsenVirtueel - hoeveelheid < 0:
             self.vrije_plaatsenVirtueel = self.vrije_plaatsenVirtueel - hoeveelheid
             return True
         return False
