@@ -56,7 +56,7 @@ class Vertoning:
         postconditie: Het aantal plaatsen worden verminderd.
         :param hoeveelheid: integer (geeft weer hoeveel plaatsen minder er beschikbaar zijn)
         """
-        if self.vrije_plaatsenVirtueel - hoeveelheid < 0:
+        if (self.vrije_plaatsenVirtueel - hoeveelheid > 0):
             self.vrije_plaatsenVirtueel = self.vrije_plaatsenVirtueel - hoeveelheid
             return True
         return False
@@ -70,7 +70,7 @@ class Vertoning:
         :param hoeveelheid: integer (geeft weer hoeveel plaatsen minder er beschikbaar zijn)
         """
         if self.vrije_plaatsenFysiek + hoeveelheid < self.vrije_plaatsen:
-            self.vrije_plaatsenFysiek = self.vrije_plaatsenFysiek - hoeveelheid
+            self.vrije_plaatsenFysiek = self.vrije_plaatsenFysiek + hoeveelheid
             return True #Operatie geslaagd
         return False #Operatie niet geslaagd
 
@@ -99,3 +99,11 @@ class Vertoning:
 
     def get_id(self):
         return self.id
+
+    def status(self,current_time):
+        if(self.afspelend):
+            return "F:"+str(self.vrije_plaatsenFysiek)
+        elif (not self.afspelend) and (self.slot < current_time):
+            return "W:"+str(self.vrije_plaatsen - self.vrije_plaatsenVirtueel )
+        else:
+            return "G:"+str(self.vrije_plaatsen - self.vrije_plaatsenVirtueel)

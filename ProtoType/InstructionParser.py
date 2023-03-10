@@ -125,6 +125,8 @@ class InstructionParser:
         tup = self.use_adt.tableFirst()[0]
         instruction = tup[1]
 
+        self.reservatie_systeem.set_time(time)
+
         if self.last_reservatie_time != time and self.reservaties_waiting > 0:
             self.reservatie_systeem.lees_reservatie()
 
@@ -132,6 +134,7 @@ class InstructionParser:
             return
 
         self.last_reservatie_time = time
+
 
         if tup[0] == time:
             if instruction == "reserveer":
@@ -165,4 +168,3 @@ class InstructionParser:
         while time is not None:
             self.check_queue(time)
             time = self.get_time()
-

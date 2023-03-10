@@ -44,6 +44,9 @@ class Reservatiesysteem:
         self.vertoningen = MyBSTAnas.BSTTable()
         self.reservaties = MyQueueKars.MyQueueTable()
         self.reservatie_archief = MyCircularLinkedChainAnas.LCTable()
+        self.info = MyCircularLinkedChainAnas.LCTable() #ADT nodig voor de logfile
+        self.slots = MyCircularLinkedChainAnas.LCTable()
+        self.slots.load([14*3600+30*60,17*3600,20*3600,22*3600+30*60])  #14:30 	17:00 	20:00 	22:30
 
         """init voor InputParser"""
         if "path" in kwargs:
@@ -132,6 +135,8 @@ class Reservatiesysteem:
 
         if isinstance(filmid, int) and isinstance(zaalnummer, int) and isinstance(slot,
                                                                                   int) and filmid >= 0 and zaalnummer >= 0 and slot >= 0:
+
+            slot = self.slots.tableRetrieve(slot)[0] #Vraag tijd van het slot op
             vertoning_object = Vertoning(id, zaalnummer, slot, datum, filmid, vrije_plaatsen)
             stack = MyStackKars.MyStackTable()
             self.vertoningen.tableInsert(id, (vertoning_object,stack) ) # kijk uit met tuple van drie waarden, vraag meneer als dit mag
@@ -359,8 +364,16 @@ class Reservatiesysteem:
             print(msg)
 
     def log(self):
+        self.vertoningen.traverseTable(self.add_to_info)
+        print("t")
+        print(self.info.save())
 
-        pass
+
+    def add_to_info(self,value):
+        filmnaam = self.films.tableRetrieveTranverse(value[0].filmid)[0].titel
+        current_slot = self.convert_time(self.tijdsstip)[1]*3600 + self.convert_time(self.tijdsstip)[2]*60
+
+        self.info.tableInsert(1,(value[0].datum,filmnaam,value[0].status(current_slot),value[0].slot))
 
 
 r = Reservatiesysteem(display_mode="print")
