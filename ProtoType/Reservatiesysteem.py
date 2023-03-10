@@ -127,6 +127,9 @@ class Reservatiesysteem:
         :param zaalnummer: integer (nummer van de zaal)
         :param slot: integer (tijdslot van vertoning, integer heeft volgend format uurMinuten vb. 23u30 -> 2330)
         """
+
+        #vertoning: PRE: tijdslot moet bestaan
+
         if not self.zalen.tableRetrieveTranverse(zaalnummer):
             return False
 
