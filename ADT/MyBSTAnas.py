@@ -318,3 +318,6 @@ class BSTTable:
 
     def save(self):
         return self.T.save()
+
+    def clear(self):
+        self.T = BST()

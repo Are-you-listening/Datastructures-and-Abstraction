@@ -801,7 +801,7 @@ class RedBlackTree:
                     Temp.value = self.value
                     self.deleteItem(key)
                     self.__dict__.update(self.rightTree.__dict__)
-                    self.leftTree = temp
+                    self.leftTree = Temp
                     self.leftTree.color = "red"
                     return True
         return False
@@ -816,7 +816,7 @@ class RedBlackTree:
                     Temp.value = self.value
                     self.deleteItem(key)
                     self.__dict__.update(self.leftTree.__dict__)
-                    self.rightTree = temp
+                    self.rightTree = Temp
                     self.rightTree.color = "red"
                     return True
 
@@ -935,3 +935,6 @@ class RedBlackTreeTable():
 
     def tableDelete(self,key):
         return self.RBT.deleteItem(key)
+
+    def clear(self):
+        self.RBT = RedBlackTree()

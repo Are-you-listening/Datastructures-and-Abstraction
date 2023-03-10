@@ -180,3 +180,4 @@ class MyStack:
         self.items=emptyObject.items
         self.size=emptyObject.size
         return None
+

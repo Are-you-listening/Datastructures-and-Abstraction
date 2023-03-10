@@ -2396,3 +2396,6 @@ class TwoThreeFourTreeTable:
 
     def load(self,map):
         return self.t.load(map)
+
+    def clear(self):
+        self.t = TwoThreeFourTree()
