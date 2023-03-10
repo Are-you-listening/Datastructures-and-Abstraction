@@ -1,4 +1,4 @@
-from ADT import MyCircularLinkedChainAnas, MyQueueKars, MyQueueTibo, MyBSTAnas, MyStackKars
+from ADT import MyCircularLinkedChainAnas, MyQueueKars, MyQueueTibo, MyBSTAnas, MyStackKars, MyCircularLinkedChainTibo
 from Film import Film
 from Zaal import Zaal
 from Vertoning import Vertoning
@@ -45,7 +45,7 @@ class Reservatiesysteem:
         self.reservaties = MyQueueKars.MyQueueTable()
         self.reservatie_archief = MyCircularLinkedChainAnas.LCTable()
         self.info = MyCircularLinkedChainAnas.LCTable() #ADT nodig voor de logfile
-        self.slots = MyCircularLinkedChainAnas.LCTable()
+        self.slots = MyCircularLinkedChainTibo.LCTable()
         self.slots.load([14*3600+30*60,17*3600,20*3600,22*3600+30*60])  #14:30 	17:00 	20:00 	22:30
 
         """init voor InputParser"""
@@ -363,17 +363,50 @@ class Reservatiesysteem:
         if self.display_mode == "print":
             print(msg)
 
-    def log(self):
+    def log(self): #Public
         self.vertoningen.traverseTable(self.add_to_info)
-        print("t")
+        stringlist = MyCircularLinkedChainAnas.LCTable()
+
+        stringlist.tableInsert(stringlist.tableGetLength()+1,"<thead>")
+        stringlist.tableInsert(stringlist.tableGetLength() + 1, "<td>Datum</td>")
+        stringlist.tableInsert(stringlist.tableGetLength() + 1, "<td>Film</td>")
+
+        #Voeg alle tijdslots toe
+        for i in range(self.slots.tableGetLength()+1):
+            slot = self.slots.tableRetrieve(i)[0] #Seconden van het tijdslot
+            slot = int("00000000"+str(slot)) #Restore het format juist
+            tijdslot = self.convert_time(slot)[1] + ":" + self.convert_time(slot)[2]
+            stringlist.tableInsert(stringlist.tableGetLength() + 1, f"<td>{tijdslot}<td\>")
+
+        stringlist.tableInsert(stringlist.tableGetLength() + 1, "<thead>") #Sluit thead
+        stringlist.tableInsert(stringlist.tableGetLength() + 1, "<tbody>") #Open Body
+        stringlist.tableInsert(stringlist.tableGetLength() + 1, "<tr>")
+
+
+
+        stringlist.tableInsert(stringlist.tableGetLength() + 1, "<thead>")
+        stringlist.tableInsert(stringlist.tableGetLength() + 1, "<thead>")
+        stringlist.tableInsert(stringlist.tableGetLength() + 1, "<thead>")
+        stringlist.tableInsert(stringlist.tableGetLength() + 1, "<thead>")
+
         print(self.info.save())
+        self.add_tijdslot(500099987)
+        print(self.slots.save())
+        #(datum,film,listt[(G,tijd)])
 
 
-    def add_to_info(self,value):
+    def add_to_info(self,value): #Private
         filmnaam = self.films.tableRetrieveTranverse(value[0].filmid)[0].titel
         current_slot = self.convert_time(self.tijdsstip)[1]*3600 + self.convert_time(self.tijdsstip)[2]*60
 
         self.info.tableInsert(1,(value[0].datum,filmnaam,value[0].status(current_slot),value[0].slot))
+
+    def add_tijdslot(self,tijdslot): #Public
+        #PRE: lijst index is currentnr+1
+        #Voeg tijdslot toe, achteraan de lijst
+
+        self.slots.tableInsert(self.slots.tableGetLength()+1 , tijdslot)
+
 
 
 r = Reservatiesysteem(display_mode="print")

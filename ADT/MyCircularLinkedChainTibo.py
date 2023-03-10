@@ -159,7 +159,7 @@ class LinkedChain:
 
         return lst
 
-class LinkedChainTable:
+class LCTable:
     def __init__(self):
         self.l = LinkedChain()
 
