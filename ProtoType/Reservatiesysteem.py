@@ -380,16 +380,15 @@ class Reservatiesysteem:
             tijdslot = self.convert_time(slot)[1] + ":" + self.convert_time(slot)[2]
             stringlist.tableInsert(stringlist.tableGetLength() + 1, f"<td>{tijdslot}<td\>")
 
-        stringlist.tableInsert(stringlist.tableGetLength() + 1, "<thead>") #Sluit thead
+        stringlist.tableInsert(stringlist.tableGetLength() + 1, "</thead>") #Sluit thead
         stringlist.tableInsert(stringlist.tableGetLength() + 1, "<tbody>") #Open Body
         stringlist.tableInsert(stringlist.tableGetLength() + 1, "<tr>")
 
+        """HIER MOET DE var data komen"""
 
+        stringlist.tableInsert(stringlist.tableGetLength() + 1, "</tr>")
+        stringlist.tableInsert(stringlist.tableGetLength() + 1, "</tbody>")
 
-        stringlist.tableInsert(stringlist.tableGetLength() + 1, "<thead>")
-        stringlist.tableInsert(stringlist.tableGetLength() + 1, "<thead>")
-        stringlist.tableInsert(stringlist.tableGetLength() + 1, "<thead>")
-        stringlist.tableInsert(stringlist.tableGetLength() + 1, "<thead>")
 
         print(self.info.save())
         self.add_tijdslot(500099987)
