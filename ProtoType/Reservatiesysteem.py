@@ -20,7 +20,6 @@ self.reservaties_archief: ketting van aangemaakte Reservatie objecten die niet m
 self.tijdstip: integer (= 0 default)  (geeft weer op welk tijdstip het programma zich bevindt)
 """
 
-
 class Reservatiesysteem:
     def __init__(self, **kwargs):
         """

@@ -48,16 +48,20 @@ class InstructionParser:
                 line = line.replace("â€¨", "")
 
                 """zorg dat aanhalingstekens bij elkaar blijven"""
-                line_array = line.split('"')
-                for i in range(1, len(line_array)-1):
-                    token = line_array[i]
+                line_tup = self.__split(line, '"')
+                for i in range(1, len(line_tup)-1):
+                    token = line_tup[i]
                     token_adapt = token.replace(" ", "_\u1000")
                     line = line.replace(f'"{token}"', token_adapt)
 
                 """breng de verdwenen spaties terug"""
-                arguments = line.split(" ")
+                arguments = self.__split(line, " ")
+                """
                 for i, arg in enumerate(arguments):
                     arguments[i] = arg.replace("_\u1000", " ")
+                """
+
+                arguments = tuple(arg.replace("_\u1000", " ") for arg in arguments)
 
                 """indien lege line, continue"""
                 if arguments[0] == '':
@@ -78,6 +82,29 @@ class InstructionParser:
                 if arguments[0] == "start":
                     self.start_mode = True
                     self.init_mode = False
+
+    def __split(self, string, split_string):
+
+        amount = string.count(split_string)
+        if amount == 0:
+            return (string,)
+        tup = ()
+        for j in range(1, amount+2):
+            if j < amount+1:
+                s_index = string.index(split_string)
+                first_part = string[:s_index]
+            else:
+                first_part = string
+                s_index = 0
+
+            tup_len = len(tup)
+            t_tup = tuple((tup[i] if tup_len > i else first_part) for i in range(j))
+            tup = t_tup
+            string = string[s_index+len(split_string):]
+
+        return tup
+
+
 
     def __init_commands(self, args):
         """
@@ -101,10 +128,10 @@ class InstructionParser:
         datum = args[0]
         time = args[1]
 
-        hour = int(time.split(":")[0])
-        minutes = int(time.split(":")[1])
+        hour = int(self.__split(time, ":")[0])
+        minutes = int(self.__split(time, ":")[1])
         time = self.reservatie_systeem.convert_date(datum, hour, minutes, 0)
-        args[1] = time
+        args = tuple(a if i != 1 else time for i, a in enumerate(args))
 
         tup = (args[1])
         if args[2] == "reserveer":
@@ -144,7 +171,8 @@ class InstructionParser:
             elif instruction == "ticket":
                 self.reservatie_systeem.lees_ticket(int(tup[2]), int(tup[3]))
             elif instruction == "log":
-                self.reservatie_systeem.log()
+                pass
+                #self.reservatie_systeem.log()
 
             self.use_adt.tableDelete()
 
