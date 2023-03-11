@@ -410,5 +410,5 @@ class Reservatiesysteem:
         self.slots.tableInsert(self.slots.tableGetLength()+1 , tijdslot)
 
 
-
-r = Reservatiesysteem(display_mode="print")
+if __name__ == '__main__':
+    r = Reservatiesysteem(display_mode="print")
