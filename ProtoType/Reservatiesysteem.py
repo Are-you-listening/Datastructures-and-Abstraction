@@ -425,33 +425,37 @@ class Reservatiesysteem:
             self.text_string += """<td></td>"""
             current_index += 1
 
-        result_string = """<html>
-                        <head>
-                        <style>
-                            table {
-                                border-collapse: collapse;
-                            }
+        result_string = """
+        <html>
+            <head>
+                <style>
+                    table {
+                        border-collapse: collapse;
+                    }
                     
-                            table, td, th {
-                                border: 1px solid black;
-                            }
-                        </style>
-                    </head>
-                        <body>
-                            <h1>Log op 2023-10-10 18:00</h1>
-                            <table>
-                                <thead>
-                                    <td>Datum</td>
-                                    <td>Film</td>"""
+                    table, td, th {
+                        border: 1px solid black;
+                   }
+                </style>
+            </head>
+            <body>
+                <h1>Log op 2023-10-10 18:00</h1>
+                <table>
+                    <thead>
+                        <td>Datum</td>
+                        <td>Film</td>"""
 
         result_string += self.header_string
-        result_string += "</thead>"
+
+        tabs = '\t' * 5
+        result_string += f"\n{tabs}</thead>"
         result_string += self.text_string
-        result_string += """</tr>
-                        </tbody>
-                    </table>
-                </body>
-            </html>"""
+        result_string += """
+                        </tr>
+                    </tbody>
+                </table>
+            </body>
+        </html>"""
 
         print(result_string)
         with open("../testfiles/log_test.html", 'wt') as f:
@@ -474,7 +478,8 @@ class Reservatiesysteem:
     def log_add_header(self, value):
         value = int(f"10000000{value}")
         tijdslot = str(self.convert_time(value)[1]) + ":" + str(self.convert_time(value)[2])
-        self.header_string += f"<td>{tijdslot}</td>"
+        tabs = '\t'*6
+        self.header_string += f"\n{tabs}<td>{tijdslot}</td>"
 
     def add_to_info_2(self, value):
         current_slot = self.convert_time(self.tijdsstip)[1] * 3600 + self.convert_time(self.tijdsstip)[2] * 60
@@ -485,27 +490,29 @@ class Reservatiesysteem:
         datum_int = int(datum.replace("-", ""))
         tijd = value[3]
         current_datum, current_tijd, current_film, current_index = self.current
+        tabs = '\t' * 6
+
         if (datum_int > current_datum) or (value[1] != current_film):
             if current_datum != 0:
-                self.text_string += """</tr> </tbody>"""
+                self.text_string += f"""\n</tr> </tbody>"""
                 while current_index != self.slots.tableGetLength():
                     self.text_string += """\n<td></td>"""
                     current_index += 1
 
-
-            self.text_string += """<tbody> <tr>"""
-            self.text_string += f"\n<td>{datum}</td>"
-            self.text_string += f"\n<td>{self.films.tableRetrieveTranverse(value[1])[0].titel}</td>"
+            tenp_tabs = "\t" * 5
+            self.text_string += f"""\n{tenp_tabs}<tbody> <tr>"""
+            self.text_string += f"\n{tabs}<td>{datum}</td>"
+            self.text_string += f"\n{tabs}<td>{self.films.tableRetrieveTranverse(value[1])[0].titel}</td>"
             current_index = 1
 
         tijd_slot = self.slots.tableRetrieve(current_index)[0]
         while tijd_slot != tijd:
-            self.text_string += """\n<td></td>"""
+            self.text_string += f"""\n{tabs}<td></td>"""
 
             current_index += 1
             tijd_slot = self.slots.tableRetrieve(current_index)[0]
 
-        self.text_string += f"\n<td>{value[2]}</td>"
+        self.text_string += f"\n{tabs}<td>{value[2]}</td>"
         self.current = (datum_int, tijd, value[1], current_index+1)
 
 
