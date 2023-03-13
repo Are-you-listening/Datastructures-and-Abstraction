@@ -366,6 +366,8 @@ class Reservatiesysteem:
             print(msg)
 
     def log(self): #Public
+
+        """
         self.vertoningen.traverseTable(self.add_to_info)
         stringlist = MyCircularLinkedChainAnas.LCTable()
 
@@ -384,7 +386,7 @@ class Reservatiesysteem:
         stringlist.tableInsert(stringlist.tableGetLength() + 1, "<tbody>") #Open Body
         stringlist.tableInsert(stringlist.tableGetLength() + 1, "<tr>")
 
-        """HIER MOET DE var data komen"""
+        #hier data
 
         stringlist.tableInsert(stringlist.tableGetLength() + 1, "</tr>")
         stringlist.tableInsert(stringlist.tableGetLength() + 1, "</tbody>")
@@ -394,6 +396,67 @@ class Reservatiesysteem:
         self.add_tijdslot(500099987)
         print(self.slots.save())
         #(datum,film,listt[(G,tijd)])
+        """
+
+        self.vertoningen.traverseTable(self.add_to_info_2)
+
+        self.header_string = ""
+        self.text_string = ""
+        self.sorting_tree = MyBSTAnas.BSTTable()
+        self.current = (0, 0, -1, 1)
+        for i in range(1, self.slots.tableGetLength()+1):
+            slot = self.slots.tableRetrieve(i)[0]
+            self.sorting_tree.tableInsert(slot, slot)
+        self.sorting_tree.traverseTable(self.log_add_header)
+
+        self.sorting_tree.clear()
+        for i in range(1, self.info.tableGetLength()+1):
+            tup = self.info.tableRetrieve(i)[0]
+            datum = tup[0].replace("-", "")
+            filmid = tup[1]
+            slot = tup[3]
+            key_value = int(datum+str(filmid)+str(slot))
+            self.sorting_tree.tableInsert(key_value, tup)
+
+        self.sorting_tree.traverseTable(self.log_add_data)
+
+        current_datum, current_tijd, current_film, current_index = self.current
+        while current_index != self.slots.tableGetLength()+1:
+            self.text_string += """<td></td>"""
+            current_index += 1
+
+        result_string = """<html>
+                        <head>
+                        <style>
+                            table {
+                                border-collapse: collapse;
+                            }
+                    
+                            table, td, th {
+                                border: 1px solid black;
+                            }
+                        </style>
+                    </head>
+                        <body>
+                            <h1>Log op 2023-10-10 18:00</h1>
+                            <table>
+                                <thead>
+                                    <td>Datum</td>
+                                    <td>Film</td>"""
+
+        result_string += self.header_string
+        result_string += "</thead>"
+        result_string += self.text_string
+        result_string += """</tr>
+                        </tbody>
+                    </table>
+                </body>
+            </html>"""
+
+        print(result_string)
+        with open("../testfiles/log_test.html", 'wt') as f:
+            f.write(result_string)
+            f.close()
 
 
     def add_to_info(self,value): #Private
@@ -407,6 +470,45 @@ class Reservatiesysteem:
         #Voeg tijdslot toe, achteraan de lijst
 
         self.slots.tableInsert(self.slots.tableGetLength()+1 , tijdslot)
+
+    def log_add_header(self, value):
+        value = int(f"10000000{value}")
+        tijdslot = str(self.convert_time(value)[1]) + ":" + str(self.convert_time(value)[2])
+        self.header_string += f"<td>{tijdslot}</td>"
+
+    def add_to_info_2(self, value):
+        current_slot = self.convert_time(self.tijdsstip)[1] * 3600 + self.convert_time(self.tijdsstip)[2] * 60
+        self.info.tableInsert(1, (value[0].datum, value[0].filmid, value[0].status(current_slot), value[0].slot))
+
+    def log_add_data(self, value):
+        datum = value[0]
+        datum_int = int(datum.replace("-", ""))
+        tijd = value[3]
+        current_datum, current_tijd, current_film, current_index = self.current
+        if (datum_int > current_datum) or (value[1] != current_film):
+            if current_datum != 0:
+                self.text_string += """</tr> </tbody>"""
+                while current_index != self.slots.tableGetLength():
+                    self.text_string += """\n<td></td>"""
+                    current_index += 1
+
+
+            self.text_string += """<tbody> <tr>"""
+            self.text_string += f"\n<td>{datum}</td>"
+            self.text_string += f"\n<td>{self.films.tableRetrieveTranverse(value[1])[0].titel}</td>"
+            current_index = 1
+
+        tijd_slot = self.slots.tableRetrieve(current_index)[0]
+        while tijd_slot != tijd:
+            self.text_string += """\n<td></td>"""
+
+            current_index += 1
+            tijd_slot = self.slots.tableRetrieve(current_index)[0]
+
+        self.text_string += f"\n<td>{value[2]}</td>"
+        self.current = (datum_int, tijd, value[1], current_index+1)
+
+
 
 
 if __name__ == '__main__':

@@ -171,8 +171,8 @@ class InstructionParser:
             elif instruction == "ticket":
                 self.reservatie_systeem.lees_ticket(int(tup[2]), int(tup[3]))
             elif instruction == "log":
-                pass
-                #self.reservatie_systeem.log()
+                self.reservatie_systeem.log()
+
 
             self.use_adt.tableDelete()
 
