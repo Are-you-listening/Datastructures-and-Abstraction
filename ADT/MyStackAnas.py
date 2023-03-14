@@ -190,11 +190,15 @@ class MyStackTable:
 
     def tableInsert(self, value):
         if not self.Stack.push(value):
-            temp = MyStack(self.Stack.size +1)
+            temp = MyStack(self.Stack.size + 1)
+            temp2 = MyStack(self.Stack.size + 1)
             for i in range(self.Stack.size):
                 item = self.Stack.pop()[0]
                 temp.push(item)
-            self.Stack = temp
+            for i in range(temp.size):
+                item = temp.pop()[0]
+                temp2.push(item)
+            self.Stack = temp2
 
     def tableFirst(self):
         return self.Stack.getTop()
@@ -206,8 +210,7 @@ class MyStackTable:
         self.Stack.load(l)
 
     def tableDelete(self):
-        self.Stack.pop()
+        return self.Stack.pop()
 
     def clear(self):
         self.Stack = MyStack(1)
-
