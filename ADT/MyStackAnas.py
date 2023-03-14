@@ -181,3 +181,33 @@ class MyStack:
         self.size=emptyObject.size
         return None
 
+class MyStackTable:
+    def __init__(self):
+        self.Stack = MyStack(1)
+
+    def tableIsEmpty(self):
+        return self.Stack.isEmpty()
+
+    def tableInsert(self, value):
+        if not self.Stack.push(value):
+            temp = MyStack(self.Stack.size +1)
+            for i in range(self.Stack.size):
+                item = self.Stack.pop()[0]
+                temp.push(item)
+            self.Stack = temp
+
+    def tableFirst(self):
+        return self.Stack.getTop()
+
+    def save(self):
+        return self.Stack.save()
+
+    def load(self, l):
+        self.Stack.load(l)
+
+    def tableDelete(self):
+        self.Stack.pop()
+
+    def clear(self):
+        self.Stack = MyStack(1)
+
