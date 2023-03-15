@@ -40,18 +40,33 @@ class Reservatiesysteem:
         if "display_mode" in kwargs:
             self.display_mode = kwargs["display_mode"]
 
-        self.tijdsstip = 0
+        self.tijdsstip = 0 #Houdt het tijdstip bij
+        self.films = MyCircularLinkedChainAnas.LCTable() #Verzameling van alle films
+        self.zalen = MyCircularLinkedChainAnas.LCTable() #Bijhouden van alle zalen
+        self.gebruikers = MyCircularLinkedChainAnas.LCTable() #Bijhouden van alle gebruikers
+        self.vertoningen = MyBSTAnas.BSTTable() #Bijhouden van alle vertoningen
+        self.reservaties = MyQueueKars.MyQueueTable() #Bijhouden van alle TE verwerken reservaties
+        self.reservatie_archief = MyCircularLinkedChainAnas.LCTable() #Opslaan van alle verwerkte reservaties
+        self.slots = MyCircularLinkedChainTibo.LCTable() #Bijhouden van tijdslots
 
-        self.films = MyCircularLinkedChainAnas.LCTable()
-        self.zalen = MyCircularLinkedChainAnas.LCTable()
-        self.gebruikers = MyCircularLinkedChainAnas.LCTable()
-        self.vertoningen = MyBSTAnas.BSTTable()
-        self.reservaties = MyQueueKars.MyQueueTable()
-        self.reservatie_archief = MyCircularLinkedChainAnas.LCTable()
-        self.slots = MyCircularLinkedChainTibo.LCTable()
-        self.stack_string;
-        self.log_string;
-        self.slots.load([14*3600+30*60,17*3600,20*3600,22*3600+30*60])  #14:30 	17:00 	20:00 	22:30
+        self.slots.load([14*3600+30*60,17*3600,20*3600,22*3600+30*60])  #14:30 	17:00 	20:00 	22:30 #Initaliseert de huidige slots
+
+        self.stack_string = "MyStackKars.MyStackTable()"
+        self.log_string = "MyBSTAnas.BSTTable()"
+        self.ip_string = "MyQueueTibo.MyQueueTable()"
+
+        if "adt_args" in kwargs:
+            adt_args = kwargs["adt_args"]
+            self.films = eval(adt_args[0])
+            self.zalen = eval(adt_args[1])
+            self.gebruikers = eval(adt_args[2])
+            self.vertoningen = eval(adt_args[3])
+            self.reservaties = eval(adt_args[4])
+            self.reservatie_archief = eval(adt_args[5])
+            self.slots = eval(adt_args[6])
+            self.ip_string = adt_args[7]
+            self.stack_string = adt_args[8]
+            self.log_string = adt_args[9]
 
         """init voor InputParser"""
         if "path" in kwargs:
