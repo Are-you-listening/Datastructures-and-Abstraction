@@ -173,8 +173,9 @@ class LCTable:
         return self.l.retrieve(index)
 
     def tableRetrieveTranverse(self, id):
-        for i in range(self.l.length):
+        for i in range(1, self.l.length+1):
             val = self.l.retrieve(i)[0]
+            status = self.l.retrieve(i)[1]
             if val.get_id() == id:
                 return val
         return False

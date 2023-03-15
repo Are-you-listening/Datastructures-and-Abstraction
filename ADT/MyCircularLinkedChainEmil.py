@@ -181,9 +181,9 @@ class LCTable:
         return self.chain.retrieve(plaats)
 
     def tableRetrieveTranverse(self, searchkey):
-        currentNode = self.chain.dummyhead
-        while currentNode.next != self.chain.dummyhead:
-            if currentNode.value == searchkey:
+        currentNode = self.chain.dummyhead.next
+        while currentNode != self.chain.dummyhead:
+            if currentNode.value.get_id() == searchkey:
                 return currentNode.value
             currentNode = currentNode.next
         return False

@@ -71,9 +71,10 @@ for i0 in adt_dict.get("0"):
                                         index += 1
 """
 
-
-for i in range(1, 40):
+"""
+for i in range(0, 40):
     print(i)
+    
     t0 = adt_dict.get("0")
     t1 = adt_dict.get("1")
     t2 = adt_dict.get("2")
@@ -97,3 +98,21 @@ for i in range(1, 40):
     i9 = t9[i % len(t9)]
 
     test(args_tup=(i0, i1, i2, i3, i4, i5, i6, i7, i8, i9))
+"""
+
+index = 0
+for i0 in adt_dict.get("0"):
+    for i1 in adt_dict.get("1"):
+        for i2 in adt_dict.get("2"):
+            for i3 in adt_dict.get("3"):
+                for i4 in adt_dict.get("4"):
+                    for i5 in adt_dict.get("5"):
+                        for i6 in adt_dict.get("6"):
+                            i7 =adt_dict.get("7")[0]
+                            i8 = adt_dict.get("8")[0]
+                            i9 = adt_dict.get("9")[0]
+                            print(index)
+
+                            # print((i0, i1, i2, i3, i4, i5, i6, i7, i8, i9))
+                            test(args_tup=(i0, i1, i2, i3, i4, i5, i6, i7, i8, i9))
+                            index += 1

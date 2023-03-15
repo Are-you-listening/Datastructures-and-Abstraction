@@ -187,10 +187,10 @@ class LCTable:
         counts = 0
         value = self.chain.head.value
         while counts<self.chain.getLength():
-            tuple = self.chain.retrieve(self,counts)
+            tuple = self.chain.retrieve(counts)
             if tuple[1]==False:
                 return False
-            if tuple[0].id == id:
+            if tuple[0].get_id() == id:
                 return value
             counts += 1
         return False

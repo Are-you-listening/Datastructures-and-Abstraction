@@ -93,7 +93,7 @@ class Log:
             tenp_tabs = "\t" * 5
             self.text_string += f"""\n{tenp_tabs}<tbody> <tr>"""
             self.text_string += f"\n{tabs}<td>{datum}</td>"
-            self.text_string += f"\n{tabs}<td>{self.resSYS.films.tableRetrieveTranverse(value[1])[0].titel}</td>"
+            self.text_string += f"\n{tabs}<td>{self.resSYS.films.tableRetrieveTranverse(value[1]).titel}</td>"
             current_index = 1
 
         tijd_slot = self.resSYS.slots.tableRetrieve(current_index)[0]

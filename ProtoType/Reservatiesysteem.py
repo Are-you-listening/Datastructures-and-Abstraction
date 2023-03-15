@@ -133,9 +133,7 @@ class Reservatiesysteem:
 
         zaal_object = Zaal(nummer, maxplaatsen)
 
-        print("zaal gemaakt", nummer)
         self.zalen.tableInsert(1, zaal_object)
-        print(self.zalen.save())
 
     def maak_vertoning(self, id, zaalnummer, slot, datum, filmid, vrije_plaatsen):
         """
@@ -152,16 +150,11 @@ class Reservatiesysteem:
         Postconditie: Er wordt een nieuwe vertoningen aangemaakt en bewaard (de boom vertoningen wordt 1 groter).
         """
 
-        print("help", filmid, zaalnummer, slot)
-
         self.__display(f"maakt vertoning: {zaalnummer} {slot} {datum} {filmid}")
         if not self.zalen.tableRetrieveTranverse(zaalnummer):
-            print("oei", self.zalen.save(), self.zalen.tableRetrieve(1)[0].get_id())
-            print("help2", self.zalen.tableRetrieveTranverse(zaalnummer), self.zalen)
             return False
 
         if not self.films.tableRetrieveTranverse(filmid):
-            print("help3")
             return False
 
         if isinstance(filmid, int) and isinstance(zaalnummer, int) and isinstance(slot,
@@ -169,7 +162,6 @@ class Reservatiesysteem:
             slot = self.slots.tableRetrieve(slot)[0] #Vraag tijd van het slot op
             vertoning_object = Vertoning(id, zaalnummer, slot, datum, filmid, vrije_plaatsen)
             stack = eval(self.stack_string)
-            print(id, (vertoning_object,stack))
             self.vertoningen.tableInsert(id, (vertoning_object,stack) )
             return True
         return False
