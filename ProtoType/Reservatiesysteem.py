@@ -50,6 +50,8 @@ class Reservatiesysteem:
         self.reservatie_archief = MyCircularLinkedChainAnas.LCTable()
         self.info = MyCircularLinkedChainAnas.LCTable() #ADT nodig voor de logfile
         self.slots = MyCircularLinkedChainTibo.LCTable()
+        self.stack_string;
+        self.log_string;
         self.slots.load([14*3600+30*60,17*3600,20*3600,22*3600+30*60])  #14:30 	17:00 	20:00 	22:30
 
         """init voor InputParser"""
@@ -155,11 +157,8 @@ class Reservatiesysteem:
         """
         Maakt een nieuwe reservatie aan en bewaard die in self.reservaties
 
-        precondities: er worden 4 parameters gegeven, allemaal zijn ze positieve integers
-        postconditie: er wordt een nieuwe reser aangemaakt en bewaard (de queue reservaties wordt 1 groter)
-
-        :param vertoning_id: integer>0 (id van vertoning) De vertoning met het bijbehorende ID moet bestaan. 
-        :param aantal_plaatsen: integer>=0 (aantal plaatsen voor reservatie) 
+        :param vertoning_id: integer>0 (id van vertoning) De vertoning met het bijbehorende ID moet bestaan.
+        :param aantal_plaatsen: integer>=0 (aantal plaatsen voor reservatie)
         :param tijdstip: integer>=0 (tijdstip van reservatie)
         :param gebruiker_id: integer>=0 (id van de gebruiker dat een reservatie maakt). De gebruiker moet bestaan met het bijbehorende ID. 
         """
