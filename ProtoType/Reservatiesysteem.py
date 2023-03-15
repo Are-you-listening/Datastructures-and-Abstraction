@@ -42,7 +42,7 @@ class Reservatiesysteem:
 
         self.tijdsstip = 0
 
-        self.films = MyCircularLinkedChainAnas.LCTable()  # dit moet veranderd worden naar de table, ik noem mijn table LCtable: Subject to be changed
+        self.films = MyCircularLinkedChainAnas.LCTable()
         self.zalen = MyCircularLinkedChainAnas.LCTable()
         self.gebruikers = MyCircularLinkedChainAnas.LCTable()
         self.vertoningen = MyBSTAnas.BSTTable()
@@ -122,18 +122,18 @@ class Reservatiesysteem:
 
     def maak_vertoning(self, id, zaalnummer, slot, datum, filmid, vrije_plaatsen):  # contract moet veranderd worden, of zelfs heel de methode
         """
-        Maakt een nieuwe vertoning aan en bewaard die in self.vertoningen
+        Maakt een nieuwe vertoning aan en bewaard die in self.vertoningen.
 
-        precondities: er worden 3 parameters gegeven, allemaal zijn ze positieve integers
-        postconditie: er wordt een nieuwe vertoningen aangemaakt en bewaard (de boom vertoningen wordt 1 groter)
-
+        :param id: unsigned integer (een nieuw uniek id voor de vertoning)
         :param filmid: integer (id van de film)
         :param zaalnummer: integer (nummer van de zaal)
         :param slot: integer (tijdslot van vertoning, integer heeft volgend format uurMinuten vb. 23u30 -> 2330)
+
+
+        Precondities: Er worden 3 parameters gegeven, allemaal zijn ze positieve integers. Het tijdslot moet bestaan/al zijn toegevoegd. De film met filmid moet bestaan. De zaal met zaalnummer moet bestaan
+        Postconditie: Er wordt een nieuwe vertoningen aangemaakt en bewaard (de boom vertoningen wordt 1 groter).
         """
-
-        #vertoning: PRE: tijdslot moet bestaan
-
+        self.__display(f"maakt vertoning: {zaalnummer} {slot} {datum} {filmid}")
         if not self.zalen.tableRetrieveTranverse(zaalnummer):
             return False
 
@@ -145,8 +145,8 @@ class Reservatiesysteem:
 
             slot = self.slots.tableRetrieve(slot)[0] #Vraag tijd van het slot op
             vertoning_object = Vertoning(id, zaalnummer, slot, datum, filmid, vrije_plaatsen)
-            stack = MyStackKars.MyStackTable()
-            self.vertoningen.tableInsert(id, (vertoning_object,stack) ) # kijk uit met tuple van drie waarden, vraag meneer als dit mag
+            stack = eval(self.stack_string)
+            self.vertoningen.tableInsert(id, (vertoning_object,stack) )
 
             return True  # contract moet aangepast worden return
         return False
@@ -158,7 +158,10 @@ class Reservatiesysteem:
         :param vertoning_id: integer>0 (id van vertoning) De vertoning met het bijbehorende ID moet bestaan.
         :param aantal_plaatsen: integer>=0 (aantal plaatsen voor reservatie)
         :param tijdstip: integer>=0 (tijdstip van reservatie)
-        :param gebruiker_id: integer>=0 (id van de gebruiker dat een reservatie maakt). De gebruiker moet bestaan met het bijbehorende ID. 
+        :param gebruiker_id: integer>=0 (id van de gebruiker dat een reservatie maakt). De gebruiker moet bestaan met het bijbehorende ID.
+
+        Precondities: Er worden 4 parameters gegeven, allemaal zijn ze positieve integers
+        Postconditie: Er wordt een nieuwe reservatie aangemaakt en bewaard (de queue reservaties wordt 1 groter)
         """
         self.__display(f"maakt reservatie: {vertoning_id} {aantal_plaatsen} {tijdstip} {gebruiker_id}")
 
@@ -176,24 +179,25 @@ class Reservatiesysteem:
 
         ReservatieItem = (tijdstip, Reservatie(id, vertoning_id, aantal_plaatsen, tijdstip, gebruiker_id))
         self.reservaties.tableInsert(ReservatieItem)
-
         return True
 
-    def get_time(self):  # Private
+    def __get_time(self):
         """
-        Geeft het huidige tijdstip terug
+        Geeft het huidige tijdstip terug.:return integer (van self.tijdstip) (geeft het huidige tijdstip weer)
 
-        precondities: er worden geen parameters gegeven.
-        postconditie: er wordt een integer teruggeven dat het tijdstip weergeeft.
-        :return integer (van self.tijdstip) (geeft het huidige tijdstip weer)
+        Precondities: Er worden geen parameters gegeven.
+        Postconditie: Er wordt een integer teruggeven dat het tijdstip weergeeft in seconden.
         """
         return self.tijdsstip
 
-    def convert_date(self, datum, hour, minutes, seconds):  # Private
-        """converteert datum naar seconden
+    def convert_date(self, *args):  # Private
+        """
+        Converteert een datum naar seconden.
 
-        preconditie: datum is een string en hour, minutes, seconds zijn integers (de datum bestaat)
-        postconditie: er wordt een integer teruggegeven waarbij de eerste 8 cijfers de datum voorstellen, en de rest stelt hour:minutes:seconds in seconden voor
+        ::param *args: kan ofwel van de vorm {datum, hour, minutes, seconds} of {hour, minutes, seconds} zijn
+
+        Preconditie: datum is een string en hour, minutes, seconds zijn integers (de datum bestaat)
+        Postconditie: er wordt een integer teruggegeven waarbij de eerste 8 cijfers de datum voorstellen, en de rest stelt hour:minutes:seconds in seconden voor
         """
         if len(args) == 4:
             datum = args[0]
@@ -213,10 +217,13 @@ class Reservatiesysteem:
         return total
 
     def convert_time(self, tijd):  # Private
-        """converteert seconden naar datum
+        """
+        Converteert seconden naar datum
 
-        preconditie: het argument tijd is een positieve integer waarbij de eerste digits jjjjmmdd zijn, de rest is de tijd in seconden
-        postconditie: de tijd wordt omgezet en gereturned
+        :param tijd: unsigned int (tijd representeert seconden)
+
+        Preconditie: Het argument tijd is een positieve integer waarbij de eerste digits jjjjmmdd zijn, de rest is de tijd in seconden.
+        Postconditie: De tijd wordt omgezet en gereturned in een datum-formaat.
         """
         if not isinstance(tijd, int):
             raise Exception("Precondition error: tijd is niet van type int in convert_time")
@@ -236,12 +243,12 @@ class Reservatiesysteem:
 
     def set_time(self, tijd):
         """
-        zet het huidige tijdstip naar een andere waarde
+        Zet het huidige tijdstip naar een andere waarde.
 
-        precondities: er wordt 1 parameter gegeven dat een positieve integer is.
-        postconditie: het tijdstip veranderd naar de gegeven waarde
+        :param tijd: unsigned integer (nieuwe waarde voor de tijd in seconden)
 
-        :param value: integer (nieuwe waarde voor de tijd)
+        Precondities: Er wordt 1 parameter gegeven dat een positieve integer is wat de tijd in seconden representeert.
+        Postconditie: Het huidige tijdstip wordt aangepast naar de ingegeven waarde.
         """
         if not isinstance(tijd, int):
             raise Exception("Precondition error: tijd is niet van type int in set_time")
@@ -253,12 +260,14 @@ class Reservatiesysteem:
         """
         Lees de reservaties uit self.reservaties en verwerkt deze.
 
-        precondities: Er worden geen parameters ingegeven. self.reservaties bevat enkel reservaties van eenzelfde tijdstip. self.verlaag_plaatsenVirtueel controleert autonoom of dat er plek is in het systeem.
-        postconditie: De reservatie is succesvol verwerkt en toegevoegd aan het archief. De vertoning heeft eventueel een aangepast aantal vrije_plaatsen.
+        Precondities: Er worden geen parameters ingegeven. self.reservaties bevat enkel reservaties van eenzelfde tijdstip. self.verlaag_plaatsenVirtueel controleert autonoom of dat er plek is in het systeem.
+        Postconditie: De reservatie is succesvol verwerkt en toegevoegd aan het archief. De vertoning heeft eventueel een aangepast aantal vrije_plaatsen.
 
         :return: bool:succes
         """
-        while self.reservaties.tableIsEmpty() == False:
+        self.__display(f"leest reservatie") #Display eventueel info naar de console
+
+        while self.reservaties.tableIsEmpty() == False: #Zolang er nog onverwerkte reservaties zijn
             reservatie = self.reservaties.tableFirst()[0][1]
             tijdstip = self.reservaties.tableFirst()[0][0]
 
@@ -270,21 +279,29 @@ class Reservatiesysteem:
 
             # Update datum & tijd
             self.set_time(tijdstip)
-
         return True
 
-    def archiveer_reservatie(self):  # Private function
+    def __archiveer_reservatie(self):
         """
-        Verplaats de reservatie van voor uit self.reservaties naar self.reservaties_archief.
+        Archiveert de huidige reservatie.
 
-        precondities: Er worden geen parameters ingegeven.
-        postconditie: self.reservaties wordt 1 kleiner en self.reservatie_archief wordt 1 groter.
+        Precondities: Er worden geen parameters ingegeven.
+        Postconditie: self.reservaties wordt 1 kleiner en self.reservatie_archief wordt 1 groter. Verplaats de reservatie van voor uit self.reservaties naar self.reservaties_archief.
         """
-        reservatie = self.reservaties.tableDelete()[0]  # Dequeu
-        self.reservatie_archief.tableInsert(1, reservatie)  # Insert reservatie
+        reservatie = self.reservaties.tableDelete()[0]  #Dequeu huidige reservatie queue
+        self.reservatie_archief.tableInsert(1, reservatie)  #Insert reservatie in archief
 
-    def lees_ticket(self, vertoningid, aantal_mensen):  # To be discussed: Private Function?
+    def lees_ticket(self, vertoningid, aantal_mensen):
+        """
+        Leest een ticket bij aankomst in de zaal uit. (Verlaagt plaatsen, en kijkt of de film gestart kan worden)
 
+        Precondities: vertoningid verwijst naar een bestaande vertoning en is op te vragen via self.vertoningen. aantal_mensen is een unsigned int.
+        Postcondities: Het ticket is verwerkt, het aantal_vrijeplaatsen van de vertoning is geüpdated en de vertoning is eventueel gestart.
+
+        :param vertoningid: id van de vertoning, int
+        :param aantal_mensen: unsigned int
+        :return:
+        """
         #Verlaag aantal plaatsen & chance stack
         self.__verlaag_plaatsenFysiek(vertoningid,aantal_mensen)
 
@@ -294,32 +311,32 @@ class Reservatiesysteem:
         #Check of de film gestart kan worden
         self.start(vertoningid)
 
-    def verhoog_plaatsenVirtueel(self, vertoningid, plaatsen):  # private functie
+    def __verhoog_plaatsenVirtueel(self, vertoningid, plaatsen):
         """
         Verminderd het aantal vrije plaatsen in een voorstelling.
 
-        precondities: er zijn voldoende plaatsen in de vertoning
-        postconditie: het aantal plaatsen van de vertoning dat overeenkomt met het vertoning id
-                      wordt verminderd met het gegeven aantal plaatsen
-
         :param vertoningid: integer (id van de vertoning)
         :param plaatsen: integer (aantal plaatsen dat niet meer beschikbaar zijn)
+
+        precondities: er zijn voldoende plaatsen in de vertoning. De vertoning bestaat en is toegevoegd aan self.vertoningen. Plaatsen is een unsigned integer.
+        postconditie: het aantal plaatsen van de vertoning dat overeenkomt met het vertoning id
+                      wordt verminderd met het gegeven aantal plaatsen
         """
         for i in range(plaatsen):
             self.vertoningen.tableRetrieve(vertoningid)[0][1].tableInsert(i)  #[0] = value-type, hiervan [1]: de stack
 
         return self.vertoningen.tableRetrieve(vertoningid)[0][0].verminder_plaatsenVirtueel(plaatsen)
 
-    def verlaag_plaatsenFysiek(self, vertoningid, plaatsen):  # private functie
+    def __verlaag_plaatsenFysiek(self, vertoningid, plaatsen):
         """
         Verminderd het aantal vrije plaatsen in een voorstelling.
 
-        precondities: er zijn voldoende plaatsen in de vertoning
-        postconditie: het aantal plaatsen van de vertoning dat overeenkomt met het vertoning id
-                      wordt verminderd met het gegeven aantal plaatsen
-
         :param vertoningid: integer (id van de vertoning)
         :param plaatsen: integer (aantal plaatsen dat niet meer beschikbaar zijn)
+
+        precondities: Er zijn voldoende plaatsen in de vertoning. De vertoning met het id bestaat en is correct op te vragen. Plaatsen is een unsigned integer (+ en groter dan 0)
+        postconditie: het aantal plaatsen van de vertoning dat overeenkomt met het vertoning id
+                      wordt verminderd met het gegeven aantal plaatsen
         """
 
         # To be changed: Whole function
@@ -330,13 +347,15 @@ class Reservatiesysteem:
             return
         raise Exception("Stack overflow")
 
-    def start(self, vertoningid):  # Public
+    def start(self, vertoningid):
         """
-        Start de vertoning
-        preconditie: De vertoning start op het juiste tijdstip en er mag geen andere vertoning bezig zijn in deze zaal
-        postconditie: De vertoning wordt gestart (gestart = true)
-        """
+        Start de vertoning.
 
+        Preconditie: De vertoning start op het juiste tijdstip en er mag geen andere vertoning bezig zijn in deze zaal. De vertoning met vertoningid moet bestaan en correct in self.vertoningen zijn toegevoegd.
+        Postconditie: De vertoning wordt gestart (gestart = true)
+
+        :param vertoningid: int
+        """
         if self.vertoningen.tableRetrieve(vertoningid)[1]: #Indien de vertoning bestaat
             if self.vertoningen.tableRetrieve(vertoningid)[0][1].tableIsEmpty(): #Kijk of de stack empty is (geen reservaties meer)
                 vertoning_object = self.vertoningen.tableRetrieve(vertoningid)[0][0]
@@ -364,28 +383,37 @@ class Reservatiesysteem:
 
     def verwijder_gebruikers(self):
         """
-        Verwijdert alle gebruikers
+        Verwijdert alle gebruikers.
 
-        precondities: Er worden geen parameters ingegeven
-        postconditie: self.gebruikers is gecleared.
+        Precondities: Er worden geen parameters ingegeven
+        Postconditie: self.gebruikers is gecleared.
         """
         self.gebruikers.clear()
 
-    def display(self, msg):
-        """private function"""
-        if self.display_mode == "print":
-            print(msg)
+    def log(self):
+        """
+        Creëert een log-file.
 
-    def log(self): #Public
-        logger = Log(self, MyBSTAnas.BSTTable())
+        Precondities: Er worden geen parameters ingegeven.
+        Postcondities: Er is een logbestand gecreërd.
+        """
+        logger = Log(self, eval(self.log_string) )
         logger.create_log()
 
-    def add_tijdslot(self,tijdslot): #Public
-        #PRE: lijst index is currentnr+1
-        #Voeg tijdslot toe, achteraan de lijst
+    def add_tijdslot(self,tijdslot):
+        """
+        Voegt een tijdslot toe aan de verzameling met bestaande tijdslots.
+                
+        :param tijdslot: int 
+        
+        Precondities: Tijdslot is een integer wat het aantal seconden representeert
+        Postcondities: Het tijdslot is achteraan de lijst toegevoegd.
+        """
+        self.slots.tableInsert(self.slots.tableGetLength()+1 , tijdslot) #PRE: lijst index is currentnr+1
 
-        self.slots.tableInsert(self.slots.tableGetLength()+1 , tijdslot)
-
+    def __display(self, msg):
+        if self.display_mode == "print":
+            print(msg)
 
 if __name__ == '__main__':
     r = Reservatiesysteem(display_mode="print")
