@@ -9,7 +9,7 @@ from Vertoning import Vertoning
 from Reservatie import Reservatie
 from Gebruiker import Gebruiker
 from InstructionParser import InstructionParser
-from Log import Ki
+from Log import Log
 
 """
 Deze ADT geeft een reservatiesysteem weer dat gebruik maakt van de andere ADT

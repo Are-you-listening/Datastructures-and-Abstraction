@@ -8,7 +8,7 @@ class Log:
         self.sorting_tree = use_ADT
         self.current = (0, 0, -1, 1)
 
-    def log(self):  # Public
+    def create_log(self):  # Public
 
         for i in range(1, self.resSYS.slots.tableGetLength() + 1):
             slot = self.resSYS.slots.tableRetrieve(i)[0]
