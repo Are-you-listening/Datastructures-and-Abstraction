@@ -7,7 +7,7 @@ def test(**kwargs):
         r = Reservatiesysteem.Reservatiesysteem(display_mode="print", path=f"../testfiles/{kwargs['file']}")
     else:
         for file in os.listdir("../testfiles"):
-            if file.endswith(".txt"):
+            if file.endswith(".txt") and not file == "ADTFiles.txt":
                 print(f"running {file}")
                 print()
                 r = Reservatiesysteem.Reservatiesysteem(display_mode="print", path=f"../testfiles/{file}")
@@ -17,4 +17,5 @@ def test(**kwargs):
 
                 print("-" * 50)
 
-test(file="system_test1.txt")
+#test(file="system_test1.txt")
+test()

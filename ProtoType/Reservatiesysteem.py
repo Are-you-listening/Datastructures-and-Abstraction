@@ -1,4 +1,8 @@
-from ADT import MyCircularLinkedChainAnas, MyQueueKars, MyQueueTibo, MyBSTAnas, MyStackKars, MyCircularLinkedChainTibo
+from ADT import MyBSTAnas, MyCircularLinkedChainAnas, MyQueueAnas, MyRedBlackTreeAnas, MyStackAnas
+from ADT import MyBSTEmil, MyCircularLinkedChainEmil, MyQueueEmil, MyTwoThreeFourTreeEmil, MyStackEmil
+from ADT import MyBSTKars, MyCircularLinkedChainKars, MyQueueKars, MyTwoThreeFourTreeKars, MyStackKars
+from ADT import MyBSTTibo, MyCircularLinkedChainTibo, MyQueueTibo, MyTwoThreeFourTreeTibo, MyStackTibo
+
 from Film import Film
 from Zaal import Zaal
 from Vertoning import Vertoning
@@ -480,8 +484,9 @@ class Reservatiesysteem:
         self.slots.tableInsert(self.slots.tableGetLength()+1 , tijdslot)
 
     def log_add_header(self, value):
-        value = int(f"10000000{value}")
-        tijdslot = str(self.convert_time(value)[1]) + ":" + str(self.convert_time(value)[2])
+        value = int(f"10000000{value}") #Value = 1 slot
+        minutes = str(self.convert_time(value)[2])
+        tijdslot = str(self.convert_time(value)[1]) + ":" + "0"*(2-len(minutes))+minutes
         tabs = '\t'*6
         self.header_string += f"\n{tabs}<td>{tijdslot}</td>"
 
