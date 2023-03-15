@@ -215,8 +215,12 @@ class Reservatiesysteem:
         if tijd < 0:
             raise Exception("Precondition error: tijd kan niet negatief zijn in convert_time")
         temp = str(tijd)
-        datum = f"{temp[:4]}-{temp[4:6]}-{temp[6:8]}"
-        seconds = int(temp[8:])
+        if (len(tijd) >= 8):
+            datum = f"{temp[:4]}-{temp[4:6]}-{temp[6:8]}"
+            seconds = int(temp[8:])
+        else:
+            datum = "0000-00-00"
+            seconds = int(tijd)
         hours = seconds // 3600
         minutes = (seconds - hours * 3600) // 60
         seconds = seconds - hours * 3600 - minutes * 60
