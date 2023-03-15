@@ -48,7 +48,6 @@ class Reservatiesysteem:
         self.vertoningen = MyBSTAnas.BSTTable()
         self.reservaties = MyQueueKars.MyQueueTable()
         self.reservatie_archief = MyCircularLinkedChainAnas.LCTable()
-        self.info = MyCircularLinkedChainAnas.LCTable() #ADT nodig voor de logfile
         self.slots = MyCircularLinkedChainTibo.LCTable()
         self.stack_string;
         self.log_string;
@@ -63,7 +62,7 @@ class Reservatiesysteem:
         self.instruction_parser.main_thread()
 
     def maak_gebruiker(self, id, voornaam, achternaam, mail):
-        self.display(f"maak gebruiker: {voornaam} {achternaam} {mail}")
+        self.__display(f"maak gebruiker: {voornaam} {achternaam} {mail}")
         """
         Maakt een nieuwe gebruiker aan en bewaard die in self.gebruikers
 
@@ -94,7 +93,7 @@ class Reservatiesysteem:
         if not (isinstance(filmid, int) and isinstance(titel, str) and isinstance(rating, float) and filmid >= 0):
             raise Exception("Precondition Failed: in maak_film")
 
-        self.display(f"maakt film {titel} {rating}")
+        self.__display(f"maakt film {titel} {rating}")
 
         film_object = Film(filmid, titel, rating)
 
@@ -115,14 +114,13 @@ class Reservatiesysteem:
         if not (isinstance(nummer, int) and isinstance(maxplaatsen, int) and nummer >= 0 and maxplaatsen >= 0):
             raise Exception("Precondition Failed: in maak_zaal")
 
-        self.display(f"maakt zaal {nummer} {maxplaatsen}")
+        self.__display(f"maakt zaal {nummer} {maxplaatsen}")
 
         zaal_object = Zaal(nummer, maxplaatsen)
 
         self.zalen.tableInsert(1, zaal_object)
 
-    def maak_vertoning(self, id, zaalnummer, slot, datum, filmid,vrije_plaatsen):  # contract moet veranderd worden, of zelfs heel de methode
-        self.display(f"maakt vertoning: {zaalnummer} {slot} {datum} {filmid}")
+    def maak_vertoning(self, id, zaalnummer, slot, datum, filmid, vrije_plaatsen):  # contract moet veranderd worden, of zelfs heel de methode
         """
         Maakt een nieuwe vertoning aan en bewaard die in self.vertoningen
 
@@ -162,7 +160,7 @@ class Reservatiesysteem:
         :param tijdstip: integer>=0 (tijdstip van reservatie)
         :param gebruiker_id: integer>=0 (id van de gebruiker dat een reservatie maakt). De gebruiker moet bestaan met het bijbehorende ID. 
         """
-        self.display(f"maakt reservatie: {vertoning_id} {aantal_plaatsen} {tijdstip} {gebruiker_id}")
+        self.__display(f"maakt reservatie: {vertoning_id} {aantal_plaatsen} {tijdstip} {gebruiker_id}")
 
         if not isinstance(vertoning_id, int) and isinstance(aantal_plaatsen, int) and isinstance(tijdstip,
                                                                                                  int) and isinstance(
@@ -252,7 +250,6 @@ class Reservatiesysteem:
         self.tijdsstip = tijd
 
     def lees_reservatie(self):
-        self.display(f"leest reservatie")
         """
         Lees de reservaties uit self.reservaties en verwerkt deze.
 
@@ -266,10 +263,10 @@ class Reservatiesysteem:
             tijdstip = self.reservaties.tableFirst()[0][0]
 
             # Verlaag virtuele plaatsen (Independent of dit slaagt of niet)
-            self.verhoog_plaatsenVirtueel(reservatie.vertoning_id, reservatie.aantal_plaatsen)
+            self.__verhoog_plaatsenVirtueel(reservatie.vertoning_id, reservatie.aantal_plaatsen)
 
             # Verwijder reservatie & voeg toe aan archief
-            self.archiveer_reservatie()
+            self.__archiveer_reservatie()
 
             # Update datum & tijd
             self.set_time(tijdstip)
@@ -289,10 +286,10 @@ class Reservatiesysteem:
     def lees_ticket(self, vertoningid, aantal_mensen):  # To be discussed: Private Function?
 
         #Verlaag aantal plaatsen & chance stack
-        self.verlaag_plaatsenFysiek(vertoningid,aantal_mensen)
+        self.__verlaag_plaatsenFysiek(vertoningid,aantal_mensen)
 
         #Out logs
-        self.display("["+str(self.convert_time(self.tijdsstip))+"] De vertoning met ID: "+str(vertoningid)+" is verlaagd met: "+str(aantal_mensen))
+        self.__display("["+str(self.convert_time(self.tijdsstip))+"] De vertoning met ID: "+str(vertoningid)+" is verlaagd met: "+str(aantal_mensen))
 
         #Check of de film gestart kan worden
         self.start(vertoningid)

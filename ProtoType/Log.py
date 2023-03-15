@@ -1,12 +1,12 @@
 class Log:
     def __init__(self, reservatiesysteem, use_ADT):
-        self.resSYS = reservatiesysteem
-        self.resSYS.vertoningen.traverseTable(self.add_to_info)
-
         self.header_string = ""
         self.text_string = ""
         self.sorting_tree = use_ADT
         self.current = (0, 0, -1, 1)
+
+        self.resSYS = reservatiesysteem
+
 
     def create_log(self):  # Public
 
@@ -16,13 +16,7 @@ class Log:
         self.sorting_tree.traverseTable(self.log_add_header)
 
         self.sorting_tree.clear()
-        for i in range(1, self.resSYS.info.tableGetLength() + 1):
-            tup = self.resSYS.info.tableRetrieve(i)[0]
-            datum = tup[0].replace("-", "")
-            filmid = tup[1]
-            slot = tup[3]
-            key_value = int(datum + str(filmid) + str(slot))
-            self.sorting_tree.tableInsert(key_value, tup)
+        self.resSYS.vertoningen.traverseTable(self.add_to_info)
 
         self.sorting_tree.traverseTable(self.log_add_data)
 
@@ -76,7 +70,12 @@ class Log:
 
     def add_to_info(self, value):
         current_slot = self.resSYS.convert_time(self.resSYS.tijdsstip)[1] * 3600 + self.resSYS.convert_time(self.resSYS.tijdsstip)[2] * 60
-        self.resSYS.info.tableInsert(1, (value[0].datum, value[0].filmid, value[0].status(current_slot), value[0].slot))
+        tup = (value[0].datum, value[0].filmid, value[0].status(current_slot), value[0].slot)
+        datum = tup[0].replace("-", "")
+        filmid = tup[1]
+        slot = tup[3]
+        key_value = int(datum + str(filmid) + str(slot))
+        self.sorting_tree.tableInsert(key_value, tup)
 
     def log_add_data(self, value):
         datum = value[0]
