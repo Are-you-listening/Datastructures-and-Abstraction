@@ -9,15 +9,16 @@ class Log:
 
 
     def create_log(self):  # Public
-
+        print("slot", "s", self.resSYS.slots.tableGetLength(), self.resSYS.slots)
         for i in range(1, self.resSYS.slots.tableGetLength() + 1):
             slot = self.resSYS.slots.tableRetrieve(i)[0]
+            print("slot", slot)
+            print(self.sorting_tree)
             self.sorting_tree.tableInsert(slot, slot)
         self.sorting_tree.traverseTable(self.log_add_header)
 
         self.sorting_tree.clear()
         self.resSYS.vertoningen.traverseTable(self.add_to_info)
-
         self.sorting_tree.traverseTable(self.log_add_data)
 
         current_datum, current_tijd, current_film, current_index = self.current
@@ -75,9 +76,11 @@ class Log:
         filmid = tup[1]
         slot = tup[3]
         key_value = int(datum + str(filmid) + str(slot))
+        print(key_value, tup)
         self.sorting_tree.tableInsert(key_value, tup)
 
     def log_add_data(self, value):
+        print(value)
         datum = value[0]
         datum_int = int(datum.replace("-", ""))
         tijd = value[3]

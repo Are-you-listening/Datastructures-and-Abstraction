@@ -51,7 +51,7 @@ class Reservatiesysteem:
         self.reservatie_archief = MyCircularLinkedChainAnas.LCTable() #Opslaan van alle verwerkte reservaties
         self.slots = MyCircularLinkedChainTibo.LCTable() #Bijhouden van tijdslots
 
-        self.slots.load([14*3600+30*60,17*3600,20*3600,22*3600+30*60])  #14:30 	17:00 	20:00 	22:30 #Initaliseert de huidige slots
+        self.slots.load([14 * 3600 + 30 * 60, 17 * 3600, 20 * 3600, 22 * 3600 + 30 * 60])  #14:30 	17:00 	20:00 	22:30 #Initaliseert de huidige slots
 
         self.stack_string = "MyStackKars.MyStackTable()"
         self.log_string = "MyBSTAnas.BSTTable()"
@@ -69,6 +69,8 @@ class Reservatiesysteem:
             self.ip_string = adt_args[7]
             self.stack_string = adt_args[8]
             self.log_string = adt_args[9]
+
+            self.slots.load([14 * 3600 + 30 * 60, 17 * 3600, 20 * 3600, 22 * 3600 + 30 * 60])
 
         """init voor InputParser"""
         if "path" in kwargs:
