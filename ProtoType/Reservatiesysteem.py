@@ -9,6 +9,7 @@ from Vertoning import Vertoning
 from Reservatie import Reservatie
 from Gebruiker import Gebruiker
 from InstructionParser import InstructionParser
+from Log import Ki
 
 """
 Deze ADT geeft een reservatiesysteem weer dat gebruik maakt van de andere ADT
@@ -406,6 +407,8 @@ class Reservatiesysteem:
         #(datum,film,listt[(G,tijd)])
         """
 
+
+
         self.vertoningen.traverseTable(self.add_to_info_2)
 
         self.header_string = ""
@@ -523,9 +526,6 @@ class Reservatiesysteem:
 
         self.text_string += f"\n{tabs}<td>{value[2]}</td>"
         self.current = (datum_int, tijd, value[1], current_index+1)
-
-
-
 
 if __name__ == '__main__':
     r = Reservatiesysteem(display_mode="print")
