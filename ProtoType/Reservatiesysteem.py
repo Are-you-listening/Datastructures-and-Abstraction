@@ -197,14 +197,20 @@ class Reservatiesysteem:
         preconditie: datum is een string en hour, minutes, seconds zijn integers (de datum bestaat)
         postconditie: er wordt een integer teruggegeven waarbij de eerste 8 cijfers de datum voorstellen, en de rest stelt hour:minutes:seconds in seconden voor
         """
-        if not isinstance(datum, str) and isinstance(hour, int) and isinstance(minutes, int) and isinstance(seconds,
-                                                                                                            int):
-            raise Exception("Precondition error: fout type argument in convert_date")
-        splitted_datum = datum.split("-")
-        jaar = splitted_datum[0]
-        maand = splitted_datum[1]
-        dag = splitted_datum[2]  # nieuwe functie om te controleren of een datum geldig is? misschien overbodig
-        total = jaar + maand + dag + str(hour * 3600 + minutes * 60 + seconds)
+        if len(args) == 4:
+            datum = args[0]
+            splitted_datum = datum.split("-")
+            jaar = splitted_datum[0]
+            maand = splitted_datum[1]
+            dag = splitted_datum[2]
+            total = jaar + maand + dag
+        elif len(args) == 3:
+            total = ""
+
+        hour = args[1]
+        minutes = args[2]
+        seconds = args[3]
+        total += str(hour * 3600 + minutes * 60 + seconds)
         total = int(total)
         return total
 
