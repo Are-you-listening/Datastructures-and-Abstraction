@@ -76,7 +76,7 @@ class MyQueue:
         :return: De functie geeft een booleaanse waarde aan die dient aan te duiden of de toevoeging gelukt is of niet. True als het gelukt is en False als niet.
         """
         if self.size == len(self.items):
-            return (0,False)
+            return False
         a=self.size
         while a!=0:
             self.items[a]=self.items[a-1]
@@ -199,6 +199,7 @@ class MyQueueTable:
             for i in range(self.Queue.size):
                 item = self.Queue.dequeue()[0]
                 temp.enqueue(item)
+            temp.enqueue(value)
             self.Queue = temp
 
     def tableFirst(self):

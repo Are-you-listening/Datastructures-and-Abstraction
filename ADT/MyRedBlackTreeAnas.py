@@ -44,8 +44,8 @@ class RedBlackTree:
             self.leftTree = None
             self.rightTree = None
             self.color = None
-            self.value = args[0]
-            self.key = args[1]
+            self.value = args[1]
+            self.key = args[0]
 
     ## functionaliteit
     def isEmpty(self):
