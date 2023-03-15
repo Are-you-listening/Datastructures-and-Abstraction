@@ -910,7 +910,7 @@ class RedBlackTree:
             self.leftTree = self.leftTree.completeDeletion(key)
             return self
 
-class RedBlackTreeTable():
+class RedBlackTreeTable:
     def __init__(self):
         self.RBT = RedBlackTree()
 
