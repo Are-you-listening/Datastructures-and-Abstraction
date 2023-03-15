@@ -46,7 +46,7 @@ for i0 in adt_dict.get("0"):
                                 for i8 in adt_dict.get("8"):
                                     for i9 in adt_dict.get("9"):
                                         print(index)
-                                        if index % 18 == 0:
-                                            print((i0, i1, i2, i3, i4, i5, i6, i7, i8, i9))
+
+                                        #print((i0, i1, i2, i3, i4, i5, i6, i7, i8, i9))
                                         test(args_tup=(i0, i1, i2, i3, i4, i5, i6, i7, i8, i9))
                                         index += 1

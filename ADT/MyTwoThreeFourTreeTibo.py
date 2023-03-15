@@ -1007,11 +1007,11 @@ class TwoThreeFourTreeTable:
     def tableIsEmpty(self):
         return self.tree.isEmpty()
 
-    def tableInsert(self, item):
-        return self.tree.insertItem(item)
+    def tableInsert(self, key, value):
+        return self.tree.insertItem(createTreeItem(key, value))
 
     def tableRetrieve(self,key):
-        return self.tree.retrieveKey(key)
+        return self.tree.retrieveItem(key)
 
     def traverseTable(self, func):
         self.tree.inorderTraverse(func)
