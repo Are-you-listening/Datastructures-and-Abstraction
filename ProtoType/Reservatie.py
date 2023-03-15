@@ -8,7 +8,6 @@ self.timestamp: integer (bewaard op welk tijdstip er een reservatie gemaakt is)
 self.userid: integer (het id van de gebruiker dat de reservatie gemaakt heeft)
 """
 
-
 class Reservatie:
     def __init__(self, id, vertoning_id, aantal_plaatsen, tijdstip, gebruiker_id):
         """
@@ -19,7 +18,7 @@ class Reservatie:
         postcondities: Er wordt een nieuw reservatie object aangemaakt
 
         :param vertoning_id: integer
-        :param aantal_plaatsen: integer
+        :param aantal_plaatsen: unsigned integer
         :param tijdstip: integer
         :param gebruiker_id: integer
         :param key: is gelijk aan een input variabel naar keuze (zoek in datastructuren)

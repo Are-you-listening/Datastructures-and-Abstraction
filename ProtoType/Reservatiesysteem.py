@@ -12,29 +12,31 @@ from InstructionParser import InstructionParser
 from Log import Log
 
 """
-Deze ADT geeft een reservatiesysteem weer dat gebruik maakt van de andere ADT
+Deze ADT geeft een reservatiesysteem weer dat gebruik maakt van de andere ADT's
 
-data:
-self.vertoningen: Boom van Vertoning objecten (de aangemaakte vertoningen worden hier bewaard)
+Data:
+self.tijdstip: integer (= 0 default)  (geeft weer op welk tijdstip het programma zich bevindt)
 self.films: ketting van Film objecten (de aangemaakte film worden hier bewaard)
 self.zalen: ketting van Zaal objecten (de aangemaakte zaal worden hier bewaard)
 self.gebruikers: ketting van aangemaakte Gebruiker objecten (de aangemaakte gebruiker worden hier bewaard)
+self.vertoningen: Boom van Vertoning objecten (de aangemaakte vertoningen worden hier bewaard)
 self.reservaties: queue van tupels(tijdstip,aangemaakte Reservatie Objecten)
 self.reservaties_archief: ketting van aangemaakte Reservatie objecten die niet meer in de queue zitten 
                           (om later nog steeds reservaties terug te vinden)
-self.tijdstip: integer (= 0 default)  (geeft weer op welk tijdstip het programma zich bevindt)
+self.slots: bevat alle mogelijke tijdslots
+
+Functionaliteit:
 """
 
 class Reservatiesysteem:
     def __init__(self, **kwargs):
         """
         Het object Reservatiesysteem wordt aangemaakt.
-        precondities: er worden geen parameters gegeven
-        postconditie: een Reservatiesysteem object wordt aangemaakt
 
-        :param id counter (universeel)
-        :param interne paramater met alle tijdslots
         :param **kwargs, kan "displaymode" bevatten die weergeeft hoe we de data weergeven
+
+        Precondities: Er worden geen parameters gegeven.
+        Postconditie: Een Reservatiesysteem object wordt aangemaakt.
         """
         self.display_mode = None
         if "display_mode" in kwargs:
@@ -77,34 +79,32 @@ class Reservatiesysteem:
         self.instruction_parser.main_thread()
 
     def maak_gebruiker(self, id, voornaam, achternaam, mail):
-        self.__display(f"maak gebruiker: {voornaam} {achternaam} {mail}")
         """
         Maakt een nieuwe gebruiker aan en bewaard die in self.gebruikers
-
-        precondities: er worden 4 parameters gegeven, id is een positieve integer en voornaam, achternaam en mail zijn  strings
-        postconditie: er wordt een nieuwe gebruiker aangemaakt en bewaard (de ketting gebruikers wordt 1 groter)
 
         :param id: integer (id van de gebruiker)
         :param voornaam: string (voornaam van de gebruiker)
         :param achternaam: string (achternaam van de gebruiker)
         :param mail: string (e-mail adres van gebruiker)
+
+        Precondities: Er worden 4 parameters gegeven, id is een positieve integer en voornaam, achternaam en mail zijn strings. Het id is een unieke integer.
+        Postconditie: Er wordt een nieuwe gebruiker aangemaakt en bewaard (de ketting gebruikers wordt 1 groter).
         """
+        self.__display(f"maak gebruiker: {voornaam} {achternaam} {mail}")
         newGebruiker = Gebruiker(id, voornaam, achternaam, mail)
         self.gebruikers.tableInsert(1, newGebruiker)
 
     def maak_film(self, filmid, titel, rating):
         """
-        Maakt een nieuwe film aan en bewaard die in self.films
-
-        precondities: er worden 3 parameters gegeven, id is een positieve integer, titel is een string en rating is een float
-        postconditie: er wordt een nieuwe film aangemaakt en bewaard (de ketting films wordt 1 groter)
-
+        Maakt een nieuwe film aan en bewaard die in self.films.
 
         :param id: integer (id van film)
         :param titel: string (titel van film)
         :param rating: float (rating van film)
-        """
 
+        Precondities: Er worden 3 parameters gegeven, id is een positieve integer, titel is een string en rating is een float. filmid is een uniek getal.
+        Postconditie: Er wordt een nieuwe film aangemaakt en bewaard (de ketting films wordt 1 groter).
+        """
         if not (isinstance(filmid, int) and isinstance(titel, str) and isinstance(rating, float) and filmid >= 0):
             raise Exception("Precondition Failed: in maak_film")
 
@@ -115,67 +115,64 @@ class Reservatiesysteem:
         self.films.tableInsert(1, film_object)
 
     def maak_zaal(self, nummer, maxplaatsen):
-
         """
-        Maakt een nieuwe zaal aan en bewaard die in self.zaal
-
-        precondities: er worden 2 parameters gegeven, beide zijn positieve integers
-        postconditie: er wordt een nieuwe zaal aangemaakt en bewaard (de ketting zalen wordt 1 groter)
+        Maakt een nieuwe zaal aan en bewaard die in self.zaal.
 
         :param nummer: integer (zaalnummer van de zaal)
         :param maxplaatsen: integer (max plaatsen van de zaal)
-        """
 
+        Precondities: Er worden 2 parameters gegeven, beide zijn positieve integers.
+        Postconditie: Er wordt een nieuwe zaal aangemaakt en bewaard (de ketting zalen wordt 1 groter).
+        """
         if not (isinstance(nummer, int) and isinstance(maxplaatsen, int) and nummer >= 0 and maxplaatsen >= 0):
             raise Exception("Precondition Failed: in maak_zaal")
 
         self.__display(f"maakt zaal {nummer} {maxplaatsen}")
 
         zaal_object = Zaal(nummer, maxplaatsen)
-
         self.zalen.tableInsert(1, zaal_object)
 
-    def maak_vertoning(self, id, zaalnummer, slot, datum, filmid, vrije_plaatsen):  # contract moet veranderd worden, of zelfs heel de methode
+    def maak_vertoning(self, id, zaalnummer, slot, datum, filmid, vrije_plaatsen):
         """
         Maakt een nieuwe vertoning aan en bewaard die in self.vertoningen.
 
         :param id: unsigned integer (een nieuw uniek id voor de vertoning)
-        :param filmid: integer (id van de film)
         :param zaalnummer: integer (nummer van de zaal)
         :param slot: integer (tijdslot van vertoning, integer heeft volgend format uurMinuten vb. 23u30 -> 2330)
+        :param datum: unsigned int (representeert de datum in seconden)
+        :param filmid: integer (id van de film)
+        :param vrije_plaatsen: unsigned integer (initieel aantal plaatsen in de vertoning)
 
-
-        Precondities: Er worden 3 parameters gegeven, allemaal zijn ze positieve integers. Het tijdslot moet bestaan/al zijn toegevoegd. De film met filmid moet bestaan. De zaal met zaalnummer moet bestaan
+        Precondities: Er worden 3 parameters gegeven, allemaal zijn ze positieve integers. Het tijdslot moet bestaan/al zijn toegevoegd. De film met filmid moet bestaan. De zaal met zaalnummer moet bestaan. id is een uniek id.
         Postconditie: Er wordt een nieuwe vertoningen aangemaakt en bewaard (de boom vertoningen wordt 1 groter).
         """
         self.__display(f"maakt vertoning: {zaalnummer} {slot} {datum} {filmid}")
         if not self.zalen.tableRetrieveTranverse(zaalnummer):
             return False
 
-        if not self.films.tableRetrieveTranverse(filmid):  # subject to change: LinkedChain retrieve probleem
+        if not self.films.tableRetrieveTranverse(filmid):
             return False
 
         if isinstance(filmid, int) and isinstance(zaalnummer, int) and isinstance(slot,
                                                                                   int) and filmid >= 0 and zaalnummer >= 0 and slot >= 0:
-
             slot = self.slots.tableRetrieve(slot)[0] #Vraag tijd van het slot op
             vertoning_object = Vertoning(id, zaalnummer, slot, datum, filmid, vrije_plaatsen)
             stack = eval(self.stack_string)
             self.vertoningen.tableInsert(id, (vertoning_object,stack) )
-
-            return True  # contract moet aangepast worden return
+            return True
         return False
 
     def maak_reservatie(self, id, vertoning_id, aantal_plaatsen, tijdstip, gebruiker_id):
         """
         Maakt een nieuwe reservatie aan en bewaard die in self.reservaties
 
-        :param vertoning_id: integer>0 (id van vertoning) De vertoning met het bijbehorende ID moet bestaan.
+        :param id: unsigned integer (uniek voor alle reservaties)
+        :param vertoning_id: integer>0 (id van vertoning)
         :param aantal_plaatsen: integer>=0 (aantal plaatsen voor reservatie)
         :param tijdstip: integer>=0 (tijdstip van reservatie)
-        :param gebruiker_id: integer>=0 (id van de gebruiker dat een reservatie maakt). De gebruiker moet bestaan met het bijbehorende ID.
+        :param gebruiker_id: integer>=0 (id van de gebruiker dat een reservatie maakt).
 
-        Precondities: Er worden 4 parameters gegeven, allemaal zijn ze positieve integers
+        Precondities: Er worden 4 parameters gegeven, allemaal zijn ze positieve integers. De gebruiker moet bestaan met het bijbehorende ID. De vertoning met het bijbehorende ID moet bestaan. Het id is een uniek getal.
         Postconditie: Er wordt een nieuwe reservatie aangemaakt en bewaard (de queue reservaties wordt 1 groter)
         """
         self.__display(f"maakt reservatie: {vertoning_id} {aantal_plaatsen} {tijdstip} {gebruiker_id}")
@@ -205,7 +202,7 @@ class Reservatiesysteem:
         """
         return self.tijdsstip
 
-    def convert_date(self, *args):  # Private
+    def convert_date(self, *args):  #Private
         """
         Converteert een datum naar seconden.
 
@@ -235,7 +232,7 @@ class Reservatiesysteem:
         total = int(total)
         return total
 
-    def convert_time(self, tijd):  # Private
+    def convert_time(self, tijd):  #Private
         """
         Converteert seconden naar datum
 
@@ -353,12 +350,10 @@ class Reservatiesysteem:
         :param vertoningid: integer (id van de vertoning)
         :param plaatsen: integer (aantal plaatsen dat niet meer beschikbaar zijn)
 
-        precondities: Er zijn voldoende plaatsen in de vertoning. De vertoning met het id bestaat en is correct op te vragen. Plaatsen is een unsigned integer (+ en groter dan 0)
-        postconditie: het aantal plaatsen van de vertoning dat overeenkomt met het vertoning id
+        Precondities: Er zijn voldoende plaatsen in de vertoning. De vertoning met het id bestaat en is correct op te vragen. Plaatsen is een unsigned integer (+ en groter dan 0)
+        Postconditie: het aantal plaatsen van de vertoning dat overeenkomt met het vertoning id
                       wordt verminderd met het gegeven aantal plaatsen
         """
-
-        # To be changed: Whole function
         notVol = self.vertoningen.tableRetrieve(vertoningid)[0][0].verhoog_plaatsenFysiek(plaatsen)
         if notVol:
             for i in range(plaatsen):
@@ -431,7 +426,7 @@ class Reservatiesysteem:
         self.slots.tableInsert(self.slots.tableGetLength()+1 , tijdslot) #PRE: lijst index is currentnr+1
 
     def __display(self, msg):
-        if self.display_mode == "print":
+        if self.display_mode == "print": #Print output to console
             print(msg)
 
 if __name__ == '__main__':
