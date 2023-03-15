@@ -645,12 +645,12 @@ class TwoThreeFourTree:
                         temptree.load(currentdict['children'][3])
                         self.RRchild = copy.deepcopy(temptree)
 
-class TwoThreeFourTable:
+class TwoThreeFourTreeTable:
     def __init__(self):
         self.tree = TwoThreeFourTree()
 
-    def tableInsert(self, newItem):
-        return self.tree.insertItem(newItem)
+    def tableInsert(self, key, newItem):
+        return self.tree.insertItem(createTreeItem(key, newItem))
 
     def tableRetrieve(self, key):
         return self.tree.retrieveItem(key)

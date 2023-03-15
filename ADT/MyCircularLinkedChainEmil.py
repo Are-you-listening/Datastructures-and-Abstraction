@@ -166,7 +166,7 @@ class LinkedChain:
         for i in range(len(ketting)):
             self.insert(i+1, ketting[i])
 
-class LinkedChainTable:
+class LCTable:
 
     def __init__(self):
         self.chain = LinkedChain()
@@ -174,8 +174,8 @@ class LinkedChainTable:
     def tableIsEmpty(self):
         return self.chain.isEmpty()
 
-    def tableInsert(self, newItem):
-        self.chain.insert(0, newItem)
+    def tableInsert(self, index, newItem):
+        self.chain.insert(index, newItem)
 
     def tableRetrieve(self, plaats):
         return self.chain.retrieve(plaats)
