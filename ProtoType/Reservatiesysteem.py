@@ -220,7 +220,7 @@ class Reservatiesysteem:
         if tijd < 0:
             raise Exception("Precondition error: tijd kan niet negatief zijn in convert_time")
         temp = str(tijd)
-        if (len(tijd) >= 8):
+        if (len(temp) >= 8):
             datum = f"{temp[:4]}-{temp[4:6]}-{temp[6:8]}"
             seconds = int(temp[8:])
         else:
@@ -384,46 +384,6 @@ class Reservatiesysteem:
 
         self.slots.tableInsert(self.slots.tableGetLength()+1 , tijdslot)
 
-    def log_add_header(self, value):
-        value = int(f"10000000{value}") #Value = 1 slot
-        minutes = str(self.convert_time(value)[2])
-        tijdslot = str(self.convert_time(value)[1]) + ":" + "0"*(2-len(minutes))+minutes
-        tabs = '\t'*6
-        self.header_string += f"\n{tabs}<td>{tijdslot}</td>"
-
-    def add_to_info_2(self, value):
-        current_slot = self.convert_time(self.tijdsstip)[1] * 3600 + self.convert_time(self.tijdsstip)[2] * 60
-        self.info.tableInsert(1, (value[0].datum, value[0].filmid, value[0].status(current_slot), value[0].slot))
-
-    def log_add_data(self, value):
-        datum = value[0]
-        datum_int = int(datum.replace("-", ""))
-        tijd = value[3]
-        current_datum, current_tijd, current_film, current_index = self.current
-        tabs = '\t' * 6
-
-        if (datum_int > current_datum) or (value[1] != current_film):
-            if current_datum != 0:
-                self.text_string += f"""\n</tr> </tbody>"""
-                while current_index != self.slots.tableGetLength():
-                    self.text_string += """\n<td></td>"""
-                    current_index += 1
-
-            tenp_tabs = "\t" * 5
-            self.text_string += f"""\n{tenp_tabs}<tbody> <tr>"""
-            self.text_string += f"\n{tabs}<td>{datum}</td>"
-            self.text_string += f"\n{tabs}<td>{self.films.tableRetrieveTranverse(value[1])[0].titel}</td>"
-            current_index = 1
-
-        tijd_slot = self.slots.tableRetrieve(current_index)[0]
-        while tijd_slot != tijd:
-            self.text_string += f"""\n{tabs}<td></td>"""
-
-            current_index += 1
-            tijd_slot = self.slots.tableRetrieve(current_index)[0]
-
-        self.text_string += f"\n{tabs}<td>{value[2]}</td>"
-        self.current = (datum_int, tijd, value[1], current_index+1)
 
 if __name__ == '__main__':
     r = Reservatiesysteem(display_mode="print")

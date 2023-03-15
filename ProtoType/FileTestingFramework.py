@@ -17,5 +17,4 @@ def test(**kwargs):
 
                 print("-" * 50)
 
-#test(file="system_test1.txt")
-test()
+test(file="system_test1.txt")
