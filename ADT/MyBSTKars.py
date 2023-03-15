@@ -433,6 +433,7 @@ class BSTTable:
 
     def tableDelete(self,searchkey):
         return self.boom.searchTreeDelete(searchkey)
+
     def tableRetrieve(self,searchkey):
         return self.boom.searchTreeRetrieve(searchkey)
 

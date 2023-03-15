@@ -12,9 +12,9 @@ MyQueueKars.MyQueueTable() 4 7
 MyQueueTibo.MyQueueTable() 4 7
 MyRedBlackTreeAnas.RedBlackTreeTable() 3 9
 MyStackAnas.MyStackTable() 8
-MyStackEmil.MyStackTable()
+MyStackEmil.MyStackTable() 8
 MyStackKars.MyStackTable() 8
 MyStackTibo.MyStackTable() 8
-MyTwoThreeFourTreeEmil.TwoThreeFourTable()
-MyTwoThreeFourTreeKars.TwoThreeFourTable() 3 9
-MyTwoThreeFourTreeTibo.TwoThreeFourTable() 3 9
+MyTwoThreeFourTreeEmil.TwoThreeFourTreeTable() 3 9
+MyTwoThreeFourTreeKars.TwoThreeFourTreeTable() 3 9
+MyTwoThreeFourTreeTibo.TwoThreeFourTreeTable() 3 9

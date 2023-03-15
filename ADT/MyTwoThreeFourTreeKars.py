@@ -512,13 +512,13 @@ class TwoThreeFourTree:
         if a==3:                                                        #3 keys & (en ook 4 Subtrees)
             if Tree.left!=None:
                 self.inorderTraverse(FunctionType, Tree.left)           # Ga eerst helemaal naar links onder
-            FunctionType(Tree.key[0])                                   #Print 1e root searchkey
+            FunctionType(Tree.value[0])                                   #Print 1e root searchkey
             if Tree.middleleft!=None:
                 self.inorderTraverse(FunctionType, Tree.middleleft)     #Ga naar middeleft tree
-            FunctionType(Tree.key[1])                                   #Print 2e root searchkey
+            FunctionType(Tree.value[1])                                   #Print 2e root searchkey
             if Tree.middleright!=None:
                 self.inorderTraverse(FunctionType, Tree.middleright)    #Ga naar middleright tree
-            FunctionType(Tree.key[2])                                   #Print 3e root searchkey
+            FunctionType(Tree.value[2])                                   #Print 3e root searchkey
             if Tree.right!=None:
                 self.inorderTraverse(FunctionType, Tree.right)          #Ga naar right tree
             return
@@ -526,10 +526,10 @@ class TwoThreeFourTree:
         if a==2:                                                        #2 keys, 3 subtrees
             if Tree.left!=None:
                 self.inorderTraverse(FunctionType, Tree.left)           # Ga eerst helemaal naar links onder
-            FunctionType(Tree.key[0])                                   #Print 1e root searchkey
+            FunctionType(Tree.value[0])                                   #Print 1e root searchkey
             if Tree.middleleft!=None:
                 self.inorderTraverse(FunctionType, Tree.middleleft)     #Ga naar middeleft tree
-            FunctionType(Tree.key[2])                                   #Print 2e root searchkey
+            FunctionType(Tree.value[2])                                   #Print 2e root searchkey
             if Tree.right!=None:
                 self.inorderTraverse(FunctionType, Tree.right)          #Ga naar right tree
             return
@@ -537,7 +537,7 @@ class TwoThreeFourTree:
         if a==1:                                                        #Als er 1 key in de tree zit
             if (Tree.left != None):                                     #and (left[5]!=self.traversal):
                 self.inorderTraverse(FunctionType,Tree.left)            #Ga eerst helemaal naar links onder
-            FunctionType(Tree.key[0])                                   # Print 1e root searchkey
+            FunctionType(Tree.value[0])                                   # Print 1e root searchkey
             if Tree.right!=None:
                 self.inorderTraverse(FunctionType, Tree.right)          #Ga naar right tree
             return
@@ -2379,8 +2379,8 @@ class TwoThreeFourTreeTable:
     def tableIsEmpty(self):
         return self.t.isEmpty()
 
-    def tableInsert(self,item):
-        return self.t.insertItem(item)
+    def tableInsert(self,key,value):
+        return self.t.insertItem(createTreeItem(key,value))
 
     def tableRetrieve(self,key):
         return self.t.retrieveItem(key)
