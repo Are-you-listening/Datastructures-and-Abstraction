@@ -33,7 +33,7 @@ with open("../testfiles/ADTFiles.txt") as f:
             t.append(adt)
             adt_dict[line_list[i]] = t
 
-
+"""
 index = 0
 for i0 in adt_dict.get("0"):
     for i1 in adt_dict.get("1"):
@@ -50,6 +50,7 @@ for i0 in adt_dict.get("0"):
                                         #print((i0, i1, i2, i3, i4, i5, i6, i7, i8, i9))
                                         test(args_tup=(i0, i1, i2, i3, i4, i5, i6, i7, i8, i9))
                                         index += 1
+"""
 
 """
 index = 0
@@ -69,3 +70,30 @@ for i0 in adt_dict.get("0"):
                                         test(args_tup=(i0, i1, i2, i3, i4, i5, i6, i7, i8, i9))
                                         index += 1
 """
+
+
+for i in range(1, 40):
+    print(i)
+    t0 = adt_dict.get("0")
+    t1 = adt_dict.get("1")
+    t2 = adt_dict.get("2")
+    t3 = adt_dict.get("3")
+    t4 = adt_dict.get("4")
+    t5 = adt_dict.get("5")
+    t6 = adt_dict.get("6")
+    t7 = adt_dict.get("7")
+    t8 = adt_dict.get("8")
+    t9 = adt_dict.get("9")
+
+    i0 = t0[i % len(t0)]
+    i1 = t1[i % len(t1)]
+    i2 = t2[i % len(t2)]
+    i3 = t3[i % len(t3)]
+    i4 = t4[i % len(t4)]
+    i5 = t5[i % len(t5)]
+    i6 = t6[i % len(t6)]
+    i7 = t7[i % len(t7)]
+    i8 = t8[i % len(t8)]
+    i9 = t9[i % len(t9)]
+
+    test(args_tup=(i0, i1, i2, i3, i4, i5, i6, i7, i8, i9))
