@@ -1,9 +1,6 @@
 from ProtoType import Reservatiesysteem
 import os
 
-
-
-
 def test(**kwargs):
     if "file" in kwargs:
         r = Reservatiesysteem.Reservatiesysteem(display_mode="print", path=f"../testfiles/{kwargs['file']}")

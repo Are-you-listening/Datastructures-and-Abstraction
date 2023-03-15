@@ -428,8 +428,8 @@ class BSTTable:
     def tableIsEmpty(self):
         return self.boom.isEmpty()
 
-    def tableInsert(self,itemtype):
-        return self.boom.searchTreeInsert(itemtype)
+    def tableInsert(self,key,value):
+        return self.boom.searchTreeInsert(createTreeItem(key,value))
 
     def tableDelete(self,searchkey):
         return self.boom.searchTreeDelete(searchkey)
