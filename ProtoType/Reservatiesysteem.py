@@ -70,9 +70,9 @@ class Reservatiesysteem:
 
         """init voor InputParser"""
         if "path" in kwargs:
-            self.instruction_parser = InstructionParser(self, MyQueueTibo.MyQueueTable(), path=kwargs["path"])
+            self.instruction_parser = InstructionParser(self, eval(self.ip_string), path=kwargs["path"])
         else:
-            self.instruction_parser = InstructionParser(self, MyQueueTibo.MyQueueTable())
+            self.instruction_parser = InstructionParser(self, eval(self.ip_string))
         self.instruction_parser.read_file()
         self.instruction_parser.main_thread()
 

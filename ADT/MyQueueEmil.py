@@ -101,7 +101,7 @@ class MyQueue:
         for item in L:
             self.enqueue(item)
 
-class QueueTable:
+class MyQueueTable:
     def __init__(self):
         self.queue = MyQueue()
 

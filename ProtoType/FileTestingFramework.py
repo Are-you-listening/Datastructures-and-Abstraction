@@ -1,6 +1,30 @@
 from ProtoType import Reservatiesysteem
 import os
 
+
+
+
+def test(**kwargs):
+    if "file" in kwargs:
+        r = Reservatiesysteem.Reservatiesysteem(display_mode="print", path=f"../testfiles/{kwargs['file']}")
+    else:
+        for file in os.listdir("../testfiles"):
+            if file.endswith(".txt") and not file == "ADTFiles.txt":
+                #print(f"running {file}")
+                #print()
+
+                if "args_tup" in kwargs:
+                    r = Reservatiesysteem.Reservatiesysteem(display_mode="", path=f"../testfiles/{file}", adt_args=kwargs["args_tup"])
+                else:
+                    r = Reservatiesysteem.Reservatiesysteem(display_mode="print", path=f"../testfiles/{file}")
+                #print()
+                #print()
+                #print()
+
+                #print("-" * 50)
+
+#test(file="system_test1.txt")
+
 adt_dict = {}
 with open("../testfiles/ADTFiles.txt") as f:
     for file in f.readlines():
@@ -12,6 +36,8 @@ with open("../testfiles/ADTFiles.txt") as f:
             t.append(adt)
             adt_dict[line_list[i]] = t
 
+
+index = 0
 for i0 in adt_dict.get("0"):
     for i1 in adt_dict.get("1"):
         for i2 in adt_dict.get("2"):
@@ -22,22 +48,8 @@ for i0 in adt_dict.get("0"):
                             for i7 in adt_dict.get("7"):
                                 for i8 in adt_dict.get("8"):
                                     for i9 in adt_dict.get("9"):
-                                        print((i0, i1, i2, i3, i4, i5, i6, i7, i8, i9))
-
-
-def test(**kwargs):
-    if "file" in kwargs:
-        r = Reservatiesysteem.Reservatiesysteem(display_mode="print", path=f"../testfiles/{kwargs['file']}")
-    else:
-        for file in os.listdir("../testfiles"):
-            if file.endswith(".txt") and not file == "ADTFiles.txt":
-                print(f"running {file}")
-                print()
-                r = Reservatiesysteem.Reservatiesysteem(display_mode="print", path=f"../testfiles/{file}")
-                print()
-                print()
-                print()
-
-                print("-" * 50)
-
-test(file="system_test1.txt")
+                                        print(index)
+                                        if index % 18 == 0:
+                                            print((i0, i1, i2, i3, i4, i5, i6, i7, i8, i9))
+                                        test(args_tup=(i0, i1, i2, i3, i4, i5, i6, i7, i8, i9))
+                                        index += 1
