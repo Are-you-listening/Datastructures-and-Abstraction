@@ -1,7 +1,6 @@
 
 class InstructionParser:
     def __init__(self, reservatie_systeem, use_adt, **kwargs):
-        print("ip init")
         """
         Maakt een InstructionParser object aan
         Alle commandos dat door dit object wordt aangeroepen moet publiek zijn
@@ -29,8 +28,6 @@ class InstructionParser:
             self.path = kwargs["path"]
         else:
             self.path = "../testfiles/system.txt"
-
-        print("ip init", self.use_adt.tableFirst())
 
     def read_file(self):
         """
