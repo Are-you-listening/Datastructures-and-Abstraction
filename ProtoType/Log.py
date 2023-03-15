@@ -4,8 +4,8 @@ import Reservatiesysteem
 
 class log:
     def __init__(self, reservatiesysteem, use_ADT):
-        self.resS = reservatiesysteem
-        reservatiesysteem.vertoningen.traverseTable(self.add_to_info)
+        self.resSYS = reservatiesysteem
+        self.resSYS.vertoningen.traverseTable(self.add_to_info)
 
         self.header_string = ""
         self.text_string = ""
