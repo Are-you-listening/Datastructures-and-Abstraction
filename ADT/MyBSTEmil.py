@@ -252,8 +252,8 @@ class BSTTable:
     def tableIsEmpty(self):
         return self.BST.isEmpty()
 
-    def tableInsert(self, newItem):
-        return self.BST.searchTreeInsert(newItem)
+    def tableInsert(self, key, newItem):
+        return self.BST.searchTreeInsert(createTreeItem(key, newItem))
 
     def tableRetrieve(self, key):
         return self.BST.searchTreeRetrieve(key)

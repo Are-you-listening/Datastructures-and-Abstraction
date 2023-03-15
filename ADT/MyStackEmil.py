@@ -91,7 +91,7 @@ class MyStack:
 
 class MyStackTable:
     def __init__(self):
-        self.stack = MyStack(100)
+        self.stack = MyStack(10)
 
     def tableIsEmpty(self):
         return self.stack.isEmpty()
@@ -119,4 +119,4 @@ class MyStackTable:
         return self.stack.load(input)
 
     def clear(self):
-        self.stack = MyStack()
+        self.stack = MyStack(10)
