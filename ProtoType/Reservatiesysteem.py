@@ -221,12 +221,16 @@ class Reservatiesysteem:
             maand = splitted_datum[1]
             dag = splitted_datum[2]
             total = jaar + maand + dag
-        elif len(args) == 3:
-            total = ""
+            hour = args[1]
+            minutes = args[2]
+            seconds = args[3]
 
-        hour = args[1]
-        minutes = args[2]
-        seconds = args[3]
+        else:
+            total = ""
+            hour = args[0]
+            minutes = args[1]
+            seconds = args[2]
+
         total += str(hour * 3600 + minutes * 60 + seconds)
         total = int(total)
         return total

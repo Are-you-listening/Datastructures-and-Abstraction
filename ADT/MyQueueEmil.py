@@ -63,6 +63,8 @@ class MyQueue:
             queueFront = None
             return tuple([queueFront, False])
         currentElement = self.first
+        if currentElement.next == None:
+            queueFront = currentElement
         while currentElement.next != None:
             queueFront = currentElement.next
             currentElement = currentElement.next

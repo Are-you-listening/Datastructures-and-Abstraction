@@ -91,13 +91,20 @@ class MyStack:
 
 class MyStackTable:
     def __init__(self):
-        self.stack = MyStack()
+        self.stack = MyStack(100)
 
     def tableIsEmpty(self):
         return self.stack.isEmpty()
 
     def tableInsert(self, newitem):
+        if not self.stack.push(newitem):
+            newstack = MyStack(self.stack.max_size * 2)
+            for i in range(self.stack.size):
+                newstack.push(self.stack.pop()[0])
+            self.stack = newstack
+
         return self.stack.push(newitem)
+
 
     def tableFirst(self):
         return self.stack.getTop()
