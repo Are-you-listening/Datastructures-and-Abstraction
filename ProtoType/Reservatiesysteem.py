@@ -93,21 +93,26 @@ class Reservatiesysteem:
         Postconditie: Er wordt een nieuwe gebruiker aangemaakt en bewaard (de ketting gebruikers wordt 1 groter).
         """
         self.__display(f"maak gebruiker: {voornaam} {achternaam} {mail}")
+
+        if( (not isinstance(id,int)) or (id<0) or (not isinstance(voornaam,str)) or (not isinstance(achternaam,str)) or (not isinstance(mail,str)) ):
+            raise Exception("Precondition Failure bij maak_gebruiker")
+
         newGebruiker = Gebruiker(id, voornaam, achternaam, mail)
         self.gebruikers.tableInsert(1, newGebruiker)
+        return True
 
     def maak_film(self, filmid, titel, rating):
         """
         Maakt een nieuwe film aan en bewaard die in self.films.
 
-        :param id: integer (id van film)
+        :param id: unsigned integer (id van film)
         :param titel: string (titel van film)
         :param rating: float (rating van film)
 
         Precondities: Er worden 3 parameters gegeven, id is een positieve integer, titel is een string en rating is een float. filmid is een uniek getal.
         Postconditie: Er wordt een nieuwe film aangemaakt en bewaard (de ketting films wordt 1 groter).
         """
-        if not (isinstance(filmid, int) and isinstance(titel, str) and isinstance(rating, float) and filmid >= 0):
+        if not (isinstance(filmid, int) and isinstance(titel, str) and isinstance(rating, float) and filmid >= 0 and rating<=100 and rating>=0):
             raise Exception("Precondition Failed: in maak_film")
 
         self.__display(f"maakt film {titel} {rating}")
@@ -115,6 +120,7 @@ class Reservatiesysteem:
         film_object = Film(filmid, titel, rating)
 
         self.films.tableInsert(1, film_object)
+        return True
 
     def maak_zaal(self, nummer, maxplaatsen):
         """
@@ -134,6 +140,7 @@ class Reservatiesysteem:
         zaal_object = Zaal(nummer, maxplaatsen)
 
         self.zalen.tableInsert(1, zaal_object)
+        return True
 
     def maak_vertoning(self, id, zaalnummer, slot, datum, filmid, vrije_plaatsen):
         """
@@ -152,19 +159,20 @@ class Reservatiesysteem:
 
         self.__display(f"maakt vertoning: {zaalnummer} {slot} {datum} {filmid}")
         if not self.zalen.tableRetrieveTranverse(zaalnummer):
-            return False
+            raise Exception("Exception in maak_vertoning: Zaal met identificatie bestaat niet")
 
         if not self.films.tableRetrieveTranverse(filmid):
-            return False
+            raise Exception("Exception in maak_vertoning: Film met identificatie bestaat niet")
 
-        if isinstance(filmid, int) and isinstance(zaalnummer, int) and isinstance(slot,
-                                                                                  int) and filmid >= 0 and zaalnummer >= 0 and slot >= 0:
-            slot = self.slots.tableRetrieve(slot)[0] #Vraag tijd van het slot op
-            vertoning_object = Vertoning(id, zaalnummer, slot, datum, filmid, vrije_plaatsen)
-            stack = eval(self.stack_string)
-            self.vertoningen.tableInsert(id, (vertoning_object,stack) )
-            return True
-        return False
+        if not (isinstance(filmid, int) and isinstance(zaalnummer, int) and isinstance(slot,
+                                                                                  int) and filmid >= 0 and zaalnummer >= 0 and slot >= 0):
+            raise Exception("Exception in maak_vertoning: Precondition Failure")
+
+        slot = self.slots.tableRetrieve(slot)[0] #Vraag tijd van het slot op
+        vertoning_object = Vertoning(id, zaalnummer, slot, datum, filmid, vrije_plaatsen)
+        stack = eval(self.stack_string)
+        self.vertoningen.tableInsert(id, (vertoning_object,stack) )
+        return True
 
     def maak_reservatie(self, id, vertoning_id, aantal_plaatsen, tijdstip, gebruiker_id):
         """
@@ -187,7 +195,7 @@ class Reservatiesysteem:
                 int) and vertoning_id >= 0 and aantal_plaatsen > 0 and gebruiker_id >= 0 and tijdstip >= 0:
             raise Exception("Precondition Error: maak_reservatie")
 
-        if not self.vertoningen.tableRetrieve(vertoning_id):
+        if not self.vertoningen.tableRetrieve(vertoning_id)[1]:
             raise Exception("Precondition Error: maak_reservatie, vertoning bestaat niet")
 
         if not self.gebruikers.tableRetrieveTranverse(gebruiker_id):  # Subscript operator?
@@ -275,6 +283,7 @@ class Reservatiesysteem:
         if tijd < 0:
             raise Exception("Precondition error: tijd kan niet negatief zijn in set_time")
         self.tijdsstip = tijd
+        return True
 
     def lees_reservatie(self):
         """
@@ -311,6 +320,7 @@ class Reservatiesysteem:
         """
         reservatie = self.reservaties.tableDelete()[0]  #Dequeu huidige reservatie queue
         self.reservatie_archief.tableInsert(1, reservatie)  #Insert reservatie in archief
+        return True
 
     def lees_ticket(self, vertoningid, aantal_mensen):
         """
@@ -331,6 +341,7 @@ class Reservatiesysteem:
 
         #Check of de film gestart kan worden
         self.start(vertoningid)
+        return True
 
     def __verhoog_plaatsenVirtueel(self, vertoningid, plaatsen):
         """
@@ -390,6 +401,7 @@ class Reservatiesysteem:
         postconditie: self.vertoningen is gecleared.
         """
         self.vertoningen.clear()
+        return True
 
     def verwijder_films(self):
         """
@@ -399,6 +411,7 @@ class Reservatiesysteem:
         postconditie: self.films is gecleared.
         """
         self.films.clear()
+        return True
 
     def verwijder_gebruikers(self):
         """
@@ -408,6 +421,7 @@ class Reservatiesysteem:
         Postconditie: self.gebruikers is gecleared.
         """
         self.gebruikers.clear()
+        return True
 
     def log(self):
         """
@@ -418,6 +432,7 @@ class Reservatiesysteem:
         """
         logger = Log(self, eval(self.log_string))
         logger.create_log()
+        return True
 
     def add_tijdslot(self,tijdslot):
         """
@@ -429,6 +444,7 @@ class Reservatiesysteem:
         Postcondities: Het tijdslot is achteraan de lijst toegevoegd.
         """
         self.slots.tableInsert(self.slots.tableGetLength()+1 , tijdslot) #PRE: lijst index is currentnr+1
+        return True
 
     def __display(self, msg):
         if self.display_mode == "print": #Print output to console
