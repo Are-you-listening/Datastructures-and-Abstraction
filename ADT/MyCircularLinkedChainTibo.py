@@ -176,6 +176,8 @@ class LCTable:
         for i in range(1, self.l.length+1):
             val = self.l.retrieve(i)[0]
             status = self.l.retrieve(i)[1]
+            if val == None:
+                return False
             if val.get_id() == id:
                 return val
         return False

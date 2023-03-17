@@ -277,7 +277,6 @@ class Reservatiesysteem:
         self.tijdsstip = tijd
 
     def lees_reservatie(self):
-        self.__display(f"leest reservatie")
         """
         Lees de reservaties uit self.reservaties en verwerkt deze.
 
@@ -417,7 +416,7 @@ class Reservatiesysteem:
         Precondities: Er worden geen parameters ingegeven.
         Postcondities: Er is een logbestand gecreërd.
         """
-        logger = Log(self, eval(self.log_string) )
+        logger = Log(self, eval(self.log_string))
         logger.create_log()
 
     def add_tijdslot(self,tijdslot):

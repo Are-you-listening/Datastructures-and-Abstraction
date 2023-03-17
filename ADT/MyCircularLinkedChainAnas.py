@@ -263,6 +263,8 @@ class LCTable:
             if self.tableRetrieve(count)[1] == False:
                 return False
             count += 1
+            if count == self.LC.getLength():
+                return False
         return self.tableRetrieve(count)[0]
 
     def tableDelete(self, index):
