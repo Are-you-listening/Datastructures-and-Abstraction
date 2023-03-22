@@ -1,8 +1,26 @@
+"""
+Deze ADT geeft een logsysteem weer
+
+Data:
+self.header_string: bewaard de header regel van de tabel
+self.text_string: beaard alle data die in de tabel hoort te staan
+self.sorting_tree: bewaard een ADT
+self.current: bewaard current locaties nodig voor te detecteren in het geval van lege slots en onderscheid tussen films
+self.resSYS: reference naar reservatiesysteem
+"""
+
 class Log:
     def __init__(self, reservatiesysteem, use_ADT):
         """
-        constructor
+        precondities: Er wordt een geldige ADT gegeven die dezelfde tableinstructies heeft als een zoekboom.
+                      Ook wordt er een reference gegeven naar het reservatiesysteem vanwaar deze klasse opgeroepen wordt.
+                      Deze klasse mag enkel opgeroepen worden vanuit een reservatiesysteem
+        postcondities: er wordt een log aangemaakt in html format
+
+        :param: reservatiesysteem: Reservatiesysteem Object
+        :param: use_ADT: een adt dat gebruikt wordt om data te sorteren
         """
+
         self.header_string = ""
         self.text_string = ""
         self.sorting_tree = use_ADT
@@ -13,21 +31,25 @@ class Log:
 
     def create_log(self):  # Public
         """
+        maakt een log aan
+
+        precondities: er worden geen parameters gegeven
+
         store alle timeslots in een sorting tree, om een gesorteerde string te vormen (header)
         die alle tijdslots chronlogisch plaatst
         """
         for i in range(1, self.resSYS.slots.tableGetLength() + 1):
             slot = self.resSYS.slots.tableRetrieve(i)[0]
             self.sorting_tree.tableInsert(slot, slot)
-        self.sorting_tree.traverseTable(self.log_add_header)
+        self.sorting_tree.traverseTable(self.__log_add_header)
         self.sorting_tree.clear()
 
         """
         Gebruik dezelfde tree om alle films te sorteren zodat:
         Alle films (met dezelfde datum) hun slots bij elkaar staan
         """
-        self.resSYS.vertoningen.traverseTable(self.add_to_info)
-        self.sorting_tree.traverseTable(self.log_add_data)
+        self.resSYS.vertoningen.traverseTable(self.__add_to_info)
+        self.sorting_tree.traverseTable(self.__log_add_data)
 
         """we vullen de niet ingevulde slot aan het einde op"""
         current_datum, current_tijd, current_film, current_index = self.current
@@ -73,7 +95,7 @@ class Log:
             f.write(result_string)
             f.close()
 
-    def log_add_header(self, value):
+    def __log_add_header(self, value):
         """leest value uit, convert naar string time, voeg toe aan header string"""
         value = int(value)  # Value = 1 slot
         minutes = str(self.resSYS.convert_time(value)[2])
@@ -81,7 +103,7 @@ class Log:
         tabs = '\t' * 6
         self.header_string += f"\n{tabs}<td>{tijdslot}</td>"
 
-    def add_to_info(self, value):
+    def __add_to_info(self, value):
         """
         leest de vertoning uit en stored die in de sorting_tree
         """
@@ -93,7 +115,8 @@ class Log:
         key_value = int(datum + str(filmid) + str(slot))
         self.sorting_tree.tableInsert(key_value, tup)
 
-    def log_add_data(self, value):
+    def __log_add_data(self, value):
+        print(value)
         """
         Leest de vertoning uit en voegt het toe aan de output string
         """
@@ -106,12 +129,13 @@ class Log:
         """indien de datum/film niet matched gaan we naar een volgende regel"""
         if (datum_int > current_datum) or (value[1] != current_film):
             if current_datum != 0:
-                self.text_string += f"""\n</tr> </tbody>"""
-
                 """opvullen van huidige regel"""
-                while current_index != self.resSYS.slots.tableGetLength():
+                while current_index != self.resSYS.slots.tableGetLength()+1:
                     self.text_string += """\n<td></td>"""
                     current_index += 1
+                self.text_string += f"""\n</tr> </tbody>"""
+
+
 
             tenp_tabs = "\t" * 5
             self.text_string += f"""\n{tenp_tabs}<tbody> <tr>"""

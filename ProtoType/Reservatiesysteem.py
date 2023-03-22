@@ -78,6 +78,8 @@ class Reservatiesysteem:
         else:
             self.instruction_parser = InstructionParser(self, eval(self.ip_string))
         self.instruction_parser.read_file()
+
+        """main thread voert alles uit"""
         self.instruction_parser.main_thread()
 
     def maak_gebruiker(self, id, voornaam, achternaam, mail):

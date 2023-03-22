@@ -5,7 +5,11 @@ class InstructionParser:
         Maakt een InstructionParser object aan
         Alle commandos dat door dit object wordt aangeroepen moet publiek zijn
 
-        :param reservatie_systeem: refrence naar reservatiesysteem
+         precondities: Er wordt een geldige ADT gegeven die dezelfde tableinstructies heeft als een queue.
+                      Ook wordt er een reference gegeven naar het reservatiesysteem vanwaar deze klasse opgeroepen wordt.
+                      Deze klasse mag enkel opgeroepen worden vanuit een reservatiesysteem
+
+        :param reservatie_systeem: reference naar reservatiesysteem
         :param use_adt: de adt (queue) dat gebruikt wordt om de toekomstige orders (in tupel vorm) te between
                         volgens format (timestamp, order)
         :param kwargs:kan de key "path" bevatten die een relatief path geeft naar de file die uitgelezen moet worden
@@ -84,6 +88,11 @@ class InstructionParser:
                     self.init_mode = False
 
     def __split(self, string, split_string):
+        """
+        splits string door een split_string.
+        Equivalent van string.split(''), maar dan zonder python list te gebruiken, maar een tuple te maken
+
+        """
 
         amount = string.count(split_string)
         if amount == 0:
@@ -108,7 +117,7 @@ class InstructionParser:
 
     def __init_commands(self, args):
         """
-        private instruction
+        commands die uitgevoerd worden tijdens de initiasie fase
 
         """
         if args[0] == "zaal":
@@ -122,7 +131,7 @@ class InstructionParser:
 
     def __setup_commands(self, args):
         """
-        private instruction
+        commands die moeten worden uitgevoerd (in volgorde) op hun juiste tijdstip
 
         """
         datum = args[0]
@@ -143,11 +152,11 @@ class InstructionParser:
 
         self.use_adt.tableInsert(tup)
 
-    def check_queue(self, time):
+    def __check_queue(self, time):
         """
-        Checkt dat de tijd matched, indien ja, voert instructie uit
+        Checked dat de tijd matched, indien ja, voert instructie uit
         precondities: de tijd dat gegeven wordt is een integer
-        postoconditie: indien de tijd matched wordt de instructie uitgevoerd
+        postconditie: indien de tijd matched wordt de instructie uitgevoerd
         """
         tup = self.use_adt.tableFirst()[0]
         instruction = tup[1]
@@ -176,7 +185,7 @@ class InstructionParser:
 
             self.use_adt.tableDelete()
 
-    def get_time(self):
+    def __get_time(self):
         if self.use_adt.tableIsEmpty():
             return None
         else:
@@ -192,7 +201,7 @@ class InstructionParser:
         return str(self.use_adt.tableRetrieve(None))
 
     def main_thread(self):
-        time = self.get_time()
+        time = self.__get_time()
         while time is not None:
-            self.check_queue(time)
-            time = self.get_time()
+            self.__check_queue(time)
+            time = self.__get_time()
