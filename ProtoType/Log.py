@@ -71,7 +71,12 @@ class Log:
                 </style>
             </head>
             <body>
-                <h1>Log op 2023-10-10 18:00</h1>
+                <h1>"""
+
+        """toevoegen van datum"""
+        logdatum = self.resSYS.convert_time(self.resSYS.tijdsstip)
+        result_string += f"Log op {logdatum[0]} {str(logdatum[1]).zfill(2)}:{str(logdatum[2]).zfill(2)}"
+        result_string += """</h1>
                 <table>
                     <thead>
                         <td>Datum</td>

@@ -222,25 +222,27 @@ class Reservatiesysteem:
 
         ::param *args: kan ofwel van de vorm {datum, hour, minutes, seconds} of {hour, minutes, seconds} zijn
 
-        Preconditie: datum is een string en hour, minutes, seconds zijn integers (de datum bestaat)
+        Preconditie: datum is een string en hour, minutes, seconds zijn integers (de datum bestaat en is van de vorm "jjjjmmdd" en start niet met nullen)
         Postconditie: er wordt een integer teruggegeven waarbij de eerste 8 cijfers de datum voorstellen, en de rest stelt hour:minutes:seconds in seconden voor
         """
         if len(args) == 4:
             datum = args[0]
             splitted_datum = datum.split("-")
             jaar = splitted_datum[0]
+            if len(str(int(jaar))) != 4:
+                raise Exception("precondition error: jaar is niet in het juiste formaat")
             maand = splitted_datum[1]
             dag = splitted_datum[2]
             total = jaar + maand + dag
-            hour = args[1]
-            minutes = args[2]
-            seconds = args[3]
+            hour = args[1] % 24
+            minutes = args[2] % 60
+            seconds = args[3] % 60
 
         else:
             total = ""
-            hour = args[0]
-            minutes = args[1]
-            seconds = args[2]
+            hour = args[0] % 24
+            minutes = args[1] % 60
+            seconds = args[2] % 60
 
         total += str(hour * 3600 + minutes * 60 + seconds)
         total = int(total)
@@ -253,6 +255,7 @@ class Reservatiesysteem:
         :param tijd: unsigned int (tijd representeert seconden)
 
         Preconditie: Het argument tijd is een positieve integer waarbij de eerste digits jjjjmmdd zijn, de rest is de tijd in seconden.
+                     De datum kan ook weggelaten worden maar dan mag de tijd in seconden maximaal 7 digits lang zijn.
         Postconditie: De tijd wordt omgezet en gereturned in een datum-formaat.
         """
         if not isinstance(tijd, int):
@@ -269,7 +272,7 @@ class Reservatiesysteem:
         hours = seconds // 3600
         minutes = (seconds - hours * 3600) // 60
         seconds = seconds - hours * 3600 - minutes * 60
-        return (datum, hours, minutes, seconds)
+        return (datum, hours%24, minutes%60, seconds%60)
 
     def set_time(self, tijd):
         """
