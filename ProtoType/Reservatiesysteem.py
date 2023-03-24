@@ -176,7 +176,7 @@ class Reservatiesysteem:
         self.vertoningen.tableInsert(id, (vertoning_object,stack) )
         return True
 
-    def maak_reservatie(self, id, vertoning_id, aantal_plaatsen, tijdstip, gebruiker_id):
+    def maak_reservatie(self, vertoning_id, aantal_plaatsen, tijdstip, gebruiker_id):
         """
         Maakt een nieuwe reservatie aan en bewaard die in self.reservaties
 
