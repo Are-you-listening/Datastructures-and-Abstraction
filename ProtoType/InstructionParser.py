@@ -175,7 +175,6 @@ class InstructionParser:
         if tup[0] == time:
             if instruction == "reserveer":
                 """id moet wrs met counter want is niet in system.txt file"""
-                print(tup)
                 #0=datetime #1="reserver" #2 = user_id #3 = vertoning_id #4 = aantal_plaatsen
                 self.reservatie_systeem.maak_reservatie(int(tup[3]), int(tup[4]), tup[0], int(tup[2]))
                 self.reservaties_waiting += 1

@@ -101,6 +101,7 @@ class Vertoning:
         return self.id
 
     def status(self,current_time):
+        #vertoning_datetime_start //Date Time ipv Slots gebruiken (Houd geen rekening met de datum)
         if(self.afspelend):
             return "F:"+str(self.vrije_plaatsenFysiek)
         elif (not self.afspelend) and (self.slot < current_time):
