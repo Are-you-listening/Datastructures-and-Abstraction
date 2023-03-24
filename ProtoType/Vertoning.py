@@ -44,7 +44,7 @@ class Vertoning:
         self.datum = datum # datum moet waarschijnlijk nog aangepast worden naar juiste formaat
         self.filmid = filmid
         self.vrije_plaatsenVirtueel = vrije_plaatsen
-        self.afspelend = None
+        self.afspelend = False
         self.vrije_plaatsenFysiek = 0
         self.vrije_plaatsen = vrije_plaatsen
 
@@ -104,6 +104,6 @@ class Vertoning:
         if(self.afspelend):
             return "F:"+str(self.vrije_plaatsenFysiek)
         elif (not self.afspelend) and (self.slot < current_time):
-            return "W:"+str(self.vrije_plaatsen - self.vrije_plaatsenVirtueel )
+            return "W:"+str(self.vrije_plaatsen - self.vrije_plaatsenVirtueel - self.vrije_plaatsenFysiek )
         else:
             return "G:"+str(self.vrije_plaatsen - self.vrije_plaatsenVirtueel)

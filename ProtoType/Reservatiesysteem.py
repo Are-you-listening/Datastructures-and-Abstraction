@@ -359,10 +359,13 @@ class Reservatiesysteem:
         postconditie: het aantal plaatsen van de vertoning dat overeenkomt met het vertoning id
                       wordt verminderd met het gegeven aantal plaatsen
         """
-        for i in range(plaatsen):
-            self.vertoningen.tableRetrieve(vertoningid)[0][1].tableInsert(i)  #[0] = value-type, hiervan [1]: de stack
+        if( not self.vertoningen.tableRetrieve(vertoningid)[0][0].verminder_plaatsenVirtueel(plaatsen)): #Indien er teveel plaatsen worden gereserveerd
+            return False
 
-        return self.vertoningen.tableRetrieve(vertoningid)[0][0].verminder_plaatsenVirtueel(plaatsen)
+        for i in range(plaatsen):
+            stack = self.vertoningen.tableRetrieve(vertoningid)[0][1]#debug
+            self.vertoningen.tableRetrieve(vertoningid)[0][1].tableInsert(i)  #[0] = value-type, hiervan [1]: de stack
+        return True
 
     def __verlaag_plaatsenFysiek(self, vertoningid, plaatsen):
         """
