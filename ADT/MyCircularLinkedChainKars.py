@@ -14,7 +14,7 @@ class ChainItemType:
         Postcondities: Maakt een object volgens type 'ChainItemype' aan. Dit type bevat een 'value', de inhoud van een node. 'next' is zelf een 'ChainItemType' en wordt geïnitaliseerd op "None".
         """
         self.value = value
-        self.next = None
+        self.next = self
 
 """Functionaliteit"""
 class MyLinkedChain:
@@ -67,7 +67,7 @@ class MyLinkedChain:
             self.head=newItem
             self.head.next=newItem
             return True
-        elif positie==1: #Inserten op positie 1=root aanpassen (net iets anders)
+        if positie==1: #Inserten op positie 1=root aanpassen (net iets anders)
             nonlinked = ChainItemType(newItem) #Make new item
             #Find predecessor
             i = 0
@@ -128,13 +128,16 @@ class MyLinkedChain:
         Précondities: Er is een 'LinkedChain' aangemaakt. ‘positie’ duidt de plaats aan van het op te vragen element. in positie:integer
         Postcondities: Als in de oorspronkelijke lijst 1 <= positie <= getLength(), dan bevat ‘dataItem’ het element van de lijst op ‘positie’. De lijst blijft onveranderd bij deze bewerking.‘Success’ is true als het opvragen lukte en false als het niet lukte. out dataItem:ListItemType, out success:boolean {query}
         """
-        if positie>self.getLength() or self.isEmpty(): #Précondities "niet" voldaan
+        #if positie>self.getLength() or self.isEmpty(): #Précondities "niet" voldaan
+        #    return (False,False)
+
+        if self.isEmpty() or positie>self.getLength() or positie<=0: #Précondities "niet" voldaan
             return (False,False)
 
         else:
             i=0
             temp=self.head
-            while(i < positie): #Loop over elementen totdat we bij de juiste positie zijn
+            while(i < positie-1): #Loop over elementen totdat we bij de juiste positie zijn #positie-1 is een fix op 25-03-2023, blijkt niet helemaal juist te gaan
                 temp=temp.next
                 i+=1
 

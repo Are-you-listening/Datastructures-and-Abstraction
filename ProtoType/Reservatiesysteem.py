@@ -49,9 +49,14 @@ class Reservatiesysteem:
         self.vertoningen = MyBSTAnas.BSTTable() #Bijhouden van alle vertoningen
         self.reservaties = MyQueueKars.MyQueueTable() #Bijhouden van alle TE verwerken reservaties
         self.reservatie_archief = MyCircularLinkedChainAnas.LCTable() #Opslaan van alle verwerkte reservaties
-        self.slots = MyCircularLinkedChainTibo.LCTable() #Bijhouden van tijdslots
+        self.slots = MyCircularLinkedChainKars.LCTable() #Bijhouden van tijdslots
 
-        self.slots.load([14 * 3600 + 30 * 60, 17 * 3600, 20 * 3600, 22 * 3600 + 30 * 60])  #14:30 	17:00 	20:00 	22:30 #Initaliseert de huidige slots
+        #Slots beginnen op index 1
+        self.slots.load([14 * 3600 + 30 * 60, 17 * 3600, 20 * 3600,22 * 3600 + 30 * 60 ])
+        #self.slots.tableInsert(1, 14 * 3600 + 30 * 60) #14:30
+        #self.slots.tableInsert(2,  17 * 3600) #17:00
+        #self.slots.tableInsert(3, 20 * 3600) #20:00
+        #self.slots.tableInsert(4, 22 * 3600 + 30 * 60) #22:30 #Initaliseert de huidige slots
 
         self.stack_string = "MyStackKars.MyStackTable()"
         self.log_string = "MyBSTAnas.BSTTable()"
@@ -114,7 +119,7 @@ class Reservatiesysteem:
         Precondities: Er worden 3 parameters gegeven, id is een positieve integer, titel is een string en rating is een float. filmid is een uniek getal.
         Postconditie: Er wordt een nieuwe film aangemaakt en bewaard (de ketting films wordt 1 groter).
         """
-        if not (isinstance(filmid, int) and isinstance(titel, str) and isinstance(rating, float) and filmid >= 0 and rating<=100 and rating>=0):
+        if not (isinstance(filmid, int) and isinstance(titel, str) and isinstance(rating, float) and filmid > 0 and rating<=100 and rating>=0):
             raise Exception("Precondition Failed: in maak_film")
 
         self.__display(f"maakt film {titel} {rating}")
@@ -134,7 +139,7 @@ class Reservatiesysteem:
         Precondities: Er worden 2 parameters gegeven, beide zijn positieve integers.
         Postconditie: Er wordt een nieuwe zaal aangemaakt en bewaard (de ketting zalen wordt 1 groter).
         """
-        if not (isinstance(nummer, int) and isinstance(maxplaatsen, int) and nummer >= 0 and maxplaatsen >= 0):
+        if not (isinstance(nummer, int) and isinstance(maxplaatsen, int) and nummer > 0 and maxplaatsen >= 0):
             raise Exception("Precondition Failed: in maak_zaal")
 
         self.__display(f"maakt zaal {nummer} {maxplaatsen}")
@@ -150,7 +155,7 @@ class Reservatiesysteem:
 
         :param id: unsigned integer (een nieuw uniek id voor de vertoning)
         :param zaalnummer: integer (nummer van de zaal)
-        :param slot: integer (tijdslot van vertoning, integer heeft volgend format uurMinuten vb. 23u30 -> 2330)
+        :param slot: integer (tijdslot van vertoning via een index van de Chain)
         :param datum: unsigned int (representeert de datum in seconden)
         :param filmid: integer (id van de film)
         :param vrije_plaatsen: unsigned integer (initieel aantal plaatsen in de vertoning)
@@ -165,7 +170,7 @@ class Reservatiesysteem:
             raise Exception("Exception in maak_vertoning: Film met identificatie bestaat niet")
 
         if not (isinstance(filmid, int) and isinstance(zaalnummer, int) and isinstance(slot,
-                                                                                  int) and filmid >= 0 and zaalnummer >= 0 and slot >= 0):
+                                                                                  int) and filmid > 0 and zaalnummer > 0 and slot > 0):
             raise Exception("Exception in maak_vertoning: Precondition Failure")
 
         datum = self.convert_date(datum) #Zet datum om in seconden
@@ -192,7 +197,7 @@ class Reservatiesysteem:
         if not isinstance(vertoning_id, int) and isinstance(aantal_plaatsen, int) and isinstance(tijdstip,
                                                                                                  int) and isinstance(
                 gebruiker_id,
-                int) and vertoning_id >= 0 and aantal_plaatsen > 0 and gebruiker_id >= 0 and tijdstip >= self.tijdsstip and tijdstip>=0:
+                int) and vertoning_id >= 0 and aantal_plaatsen > 0 and gebruiker_id > 0 and tijdstip >= self.tijdsstip and tijdstip>=0:
             raise Exception("Precondition Error: maak_reservatie")
 
         if not self.vertoningen.tableRetrieve(vertoning_id)[1]:
@@ -234,8 +239,8 @@ class Reservatiesysteem:
             datum = args[0]
             splitted_datum = datum.split("-")
             jaar = splitted_datum[0]
-            if len(str(int(jaar))) != 4:
-                raise Exception("precondition error: jaar is niet in het juiste formaat")
+            #if len(str(int(jaar))) != 4:
+            #    raise Exception("precondition error: jaar is niet in het juiste formaat")
             maand = splitted_datum[1]
             dag = splitted_datum[2]
             total = jaar + maand + dag
@@ -247,8 +252,8 @@ class Reservatiesysteem:
             datum = args[0]
             splitted_datum = datum.split("-")
             jaar = splitted_datum[0]
-            if len(str(int(jaar))) != 4:
-                raise Exception("precondition error: jaar is niet in het juiste formaat")
+            #if len(str(int(jaar))) != 4:
+            #    raise Exception("precondition error: jaar is niet in het juiste formaat")
             maand = splitted_datum[1]
             dag = splitted_datum[2]
             total = jaar + maand + dag
@@ -461,17 +466,16 @@ class Reservatiesysteem:
         logger.create_log()
         return True
 
-    def add_tijdslot(self,tijdslot):
+    def add_tijdslot(self,index,tijdslot):
         """
         Voegt een tijdslot toe aan de verzameling met bestaande tijdslots.
 
         :param tijdslot: int
 
-        Precondities: Tijdslot is een integer wat het aantal seconden representeert
+        Precondities: Tijdslot is een integer wat het aantal seconden representeert. De index is een geldige index die niet 0 is.
         Postcondities: Het tijdslot is achteraan de lijst toegevoegd.
         """
-        self.slots.tableInsert(self.slots.tableGetLength()+1 , tijdslot) #PRE: lijst index is currentnr+1
-        return True
+        return self.slots.tableInsert(index, tijdslot)
 
     def __display(self, msg):
         if self.display_mode == "print": #Print output to console

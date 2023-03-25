@@ -19,15 +19,15 @@ film 103 "a "" 50
 film 104 "" 50
 film 91 "" 50
 #vertoning: id, zaalnummer, slot, datum, filmid, vrije_plaatsen
-vertoning 1 1 0 0000-10-10 1 200
+vertoning 1 1 1 2024-10-10 1 200
 vertoning 2 1 1 10000-10-10 2 200
 #vertoning 2 2 1 10000-10-10 2 200
-vertoning 3 3 1 1000-10-10 2 500
-vertoning 4 5 10 1000-10-10 2 500
-vertoning 5 5 2 1000-10-10 2 500
-vertoning 6 4 2 1000-10-10 2 500
-vertoning 8 4 2 1000-10-10 2 0
-vertoning 100 4 2 1000-10-10 2 -1
+vertoning 3 3 1 4000-10-10 2 500
+vertoning 4 5 10 4000-10-10 2 500
+vertoning 5 5 2 4000-10-10 2 500
+vertoning 6 4 2 4000-10-10 2 500
+vertoning 8 4 2 4000-10-10 2 0
+vertoning 100 4 2 4000-10-10 2 -1
 gebruiker 1 Henry Hermans Henry@Hermans.com
 gebruiker 2 Henry Hermans Henry@Hermans.com
 gebruiker 3 Henry Hermans Henry@Hermans.com

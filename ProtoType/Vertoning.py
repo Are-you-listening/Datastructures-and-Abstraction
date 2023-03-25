@@ -30,7 +30,7 @@ class Vertoning:
 
         :param id: integer
         :param zaalnummer: integer
-        :param slot: integer
+        :param slot: integer (geeft de slot in seconden weer)
         :param datum: integer
         :param filmid: integer
         :param vrije_plaatsen: integer
@@ -104,7 +104,7 @@ class Vertoning:
         datetime = int( str(self.datum) + str(self.slot) ) #Date time in seconden volgens format
         if(self.afspelend):
             return "F:"+str(self.vrije_plaatsenFysiek)
-        elif (not self.afspelend) and (datetime < current_time):
-            return "W:"+str(self.vrije_plaatsen - self.vrije_plaatsenVirtueel - self.vrije_plaatsenFysiek )
+        elif ( current_time > datetime ): #Wanneer de huidige tijd is VOORDAT de film wordt gespeeld
+            return "W:" + str(self.vrije_plaatsen - self.vrije_plaatsenVirtueel - self.vrije_plaatsenFysiek)
         else:
             return "G:"+str(self.vrije_plaatsen - self.vrije_plaatsenVirtueel)
