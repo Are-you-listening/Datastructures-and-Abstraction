@@ -42,7 +42,7 @@ class Reservatiesysteem:
         if "display_mode" in kwargs:
             self.display_mode = kwargs["display_mode"]
 
-        self.tijdsstip = 0 #Houdt het tijdstip bij
+        self.tijdsstip = 0 #Houdt het tijdstip bij Format: int( "jaar"+"maand"+"dag"+str(#seconden uit uren,minuten,seconden) )
         self.films = MyCircularLinkedChainAnas.LCTable() #Verzameling van alle films
         self.zalen = MyCircularLinkedChainAnas.LCTable() #Bijhouden van alle zalen
         self.gebruikers = MyCircularLinkedChainAnas.LCTable() #Bijhouden van alle gebruikers
@@ -158,8 +158,6 @@ class Reservatiesysteem:
         Precondities: Er worden 3 parameters gegeven, allemaal zijn ze positieve integers. Het tijdslot moet bestaan/al zijn toegevoegd. De film met filmid moet bestaan. De zaal met zaalnummer moet bestaan. id is een uniek id.
         Postconditie: Er wordt een nieuwe vertoningen aangemaakt en bewaard (de boom vertoningen wordt 1 groter).
         """
-
-        self.__display(f"maakt vertoning: {zaalnummer} {slot} {datum} {filmid}")
         if not self.zalen.tableRetrieveTranverse(zaalnummer):
             raise Exception("Exception in maak_vertoning: Zaal met identificatie bestaat niet")
 
@@ -170,10 +168,12 @@ class Reservatiesysteem:
                                                                                   int) and filmid >= 0 and zaalnummer >= 0 and slot >= 0):
             raise Exception("Exception in maak_vertoning: Precondition Failure")
 
+        datum = self.convert_date(datum) #Zet datum om in seconden
         slot = self.slots.tableRetrieve(slot)[0] #Vraag tijd van het slot op
         vertoning_object = Vertoning(id, zaalnummer, slot, datum, filmid, vrije_plaatsen)
         stack = eval(self.stack_string)
         self.vertoningen.tableInsert(id, (vertoning_object,stack) )
+        self.__display(f"maakt vertoning: {zaalnummer} {slot} {datum} {filmid}")
         return True
 
     def maak_reservatie(self, vertoning_id, aantal_plaatsen, tijdstip, gebruiker_id):
@@ -186,15 +186,13 @@ class Reservatiesysteem:
         :param tijdstip: integer>=0 (tijdstip van reservatie)
         :param gebruiker_id: integer>=0 (id van de gebruiker dat een reservatie maakt).
 
-        Precondities: Er worden 4 parameters gegeven, allemaal zijn ze positieve integers. De gebruiker moet bestaan met het bijbehorende ID. De vertoning met het bijbehorende ID moet bestaan. Het id is een uniek getal.
+        Precondities: Er worden 4 parameters gegeven, allemaal zijn ze positieve integers. De gebruiker moet bestaan met het bijbehorende ID. De vertoning met het bijbehorende ID moet bestaan. Het id is een uniek getal. Het tijdstip van reserveren moet gebeuren voor
         Postconditie: Er wordt een nieuwe reservatie aangemaakt en bewaard (de queue reservaties wordt 1 groter)
         """
-        self.__display(f"maakt reservatie: {vertoning_id} {aantal_plaatsen} {tijdstip} {gebruiker_id}")
-
         if not isinstance(vertoning_id, int) and isinstance(aantal_plaatsen, int) and isinstance(tijdstip,
                                                                                                  int) and isinstance(
                 gebruiker_id,
-                int) and vertoning_id >= 0 and aantal_plaatsen > 0 and gebruiker_id >= 0 and tijdstip >= 0:
+                int) and vertoning_id >= 0 and aantal_plaatsen > 0 and gebruiker_id >= 0 and tijdstip >= self.tijdsstip and tijdstip>=0:
             raise Exception("Precondition Error: maak_reservatie")
 
         if not self.vertoningen.tableRetrieve(vertoning_id)[1]:
@@ -203,8 +201,15 @@ class Reservatiesysteem:
         if not self.gebruikers.tableRetrieveTranverse(gebruiker_id):  # Subscript operator?
             raise Exception("Precondition Error: maak_reservatie, gebruiker bestaat niet")
 
+        Vertoning = self.vertoningen.tableRetrieve(vertoning_id)[0][0]
+        date = Vertoning.datum# in 'seconden'
+        starttime= int( str(date) + str(Vertoning.slot) ) #Het moment van starten van de Vertoning in seconden
+        if not ( tijdstip<starttime ):
+            raise Exception("Precondition Error: maak_reservatie, Reservatie voor een vertoning in het verleden")
+
         ReservatieItem = (tijdstip, Reservatie(id, vertoning_id, aantal_plaatsen, tijdstip, gebruiker_id))
         self.reservaties.tableInsert(ReservatieItem)
+        self.__display(f"maakt reservatie: {vertoning_id} {aantal_plaatsen} {tijdstip} {gebruiker_id}")
         return True
 
     def __get_time(self):
@@ -220,7 +225,7 @@ class Reservatiesysteem:
         """
         Converteert een datum naar seconden.
 
-        ::param *args: kan ofwel van de vorm {datum, hour, minutes, seconds} of {hour, minutes, seconds} zijn
+        ::param *args: kan ofwel van de vorm {datum, hour, minutes, seconds} of {hour, minutes, seconds} of {datum} zijn
 
         Preconditie: datum is een string en hour, minutes, seconds zijn integers (de datum bestaat en is van de vorm "jjjjmmdd" en start niet met nullen)
         Postconditie: er wordt een integer teruggegeven waarbij de eerste 8 cijfers de datum voorstellen, en de rest stelt hour:minutes:seconds in seconden voor
@@ -237,6 +242,17 @@ class Reservatiesysteem:
             hour = args[1] % 24
             minutes = args[2] % 60
             seconds = args[3] % 60
+
+        elif len(args)==1:
+            datum = args[0]
+            splitted_datum = datum.split("-")
+            jaar = splitted_datum[0]
+            if len(str(int(jaar))) != 4:
+                raise Exception("precondition error: jaar is niet in het juiste formaat")
+            maand = splitted_datum[1]
+            dag = splitted_datum[2]
+            total = jaar + maand + dag
+            return int(total)
 
         else:
             total = ""
@@ -265,7 +281,10 @@ class Reservatiesysteem:
         temp = str(tijd)
         if (len(temp) >= 8):
             datum = f"{temp[:4]}-{temp[4:6]}-{temp[6:8]}"
-            seconds = int(temp[8:])
+            if(len(temp) == 8):
+                seconds = 0
+            else:
+                seconds = int(temp[8:])
         else:
             datum = "0000-00-00"
             seconds = int(tijd)

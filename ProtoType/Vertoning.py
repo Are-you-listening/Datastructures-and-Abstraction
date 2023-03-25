@@ -45,7 +45,7 @@ class Vertoning:
         self.filmid = filmid
         self.vrije_plaatsenVirtueel = vrije_plaatsen
         self.afspelend = False
-        self.vrije_plaatsenFysiek = 0
+        self.vrije_plaatsenFysiek = 0 #Ingenomen aantal plaatsen
         self.vrije_plaatsen = vrije_plaatsen
 
     def verminder_plaatsenVirtueel(self, hoeveelheid):
@@ -101,10 +101,10 @@ class Vertoning:
         return self.id
 
     def status(self,current_time):
-        #vertoning_datetime_start //Date Time ipv Slots gebruiken (Houd geen rekening met de datum)
+        datetime = int( str(self.datum) + str(self.slot) ) #Date time in seconden volgens format
         if(self.afspelend):
             return "F:"+str(self.vrije_plaatsenFysiek)
-        elif (not self.afspelend) and (self.slot < current_time):
+        elif (not self.afspelend) and (datetime < current_time):
             return "W:"+str(self.vrije_plaatsen - self.vrije_plaatsenVirtueel - self.vrije_plaatsenFysiek )
         else:
             return "G:"+str(self.vrije_plaatsen - self.vrije_plaatsenVirtueel)

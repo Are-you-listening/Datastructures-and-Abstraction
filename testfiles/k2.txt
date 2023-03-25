@@ -1,0 +1,19 @@
+#Test: Normale 1 reservatie waarbij er gewacht wordt op 1 persoon
+
+init
+zaal 2 200
+film 5 "This is a good test case (the movie)" 0.95
+vertoning 22 2 3 2023-12-10 5 200
+gebruiker 3 Henry Hendriks no_mail@oei.be
+
+start
+
+2023-11-11 11:30 reserveer 3 22 40
+
+2023-11-11 12:30 ticket 22 39
+
+# dit maakt een bestand log.txt
+# G betekent gepland gevolgd door het aantal verkochte ticketten
+# F betekent dat de film gestart is gevolgd door het aantal mensen in de zaal
+# W betekent dat de film wacht om gestart te worden gevolgd door het aantal mensen waarop nog gewacht wordt
+2024-12-12 18:00 log

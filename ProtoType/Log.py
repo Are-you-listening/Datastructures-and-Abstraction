@@ -112,27 +112,25 @@ class Log:
         """
         leest de vertoning uit en stored die in de sorting_tree
         """
-        current_slot = self.resSYS.convert_time(self.resSYS.tijdsstip)[1] * 3600 + self.resSYS.convert_time(self.resSYS.tijdsstip)[2] * 60
-        tup = (value[0].datum, value[0].filmid, value[0].status(current_slot), value[0].slot)
-        datum = tup[0].replace("-", "")
+        currenttime = self.resSYS.tijdsstip
+        tup = (value[0].datum, value[0].filmid, value[0].status(currenttime), value[0].slot)
+        datum = str(tup[0])
         filmid = tup[1]
         slot = tup[3]
         key_value = int(datum + str(filmid) + str(slot))
         self.sorting_tree.tableInsert(key_value, tup)
 
     def __log_add_data(self, value):
-        print(value)
         """
         Leest de vertoning uit en voegt het toe aan de output string
         """
         datum = value[0]
-        datum_int = int(datum.replace("-", ""))
         tijd = value[3]
         current_datum, current_tijd, current_film, current_index = self.current
         tabs = '\t' * 6
 
         """indien de datum/film niet matched gaan we naar een volgende regel"""
-        if (datum_int > current_datum) or (value[1] != current_film):
+        if (datum > current_datum) or (value[1] != current_film):
             if current_datum != 0:
                 """opvullen van huidige regel"""
                 while current_index != self.resSYS.slots.tableGetLength()+1:
@@ -144,7 +142,7 @@ class Log:
 
             tenp_tabs = "\t" * 5
             self.text_string += f"""\n{tenp_tabs}<tbody> <tr>"""
-            self.text_string += f"\n{tabs}<td>{datum}</td>"
+            self.text_string += f"\n{tabs}<td>{self.resSYS.convert_time(datum)[0]}</td>"
             self.text_string += f"\n{tabs}<td>{self.resSYS.films.tableRetrieveTranverse(value[1]).titel}</td>"
             current_index = 1
 
@@ -158,4 +156,4 @@ class Log:
 
         """voeg de data toe onder de tijdslot"""
         self.text_string += f"\n{tabs}<td>{value[2]}</td>"
-        self.current = (datum_int, tijd, value[1], current_index + 1)
+        self.current = (datum, tijd, value[1], current_index + 1)
