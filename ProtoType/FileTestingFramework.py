@@ -133,7 +133,7 @@ for i0 in adt_dict.get("0"):
                             index += 1
 """
 
-
+"""
 index = 0
 for i0 in adt_dict.get("0"):
     for i1 in adt_dict.get("1"):
@@ -148,7 +148,8 @@ for i0 in adt_dict.get("0"):
                             print(index)
 
                             # print((i0, i1, i2, i3, i4, i5, i6, i7, i8, i9))
-                            test(file="system.txt", args_tup=(i0, i1, i2, i3, i4, i5, i6, i7, i8, i9))
+                            test(file="system_test2.txt", args_tup=(i0, i1, i2, i3, i4, i5, i6, i7, i8, i9))
                             index += 1
+"""
 
-#test(file="system_test2.txt")
+test(file="system_test2.txt")

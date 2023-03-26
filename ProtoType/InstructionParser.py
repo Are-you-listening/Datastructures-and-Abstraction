@@ -39,6 +39,7 @@ class InstructionParser:
         de init instructions worden ineens uitgevoerd
         de tijd gerelateerde instructies worden bewaard in de gegeven ADT
         precondities: De file voldoet aan het gevraagde format en bevat geen onbekende instructies
+                      De file bevat alle instructies chronologisch
         postcondities: de instructies worden geinitialiseerd/ klaargezet op hun juiste locatie
         """
         with open(self.path, 'rt') as f:
@@ -91,9 +92,7 @@ class InstructionParser:
         """
         splits string door een split_string.
         Equivalent van string.split(''), maar dan zonder python list te gebruiken, maar een tuple te maken
-
         """
-
         amount = string.count(split_string)
         if amount == 0:
             return (string,)
@@ -118,15 +117,44 @@ class InstructionParser:
     def __init_commands(self, args):
         """
         commands die uitgevoerd worden tijdens de initiasie fase
-
+        """
+        """
+        format zoals in inputfile gegeven
         """
         if args[0] == "zaal":
+            """
+            0: 'zaal' order
+            1: zaalnummer
+            2: plaatsen
+            """
             self.reservatie_systeem.maak_zaal(int(args[1]), int(args[2]))
         elif args[0] == "film":
+            """
+            0: 'film' order
+            1: filmid
+            2: titel
+            3: rating
+            """
             self.reservatie_systeem.maak_film(int(args[1]), args[2], float(args[3]))
         elif args[0] == "vertoning":
+            """
+            0: 'vertoning' order
+            1: vertoning id
+            2: zaal
+            3: slot
+            4: datum
+            5: filmid
+            6: aantal plaatsen
+            """
             self.reservatie_systeem.maak_vertoning(int(args[1]), int(args[2]), int(args[3]), args[4], int(args[5]), int(args[6]))
         elif args[0] == "gebruiker":
+            """
+            0: 'gebruiker' order
+            1: gebruiker id
+            2: voornaam
+            3: achternaam
+            4: e-mail
+            """
             self.reservatie_systeem.maak_gebruiker(int(args[1]), args[2], args[3], args[4])
 
     def __setup_commands(self, args):
@@ -161,6 +189,7 @@ class InstructionParser:
         tup = self.use_adt.tableFirst()[0]
         instruction = tup[1]
 
+        """zety de tijd in het reservatiesysteem naar de gegeven tijd"""
         self.reservatie_systeem.set_time(time)
 
         if self.last_reservatie_time != time and self.reservaties_waiting > 0:
@@ -171,37 +200,54 @@ class InstructionParser:
 
         self.last_reservatie_time = time
 
+        print("k", tup)
+        """
+        new format: datetime, order, args 
+        """
 
         if tup[0] == time:
             if instruction == "reserveer":
-                """id moet wrs met counter want is niet in system.txt file"""
-                #0=datetime #1="reserver" #2 = user_id #3 = vertoning_id #4 = aantal_plaatsen
+                """
+                0: datetime
+                1: 'reserveer' order
+                2: user id
+                3: vertoning id
+                4: aantal plaatsen
+                """
                 self.reservatie_systeem.maak_reservatie(int(tup[3]), int(tup[4]), tup[0], int(tup[2]))
                 self.reservaties_waiting += 1
             elif instruction == "ticket":
+                """
+                0: datetime
+                1: 'ticket' order
+                2: vertoning id
+                3: aantal plaatsen
+                """
                 self.reservatie_systeem.lees_ticket(int(tup[2]), int(tup[3]))
             elif instruction == "log":
+                """
+                0: datetime
+                1: 'log' order
+                """
                 self.reservatie_systeem.log()
 
-
+            """haal element weg uit de queue"""
             self.use_adt.tableDelete()
 
     def __get_time(self):
+        """
+        ontvang de tijd van het eerste element in de queue
+        """
         if self.use_adt.tableIsEmpty():
             return None
         else:
             return self.use_adt.tableFirst()[0][0]
 
-    def __str__(self):
-        """
-        DEBUG
-        REMOVE LATER
-        :return:
-        """
-
-        return str(self.use_adt.tableRetrieve(None))
-
     def main_thread(self):
+        """
+        preconditie: wordt 1 keer opgeroepen vanuit hetzelfde reservatiesysteem dat ook werd doorgegeven in de constructor.
+        postconditie: alle instructies worden chronologisch uitgevoerd
+        """
         time = self.__get_time()
         while time is not None:
             self.__check_queue(time)
