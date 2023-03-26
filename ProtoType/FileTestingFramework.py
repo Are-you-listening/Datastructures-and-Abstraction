@@ -20,7 +20,21 @@ def test(**kwargs):
 
                 #print("-" * 50)
 
+    file_compare("../testfiles/log_test.html", "../testfiles/test_controle.html")
+
 #test(file="system_test1.txt")
+
+def file_compare(path1, path2):
+    f1 = open(path1, "rt")
+    f2 = open(path2, "rt")
+    l1 = f1.readlines()
+    l2 = f2.readlines()
+    if len(l1) != len(l2):
+        raise Exception("not matching log file")
+    for line_i in range(len(l1)):
+        if l1[i] != l2[i]:
+            raise Exception("not matching log file")
+
 
 adt_dict = {}
 with open("../testfiles/ADTFiles.txt") as f:
@@ -118,5 +132,23 @@ for i0 in adt_dict.get("0"):
                             test(args_tup=(i0, i1, i2, i3, i4, i5, i6, i7, i8, i9))
                             index += 1
 """
-test(file="system.txt")
-#test(file="system_hendry_hermans_scenario.txt")
+
+
+index = 0
+for i0 in adt_dict.get("0"):
+    for i1 in adt_dict.get("1"):
+        for i2 in adt_dict.get("2"):
+            for i3 in adt_dict.get("3"):
+                for i4 in adt_dict.get("4"):
+                    for i5 in adt_dict.get("5"):
+                        for i6 in adt_dict.get("6"):
+                            i7 =adt_dict.get("7")[0]
+                            i8 = adt_dict.get("8")[0]
+                            i9 = adt_dict.get("9")[0]
+                            print(index)
+
+                            # print((i0, i1, i2, i3, i4, i5, i6, i7, i8, i9))
+                            test(file="system.txt", args_tup=(i0, i1, i2, i3, i4, i5, i6, i7, i8, i9))
+                            index += 1
+
+#test(file="system_test2.txt")

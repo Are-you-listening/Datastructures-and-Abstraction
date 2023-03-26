@@ -368,7 +368,6 @@ class BST:
         self.inorderTraverse(pri, item.right_child, False)
 
 
-
 class BSTTable():
     def __init__(self):
         self.bst = BST()
@@ -376,11 +375,33 @@ class BSTTable():
     def tableIsEmpty(self):
         return self.bst.isEmpty()
 
-    def tableInsert(self, key, val):
-        return self.bst.searchTreeInsert(createTreeItem(key, val))
+    def tableInsert(self, key, val, adt=None):
 
-    def tableRetrieve(self,key):
-        return self.bst.searchTreeRetrieve(key)
+        if isinstance(key, int):
+            return self.bst.searchTreeInsert(createTreeItem(key, val))
+        elif isinstance(key, tuple):
+            key, key2 = key
+            current_adt, found = self.bst.searchTreeRetrieve(key)
+
+            if adt == None or not adt.empty():
+                raise Exception("Preconditie BST Tibo: sub-adt niet empty")
+
+            if found:
+                return current_adt.tableInsert(key2, val)
+            else:
+                adt.tableInsert(key2, val)
+                return self.bst.searchTreeInsert(createTreeItem(key,adt))
+
+    def tableRetrieve(self, key):
+        if isinstance(key, int):
+            return self.bst.searchTreeRetrieve(key)
+        elif isinstance(key, tuple):
+            key, key2 = key
+            current_adt, found = self.bst.searchTreeRetrieve(key)
+            if not found:
+                return None, False
+
+            return current_adt.tableRetrieve(key2)
 
     def traverseTable(self, func):
         self.bst.inorderTraverse(func)
@@ -391,8 +412,16 @@ class BSTTable():
     def load(self, dict):
         return self.bst.load(dict)
 
-    def tableDelete(self, key):
-        return self.bst.searchTreeDelete(key)
+    def tableDelete(self, key, key2=None):
+        if not self.indent:
+            return self.bst.searchTreeDelete(key)
+
+        current_adt, found = self.bst.searchTreeRetrieve(key)
+        if not found:
+            return False
+
+        return current_adt.tableDelete(key2)
 
     def clear(self):
         self.bst = BST()
+
