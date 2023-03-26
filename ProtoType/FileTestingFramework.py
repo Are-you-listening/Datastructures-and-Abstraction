@@ -152,4 +152,4 @@ for i0 in adt_dict.get("0"):
                             index += 1
 """
 
-test(file="system_test2.txt")
+#test(file="system_test2.txt")

@@ -10,11 +10,12 @@ self.resSYS: reference naar reservatiesysteem
 """
 
 class Log:
-    def __init__(self, reservatiesysteem, use_ADT):
+    def __init__(self, reservatiesysteem, use_ADT, **kwargs):
         """
         precondities: Er wordt een geldige ADT gegeven die dezelfde tableinstructies heeft als een zoekboom.
                       Ook wordt er een reference gegeven naar het reservatiesysteem vanwaar deze klasse opgeroepen wordt.
                       Deze klasse mag enkel opgeroepen worden vanuit een reservatiesysteem
+                      Het path dat meegegeven wordt via **kwargs:path is een geldig path
         postcondities: er wordt een log aangemaakt in html format
 
         :param: reservatiesysteem: Reservatiesysteem Object
@@ -27,6 +28,11 @@ class Log:
         self.current = (0, 0, -1, 1)
 
         self.resSYS = reservatiesysteem
+
+        if "path" in kwargs:
+            self.store_path = kwargs["path"]
+        else:
+            self.store_path = "../testfiles/log_test.html"
 
 
     def create_log(self):  # Public
@@ -96,7 +102,7 @@ class Log:
             </body>
         </html>"""
 
-        with open("../testfiles/log_test.html", 'wt') as f:
+        with open(self.store_path, 'wt') as f:
             f.write(result_string)
             f.close()
 

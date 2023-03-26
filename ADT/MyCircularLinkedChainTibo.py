@@ -166,24 +166,63 @@ class LCTable:
     def tableIsEmpty(self):
         return self.l.isEmpty()
 
-    def tableInsert(self, index, val):
-        return self.l.insert(index, val)
+    def tableInsert(self, index, val, adt=None):
+        if isinstance(index, int):
+            return self.l.insert(index, val)
+        elif isinstance(index, tuple):
+            index, index2 = index
+            current_adt, found = self.l.retrieve(index)
+
+            if adt == None or not adt.empty():
+                raise Exception("Preconditie BST Tibo: sub-adt niet empty")
+
+            if found:
+                return current_adt.tableInsert(index2, val)
+            else:
+                adt.tableInsert(index2, val)
+                return self.l.insert(index, adt)
 
     def tableRetrieve(self, index):
-        return self.l.retrieve(index)
+        if isinstance(index, int):
+            return self.l.retrieve(index)
+        elif isinstance(index, tuple):
+            index, index2 = index
+            current_adt, found = self.l.retrieve(index)
+            if not found:
+                return None, False
+
+            return current_adt.tableRetrieve(index2)
 
     def tableRetrieveTranverse(self, id):
-        for i in range(1, self.l.length+1):
-            val = self.l.retrieve(i)[0]
-            status = self.l.retrieve(i)[1]
-            if val == None:
-                return False
-            if val.get_id() == id:
-                return val
-        return False
+        if isinstance(id, int):
+            for i in range(1, self.l.length+1):
+                val = self.l.retrieve(i)[0]
+                if val == None:
+                    return False
+                if val.get_id() == id:
+                    return val
+            return False
+        elif isinstance(id, tuple):
+            id, id2 = id
+            """
+            TO BE DISCUSSED
+            """
+            return False
 
     def tableDelete(self, index):
-        return self.l.delete(index)
+        if isinstance(index, int):
+            return self.l.delete(index)
+
+        elif isinstance(index, tuple):
+            index, index2 = index
+            current_adt, found = self.l.retrieve(index)
+            if not found:
+                return False
+
+            suc6 = current_adt.tableDelete(index2)
+            if current_adt.tableIsEmpty():
+                self.l.delete(index)
+            return suc6
 
     def tableGetLength(self):
         return self.l.getLength()

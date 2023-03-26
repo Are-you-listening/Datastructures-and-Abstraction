@@ -412,15 +412,19 @@ class BSTTable():
     def load(self, dict):
         return self.bst.load(dict)
 
-    def tableDelete(self, key, key2=None):
-        if not self.indent:
+    def tableDelete(self, key):
+        if isinstance(key, int):
             return self.bst.searchTreeDelete(key)
+        elif isinstance(key, tuple):
+            key, key2 = key
+            current_adt, found = self.bst.searchTreeRetrieve(key)
+            if not found:
+                return False
 
-        current_adt, found = self.bst.searchTreeRetrieve(key)
-        if not found:
-            return False
-
-        return current_adt.tableDelete(key2)
+            suc6 = current_adt.tableDelete(key2)
+            if current_adt.tableIsEmpty():
+                self.bst.searchTreeDelete(key)
+            return suc6
 
     def clear(self):
         self.bst = BST()

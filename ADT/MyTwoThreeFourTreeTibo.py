@@ -1007,11 +1007,32 @@ class TwoThreeFourTreeTable:
     def tableIsEmpty(self):
         return self.tree.isEmpty()
 
-    def tableInsert(self, key, value):
-        return self.tree.insertItem(createTreeItem(key, value))
+    def tableInsert(self, key, value, adt=None):
+        if isinstance(key, int):
+            return self.tree.insertItem(createTreeItem(key, value))
+        elif isinstance(key, tuple):
+            key, key2 = key
+            current_adt, found = self.tree.retrieveItem(key)
 
-    def tableRetrieve(self,key):
-        return self.tree.retrieveItem(key)
+            if adt == None or not adt.empty():
+                raise Exception("Preconditie BST Tibo: sub-adt niet empty")
+
+            if found:
+                return current_adt.tableInsert(key2, value)
+            else:
+                adt.tableInsert(key2, value)
+                return self.tree.insertItem(createTreeItem(key, adt))
+
+    def tableRetrieve(self, key):
+        if isinstance(key, int):
+            return self.tree.retrieveItem(key)
+        elif isinstance(key, tuple):
+            key, key2 = key
+            current_adt, found = self.tree.retrieveItem(key)
+            if not found:
+                return None, False
+
+            return current_adt.tableRetrieve(key2)
 
     def traverseTable(self, func):
         self.tree.inorderTraverse(func)
@@ -1023,7 +1044,18 @@ class TwoThreeFourTreeTable:
         return self.tree.load(dict)
 
     def tableDelete(self, key):
-        return self.tree.deleteItem(key)
+        if isinstance(key, int):
+            return self.tree.deleteItem(key)
+        elif isinstance(key, tuple):
+            key, key2 = key
+            current_adt, found = self.tree.retrieveItem(key)
+            if not found:
+                return False
+
+            suc6 = current_adt.tableDelete(key2)
+            if current_adt.tableIsEmpty():
+                self.tree.deleteItem(key)
+            return suc6
 
     def clear(self):
         self.tree = TwoThreeFourTree()
