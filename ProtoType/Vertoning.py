@@ -36,7 +36,7 @@ class Vertoning:
         :param vrije_plaatsen: integer
         :data afspelend: bool
         :data vrije_plaatsenFysiek
-        :data vrije_plaatsen
+        :data vrije_plaatsenVirtueel
         """
         self.id = id
         self.zaalnummer = zaalnummer
@@ -101,6 +101,12 @@ class Vertoning:
         return self.id
 
     def status(self,current_time):
+        """
+        Geeft de status van een Vertoning in string mee
+
+        :param current_time: positive integer (Time van reservatie systeem)
+        :return:
+        """
         datetime = int( str(self.datum) + str(self.slot) ) #Date time in seconden volgens format
         if(self.afspelend):
             return "F:"+str(self.vrije_plaatsenFysiek)

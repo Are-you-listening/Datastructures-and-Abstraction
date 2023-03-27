@@ -12,7 +12,7 @@ from InstructionParser import InstructionParser
 from Log import Log
 
 """
-Deze ADT geeft een reservatiesysteem weer dat gebruik maakt van de andere ADT's
+Deze ADT geeft een reservatiesysteem weer dat gebruik maakt van de andere ADT's geïmplementeerd bij Toi
 
 Data:
 self.tijdstip: integer (= 0 default)  (geeft weer op welk tijdstip het programma zich bevindt)
@@ -38,7 +38,7 @@ class Reservatiesysteem:
         Precondities: Er worden geen andere parameters gegeven.
         Postconditie: Een Reservatiesysteem object wordt aangemaakt.
         """
-        self.tijdsstip = 0 #Houdt het tijdstip bij Format: int( "jaar"+"maand"+"dag"+str(#seconden uit uren,minuten,seconden) )
+        self.tijdsstip = 0 #Houdt het tijdstip bij | Format: int( "jaar"+"maand"+"dag"+str(#seconden uit uren,minuten,seconden) )
         self.films = MyCircularLinkedChainAnas.LCTable() #Verzameling van alle films
         self.zalen = MyCircularLinkedChainAnas.LCTable() #Bijhouden van alle zalen
         self.gebruikers = MyCircularLinkedChainAnas.LCTable() #Bijhouden van alle gebruikers
@@ -54,7 +54,6 @@ class Reservatiesysteem:
         self.stack_string = "MyStackKars.MyStackTable()"
         self.log_string = "MyBSTAnas.BSTTable()"
         self.ip_string = "MyQueueTibo.MyQueueTable()"
-
 
         #If statement to delete
         if "adt_args" in kwargs:
@@ -85,6 +84,7 @@ class Reservatiesysteem:
 
         """main thread voert alles uit"""
         self.instruction_parser.main_thread()
+
     def maak_gebruiker(self, id, voornaam, achternaam, mail):
         """
         Maakt een nieuwe gebruiker aan en bewaard die in self.gebruikers
@@ -97,13 +97,14 @@ class Reservatiesysteem:
         Precondities: Er worden 4 parameters gegeven, id is een positieve integer en voornaam, achternaam en mail zijn strings. Het id is een unieke getal.
         Postconditie: Bij succes wordt een nieuwe gebruiker aangemaakt en bewaard (self.gebruikers wordt 1 groter).
         """
-        if( (not isinstance(id,int)) or (id<0) or (not isinstance(voornaam,str)) or (not isinstance(achternaam,str)) or (not isinstance(mail,str)) ):
+        if( (not isinstance(id,int)) or (id<=0) or (not isinstance(voornaam,str)) or (not isinstance(achternaam,str)) or (not isinstance(mail,str)) ):
             raise Exception("Precondition Failure bij maak_gebruiker")
 
         newGebruiker = Gebruiker(id, voornaam, achternaam, mail)
         self.gebruikers.tableInsert(1, newGebruiker)
         self.__display(f"maak gebruiker: {voornaam} {achternaam} {mail}")
         return True
+
     def maak_film(self, filmid, titel, rating):
         """
         Maakt een nieuwe film aan en bewaard die in self.films.
@@ -140,6 +141,7 @@ class Reservatiesysteem:
         self.zalen.tableInsert(1, zaal_object)
         self.__display(f"maakt zaal {nummer} {maxplaatsen}")
         return True
+
     def maak_vertoning(self, id, zaalnummer, slot, datum, filmid, vrije_plaatsen):
         """
         Maakt een nieuwe vertoning aan en bewaard die in self.vertoningen.
@@ -181,9 +183,7 @@ class Reservatiesysteem:
 
         vertoning_object = Vertoning(id, zaalnummer, slot, datum, filmid, vrije_plaatsen)
         stack = eval(self.stack_string)
-        #if not self.vertoningen.tableInsert(id, (vertoning_object,stack) ):
-        #    raise Exception("Error: maak_vertoning insert is gefaald")
-        self.vertoningen.tableInsert(id, (vertoning_object, stack))
+        self.vertoningen.tableInsert(id, (vertoning_object,stack) )
         self.__display(f"maakt vertoning: {id} {zaalnummer} {slot} {datum} {filmid}")
         return True
 
@@ -191,14 +191,13 @@ class Reservatiesysteem:
         """
         Maakt een nieuwe reservatie aan en bewaard die in self.reservaties
 
-        :param id: unsigned integer (uniek voor alle reservaties)
         :param vertoning_id: integer>0 (id van vertoning)
-        :param aantal_plaatsen: integer>=0 (aantal plaatsen voor reservatie)
+        :param aantal_plaatsen: integer>0 (aantal plaatsen voor reservatie)
         :param tijdstip: integer>=0 (tijdstip van reservatie)
-        :param gebruiker_id: integer>=0 (id van de gebruiker dat een reservatie maakt).
+        :param gebruiker_id: integer>0 (id van de gebruiker dat een reservatie maakt).
 
-        Precondities: Er worden 4 parameters gegeven, allemaal zijn ze positieve integers. De gebruiker moet bestaan met het bijbehorende ID. De vertoning met het bijbehorende ID moet bestaan. Het id is een uniek getal. Het tijdstip van reserveren moet gebeuren voor
-        Postconditie: Er wordt een nieuwe reservatie aangemaakt en bewaard (de queue reservaties wordt 1 groter)
+        Precondities: Er worden 4 parameters gegeven, allemaal zijn ze positieve integers. De gebruiker moet bestaan met het bijbehorende ID. De vertoning met het bijbehorende ID moet bestaan. Het tijdstip van reserveren moet gebeuren voor
+        Postconditie: Bij succes: er wordt een nieuwe reservatie aangemaakt en bewaard (de queue reservaties wordt 1 groter)
         """
         if not isinstance(vertoning_id, int) and isinstance(aantal_plaatsen, int) and isinstance(tijdstip,
                                                                                                  int) and isinstance(
@@ -221,10 +220,11 @@ class Reservatiesysteem:
         self.reservaties.tableInsert(ReservatieItem)
         self.__display(f"maakt reservatie: {vertoning_id} {aantal_plaatsen} {tijdstip} {gebruiker_id}")
         return True
-
     def __get_time(self):
         """
-        Geeft het huidige tijdstip terug.:return integer (van self.tijdstip) (geeft het huidige tijdstip weer)
+        Geeft het huidige tijdstip terug.
+
+        :return integer (van self.tijdstip) (geeft het huidige tijdstip weer)
 
         Precondities: Er worden geen parameters gegeven.
         Postconditie: Er wordt een integer teruggeven dat het tijdstip weergeeft in seconden.
@@ -253,7 +253,7 @@ class Reservatiesysteem:
             minutes = args[2] % 60
             seconds = args[3] % 60
 
-        elif len(args)==1:
+        elif len(args)==1: #Convert {datum}
             datum = args[0]
             splitted_datum = datum.split("-")
             jaar = splitted_datum[0]
@@ -302,15 +302,14 @@ class Reservatiesysteem:
         minutes = (seconds - hours * 3600) // 60
         seconds = seconds - hours * 3600 - minutes * 60
         return (datum, hours%24, minutes%60, seconds%60)
-
-    def set_time(self, tijd):
+    def set_time(self, tijd): #Private
         """
-        Zet het huidige tijdstip naar een andere waarde.
+        Zet het huidige tijdstip naar een andere waarde. Controleert hierbij of er al een vertoning gestart moet/kan worden.
 
         :param tijd: unsigned integer (nieuwe waarde voor de tijd in seconden)
 
         Precondities: Er wordt 1 parameter gegeven dat een positieve integer is wat de tijd in seconden representeert.
-        Postconditie: Het huidige tijdstip wordt aangepast naar de ingegeven waarde.
+        Postconditie: Het huidige tijdstip wordt aangepast naar de ingegeven waarde. Eventuele vertoningen zijn gestart.
         """
         if not isinstance(tijd, int):
             raise Exception("Precondition error: tijd is niet van type int in set_time")
@@ -318,8 +317,8 @@ class Reservatiesysteem:
             raise Exception("Precondition error: tijd kan niet negatief zijn in set_time")
         self.tijdsstip = tijd
 
-        if not self.vertoningen.tableIsEmpty():
-            self.vertoningen.traverseTable(self.start_by_object)
+        if not self.vertoningen.tableIsEmpty(): #Dubbelcheck of er een vertoning gestart moet worden
+            self.vertoningen.traverseTable(self.__start_by_object)
 
         return True
 
@@ -327,10 +326,10 @@ class Reservatiesysteem:
         """
         Lees de reservaties uit self.reservaties en verwerkt deze.
 
+        :return: bool:succes
+
         Precondities: Er worden geen parameters ingegeven. self.reservaties bevat enkel reservaties van eenzelfde tijdstip. self.verlaag_plaatsenVirtueel controleert autonoom of dat er plek is in het systeem.
         Postconditie: De reservatie is succesvol verwerkt en toegevoegd aan het archief. De vertoning heeft eventueel een aangepast aantal vrije_plaatsen.
-
-        :return: bool:succes
         """
         self.__display(f"leest reservatie") #Display eventueel info naar de console
 
@@ -345,7 +344,7 @@ class Reservatiesysteem:
             self.__archiveer_reservatie()
 
             # Update datum & tijd
-            #self.set_time(tijdstip)
+            #self.set_time(tijdstip) #Dit gebeurt nu inprincipe in de instruction parser
 
         return True
 
@@ -367,9 +366,9 @@ class Reservatiesysteem:
         Precondities: vertoningid verwijst naar een bestaande vertoning en is op te vragen via self.vertoningen. aantal_mensen is een unsigned int.
         Postcondities: Het ticket is verwerkt, het aantal_vrijeplaatsen van de vertoning is geüpdated en de vertoning is eventueel gestart.
 
-        :param vertoningid: id van de vertoning, int
+        :param vertoningid: id van de vertoning, positive unsigned int
         :param aantal_mensen: unsigned int
-        :return:
+        :return: bool: succes
         """
         #Verlaag aantal plaatsen & chance stack
         self.__verlaag_plaatsenFysiek(vertoningid,aantal_mensen)
@@ -429,12 +428,13 @@ class Reservatiesysteem:
         """
         if self.vertoningen.tableRetrieve(vertoningid)[1]: #Indien de vertoning bestaat
             vertoning_object = self.vertoningen.tableRetrieve(vertoningid)[0]
-            return self.start_by_object(vertoning_object)
+            return self.__start_by_object(vertoning_object)
         raise Exception("Vertoning bestaat niet")
 
-    def start_by_object(self, vertoning_object):
+    def __start_by_object(self, vertoning_object):
         """
-        Dit controleert dat de vertoning kan starten
+        Hulpfunctie
+        Controleert of een Vertoning-Object mag starten
         door te kijken dat de huidige tijd voorbij het tijdslot is en iedereen aanwezig is
         """
         stack = vertoning_object[1]
@@ -488,22 +488,14 @@ class Reservatiesysteem:
         logger.create_log()
         return True
 
-    def add_tijdslot(self,index,tijdslot):
-        """
-        Voegt een tijdslot toe aan de verzameling met bestaande tijdslots.
-
-        :param tijdslot: int
-
-        Precondities: Tijdslot is een integer wat het aantal seconden representeert. De index is een geldige index die niet 0 is.
-        Postcondities: Het tijdslot is achteraan de lijst toegevoegd.
-        """
-        return self.slots.tableInsert(index, tijdslot)
-
-    def __display(self, msg):
+    def __display(self, msg): #Hulpfunctie
         if self.display_mode == "print": #Print output to console
             print(msg)
+
     def __VertoningCheck(self,vertoning):
         """
+        Hulpfunctie
+
         Checkt of een Vertoning niet al dit moment (tijd en plaats) bestaat
 
         :param vertoning:

@@ -6,7 +6,6 @@ self.zaalnummer: integer (nummer van de overeenkomstige zaal)
 self.plaatsen: integer (aantal plaatsen in de zaal)
 """
 
-
 class Zaal:
     def __init__(self, nummer, plaatsen):
         if not isinstance(nummer, int) or nummer < 0:
