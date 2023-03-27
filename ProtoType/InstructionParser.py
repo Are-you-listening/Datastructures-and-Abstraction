@@ -199,8 +199,6 @@ class InstructionParser:
             return
 
         self.last_reservatie_time = time
-
-        print("k", tup)
         """
         new format: datetime, order, args 
         """
