@@ -58,6 +58,8 @@ class Reservatiesysteem:
         #self.slots.tableInsert(3, 20 * 3600) #20:00
         #self.slots.tableInsert(4, 22 * 3600 + 30 * 60) #22:30 #Initaliseert de huidige slots
 
+        self.VertoningCheckValue = [0,0]
+
         self.stack_string = "MyStackKars.MyStackTable()"
         self.log_string = "MyBSTAnas.BSTTable()"
         self.ip_string = "MyQueueTibo.MyQueueTable()"
@@ -86,7 +88,6 @@ class Reservatiesysteem:
 
         """main thread voert alles uit"""
         self.instruction_parser.main_thread()
-
     def maak_gebruiker(self, id, voornaam, achternaam, mail):
         """
         Maakt een nieuwe gebruiker aan en bewaard die in self.gebruikers
@@ -164,26 +165,34 @@ class Reservatiesysteem:
         Postconditie: Er wordt een nieuwe vertoningen aangemaakt en bewaard (de boom vertoningen wordt 1 groter).
         """
         if not self.zalen.tableRetrieveTranverse(zaalnummer):
-            raise Exception("Exception in maak_vertoning: Zaal met identificatie bestaat niet")
+            raise Exception("Exception in maak_vertoning: Zaal met identificatie bestaat niet ")
 
         if not self.films.tableRetrieveTranverse(filmid):
-            raise Exception("Exception in maak_vertoning: Film met identificatie bestaat niet")
+            raise Exception("Exception in maak_vertoning: Film met identificatie bestaat niet ")
+
+        if not self.slots.tableRetrieve(slot)[0]:
+            raise Exception("Exception in maak_vertoning: Tijdslots met deze index bestaat niet " )
 
         if not (isinstance(filmid, int) and isinstance(zaalnummer, int) and isinstance(slot,
                                                                                   int) and filmid > 0 and zaalnummer > 0 and slot > 0 and vrije_plaatsen>0):
-            raise Exception("Exception in maak_vertoning: Precondition Failure")
+            raise Exception("Exception in maak_vertoning: Precondition Failure ")
 
         zaal = self.zalen.tableRetrieveTranverse(zaalnummer)
         if(zaal.plaatsen<vrije_plaatsen):
-            raise Exception("Exception in maak_vertoning: Precondition Failure")
-
+            raise Exception("Exception in maak_vertoning: Het aantal plaatsen voor deze vertoning past niet in de bijbehorende zaal" + id)
 
         datum = self.convert_date(datum) #Zet datum om in seconden
         slot = self.slots.tableRetrieve(slot)[0] #Vraag tijd van het slot op
+
+        #Check if vertoning niet al bestaat op dit moment
+        self.VertoningCheckValue[0] = int ( str(datum) + str(slot) )
+        self.VertoningCheckValue[1] = zaalnummer
+        self.vertoningen.traverseTable(self.__VertoningCheck)
+
         vertoning_object = Vertoning(id, zaalnummer, slot, datum, filmid, vrije_plaatsen)
         stack = eval(self.stack_string)
         self.vertoningen.tableInsert(id, (vertoning_object,stack) )
-        self.__display(f"maakt vertoning: {zaalnummer} {slot} {datum} {filmid}")
+        self.__display(f"maakt vertoning: {id} {zaalnummer} {slot} {datum} {filmid}")
         return True
 
     def maak_reservatie(self, vertoning_id, aantal_plaatsen, tijdstip, gebruiker_id):
@@ -485,6 +494,28 @@ class Reservatiesysteem:
     def __display(self, msg):
         if self.display_mode == "print": #Print output to console
             print(msg)
+    def __VertoningCheck(self,vertoning):
+        """
+        Checkt of een Vertoning niet al dit moment (tijd en plaats) bestaat
+
+        :param vertoning:
+        :param zaalnummer:
+        :param datetime:
+        :return:
+        """
+        if(self.vertoningen.tableIsEmpty()):
+            return True
+
+        datetime = self.VertoningCheckValue[0] #Opgeslagen waardes van voor de check
+        zaalnummer = self.VertoningCheckValue[1]
+
+        vertoning = vertoning[0] #0 = Vertoning; #1 = Stack
+
+        if(vertoning.zaalnummer==zaalnummer): #Kijk of de zaal hetzelfde is
+            vertoningdatetime = int( str(vertoning.datum) + str(vertoning.slot) )
+            if(vertoningdatetime==datetime): #Kijk of de tijd niet hetzelfde is in dezelfde zaal
+                raise Exception("Precondition Error: maak vertoning, vertoning bestaat al op dit moment in deze zaal")
+        return True
 
 if __name__ == '__main__':
     r = Reservatiesysteem(display_mode="print")

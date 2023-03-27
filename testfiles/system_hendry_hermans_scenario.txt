@@ -2,7 +2,7 @@ init
 zaal 1 10
 zaal 2 1000
 zaal 3 1
-zaal 4 1
+zaal 4 100
 zaal 5 200
 film 1 "Jhon Battles @#$^%*(" 0.00
 film 2 "Jhon Battles @#$^%*(" 0.01
@@ -20,13 +20,26 @@ film 104 "" 50
 film 91 "" 50
 #vertoning: id, zaalnummer, slot, datum, filmid, vrije_plaatsen
 vertoning 1 1 1 2024-10-10 1 10
+#vertoning 1 1 1 2024-10-10 1 -10 #Negatieve vertoning plaatsen
+
 vertoning 2 1 1 10000-10-10 2 10
+#vertoning 2 8 1 10000-10-10 2 10 #Zaal bestaat niet
+
 vertoning 3 3 1 4000-10-10 2 1
-vertoning 4 5 10 4000-10-10 2 1
-vertoning 5 5 2 4000-10-10 2 500
-vertoning 6 4 2 4000-10-10 2 500
-vertoning 8 4 2 4000-10-10 2 0
-vertoning 100 4 2 4000-10-10 2 -1
+#vertoning 3 3 1 4000-10-10 2 0 #Foutief aantal plaatsen
+
+vertoning 4 5 1 4000-10-10 2 1
+#vertoning 4 5 10 4000-10-10 2 1 #foutiev tijdslot index
+#vertoning 4 5 10 4000-10-10 99218 1 #Foutiev film id
+
+vertoning 5 5 2 4000-10-10 2 200
+vertoning 6 4 2 4000-10-10 2 1
+
+vertoning 8 4 2 4008-10-10 2 1
+#vertoning 8 4 2 4000-10-10 2 1 #Vertoning bestaat al op dit plaats en moment
+
+vertoning 100 4 2 4100-10-10 2 100
+#vertoning 100 4 2 4100-10-10 2 1000 #Teveel mensen dan mogelijk in deze zaal
 gebruiker 1 Henry Hermans Henry@Hermans.com
 gebruiker 2 Henry Hermans Henry@Hermans.com
 gebruiker 3 Henry Hermans Henry@Hermans.com

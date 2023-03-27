@@ -310,11 +310,11 @@ class BSTTable:
     def tableDelete(self,key):
         return self.T.searchTreeDelete(key)
 
-    def traverseTable(self,arg):
-        return self.T.inorderTraverse(arg)
+    def traverseTable(self,function):
+        return self.T.inorderTraverse(function)
 
-    def load(self, args):
-        return self.T.load(args)
+    def load(self, list):
+        return self.T.load(list)
 
     def save(self):
         return self.T.save()
