@@ -381,6 +381,9 @@ class BSTTable():
             return self.bst.searchTreeInsert(createTreeItem(key, val))
         elif isinstance(key, tuple):
             key, key2 = key
+
+            key = self.__convert_str_int(key)
+
             current_adt, found = self.bst.searchTreeRetrieve(key)
 
             if adt == None or not adt.empty():
@@ -397,6 +400,7 @@ class BSTTable():
             return self.bst.searchTreeRetrieve(key)
         elif isinstance(key, tuple):
             key, key2 = key
+            key = self.__convert_str_int(key)
             current_adt, found = self.bst.searchTreeRetrieve(key)
             if not found:
                 return None, False
@@ -417,6 +421,7 @@ class BSTTable():
             return self.bst.searchTreeDelete(key)
         elif isinstance(key, tuple):
             key, key2 = key
+            key = self.__convert_str_int(key)
             current_adt, found = self.bst.searchTreeRetrieve(key)
             if not found:
                 return False
@@ -429,3 +434,11 @@ class BSTTable():
     def clear(self):
         self.bst = BST()
 
+    @staticmethod
+    def __convert_str_int(key):
+        final_int = 0
+        if isinstance(key, str):
+            for char in key:
+                final_int += ord(char)
+
+        return final_int
