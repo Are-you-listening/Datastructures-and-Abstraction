@@ -12,8 +12,4 @@ start
 
 2023-11-11 12:30 ticket 22 39
 
-# dit maakt een bestand log.txt
-# G betekent gepland gevolgd door het aantal verkochte ticketten
-# F betekent dat de film gestart is gevolgd door het aantal mensen in de zaal
-# W betekent dat de film wacht om gestart te worden gevolgd door het aantal mensen waarop nog gewacht wordt
 2024-12-12 18:00 log
