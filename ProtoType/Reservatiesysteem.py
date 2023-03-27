@@ -139,7 +139,7 @@ class Reservatiesysteem:
         Precondities: Er worden 2 parameters gegeven, beide zijn positieve integers.
         Postconditie: Er wordt een nieuwe zaal aangemaakt en bewaard (de ketting zalen wordt 1 groter).
         """
-        if not (isinstance(nummer, int) and isinstance(maxplaatsen, int) and nummer > 0 and maxplaatsen >= 0):
+        if not (isinstance(nummer, int) and isinstance(maxplaatsen, int) and nummer > 0 and maxplaatsen > 0):
             raise Exception("Precondition Failed: in maak_zaal")
 
         self.__display(f"maakt zaal {nummer} {maxplaatsen}")
@@ -170,8 +170,13 @@ class Reservatiesysteem:
             raise Exception("Exception in maak_vertoning: Film met identificatie bestaat niet")
 
         if not (isinstance(filmid, int) and isinstance(zaalnummer, int) and isinstance(slot,
-                                                                                  int) and filmid > 0 and zaalnummer > 0 and slot > 0):
+                                                                                  int) and filmid > 0 and zaalnummer > 0 and slot > 0 and vrije_plaatsen>0):
             raise Exception("Exception in maak_vertoning: Precondition Failure")
+
+        zaal = self.zalen.tableRetrieveTranverse(zaalnummer)
+        if(zaal.plaatsen<vrije_plaatsen):
+            raise Exception("Exception in maak_vertoning: Precondition Failure")
+
 
         datum = self.convert_date(datum) #Zet datum om in seconden
         slot = self.slots.tableRetrieve(slot)[0] #Vraag tijd van het slot op

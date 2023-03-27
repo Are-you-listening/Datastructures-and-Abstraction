@@ -2,9 +2,9 @@ init
 zaal 1 10
 zaal 2 1000
 zaal 3 1
-zaal 4 0
+zaal 4 1
 zaal 5 200
-film 1 "Jhon Battles @#$^%*(" 0.01
+film 1 "Jhon Battles @#$^%*(" 0.00
 film 2 "Jhon Battles @#$^%*(" 0.01
 film 1 "Jhon Battles @#$^%*(" 0.01
 film 3 "Jhon Battles @#$^%*(" 0.01
@@ -19,11 +19,10 @@ film 103 "a "" 50
 film 104 "" 50
 film 91 "" 50
 #vertoning: id, zaalnummer, slot, datum, filmid, vrije_plaatsen
-vertoning 1 1 1 2024-10-10 1 200
-vertoning 2 1 1 10000-10-10 2 200
-#vertoning 2 2 1 10000-10-10 2 200
-vertoning 3 3 1 4000-10-10 2 500
-vertoning 4 5 10 4000-10-10 2 500
+vertoning 1 1 1 2024-10-10 1 10
+vertoning 2 1 1 10000-10-10 2 10
+vertoning 3 3 1 4000-10-10 2 1
+vertoning 4 5 10 4000-10-10 2 1
 vertoning 5 5 2 4000-10-10 2 500
 vertoning 6 4 2 4000-10-10 2 500
 vertoning 8 4 2 4000-10-10 2 0
