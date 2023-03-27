@@ -432,9 +432,19 @@ class Reservatiesysteem:
 
         :param vertoningid: int
         """
+
         if self.vertoningen.tableRetrieve(vertoningid)[1]: #Indien de vertoning bestaat
             if self.vertoningen.tableRetrieve(vertoningid)[0][1].tableIsEmpty(): #Kijk of de stack empty is (geen reservaties meer)
                 vertoning_object = self.vertoningen.tableRetrieve(vertoningid)[0][0]
+
+                """
+                indien de film officiel nog niet gestart is, kan het zijn dat de film toch al gestart is
+                om nog nieuwe reservaties te ondersteunen resetten we deze bool
+                """
+                datetime = int(str(vertoning_object.datum) + str(vertoning_object.slot))
+                if self.__get_time() < datetime and vertoning_object.afspelend:
+                    return False
+
                 vertoning_object.start()
             return True
         raise Exception("Vertoning bestaat niet")
