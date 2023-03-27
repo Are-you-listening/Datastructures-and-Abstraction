@@ -1,3 +1,4 @@
+#deze test krijgt steeds nieuwe reservaties en bevat mensen die zo graag naar de film gaan dat ze zelfs weken op voorhand in de zaal wachten
 init
 zaal 1 200
 film 3 "The Matrix 3D" 0.95
@@ -10,4 +11,6 @@ start
 2023-10-10 13:45 ticket 9 4
 
 2023-10-11 11:00 reserveer 1 9 4
-2023-12-12 19:00 log
+
+#2023-10-11 13:45 ticket 9 4
+2023-12-12 11:00 log

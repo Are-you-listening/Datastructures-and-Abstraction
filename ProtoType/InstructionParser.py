@@ -189,14 +189,16 @@ class InstructionParser:
         tup = self.use_adt.tableFirst()[0]
         instruction = tup[1]
 
-        """zety de tijd in het reservatiesysteem naar de gegeven tijd"""
-        self.reservatie_systeem.set_time(time)
+        """zet de tijd in het reservatiesysteem naar de gegeven tijd"""
+        #self.reservatie_systeem.set_time(time)
 
         if self.last_reservatie_time != time and self.reservaties_waiting > 0:
             self.reservatie_systeem.lees_reservatie()
 
             self.reservaties_waiting -= 1
             return
+
+        self.reservatie_systeem.set_time(time)
 
         self.last_reservatie_time = time
         """

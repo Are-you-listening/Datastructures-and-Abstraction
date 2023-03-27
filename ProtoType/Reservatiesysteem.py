@@ -326,6 +326,9 @@ class Reservatiesysteem:
         if tijd < 0:
             raise Exception("Precondition error: tijd kan niet negatief zijn in set_time")
         self.tijdsstip = tijd
+
+        self.vertoningen.traverseTable(self.start_by_object)
+
         return True
 
     def lees_reservatie(self):
@@ -350,7 +353,7 @@ class Reservatiesysteem:
             self.__archiveer_reservatie()
 
             # Update datum & tijd
-            self.set_time(tijdstip)
+            #self.set_time(tijdstip)
 
         return True
 
@@ -434,20 +437,24 @@ class Reservatiesysteem:
         """
 
         if self.vertoningen.tableRetrieve(vertoningid)[1]: #Indien de vertoning bestaat
-            if self.vertoningen.tableRetrieve(vertoningid)[0][1].tableIsEmpty(): #Kijk of de stack empty is (geen reservaties meer)
-                vertoning_object = self.vertoningen.tableRetrieve(vertoningid)[0][0]
-
-                """
-                indien de film officiel nog niet gestart is, kan het zijn dat de film toch al gestart is
-                om nog nieuwe reservaties te ondersteunen resetten we deze bool
-                """
-                datetime = int(str(vertoning_object.datum) + str(vertoning_object.slot))
-                if self.__get_time() < datetime:
-                    return False
-
-                vertoning_object.start()
-            return True
+            vertoning_object = self.vertoningen.tableRetrieve(vertoningid)[0]
+            return self.start_by_object(vertoning_object)
         raise Exception("Vertoning bestaat niet")
+
+    def start_by_object(self, vertoning_object):
+        """
+        Dit controleert dat de vertoning kan starten
+        door te kijken dat de huidige tijd voorbij het tijdslot is en iedereen aanwezig is
+        """
+        stack = vertoning_object[1]
+        if not stack.tableIsEmpty(): #Kijk of de stack empty is (geen reservaties meer)
+            return False
+        vertoning_object = vertoning_object[0]
+        datetime = int(str(vertoning_object.datum) + str(vertoning_object.slot))
+        if self.__get_time() < datetime:
+            return False
+        vertoning_object.start()
+        return True
 
     def verwijder_vertoningen(self):
         """
