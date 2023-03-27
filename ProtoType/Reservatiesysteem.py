@@ -183,6 +183,7 @@ class Reservatiesysteem:
         stack = eval(self.stack_string)
         #if not self.vertoningen.tableInsert(id, (vertoning_object,stack) ):
         #    raise Exception("Error: maak_vertoning insert is gefaald")
+        self.vertoningen.tableInsert(id, (vertoning_object, stack))
         self.__display(f"maakt vertoning: {id} {zaalnummer} {slot} {datum} {filmid}")
         return True
 
@@ -204,7 +205,6 @@ class Reservatiesysteem:
                 gebruiker_id,
                 int) and vertoning_id >= 0 and aantal_plaatsen > 0 and gebruiker_id > 0 and tijdstip >= self.tijdsstip and tijdstip>=0:
             raise Exception("Precondition Error: maak_reservatie")
-
         if not self.vertoningen.tableRetrieve(vertoning_id)[1]:
             raise Exception("Precondition Error: maak_reservatie, vertoning bestaat niet")
 
@@ -318,7 +318,8 @@ class Reservatiesysteem:
             raise Exception("Precondition error: tijd kan niet negatief zijn in set_time")
         self.tijdsstip = tijd
 
-        self.vertoningen.traverseTable(self.start_by_object)
+        if not self.vertoningen.tableIsEmpty():
+            self.vertoningen.traverseTable(self.start_by_object)
 
         return True
 
