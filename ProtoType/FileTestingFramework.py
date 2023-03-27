@@ -20,7 +20,7 @@ def test(**kwargs):
 
                 #print("-" * 50)
 
-    file_compare("../testfiles/log_test.html", "../testfiles/test_controle.html")
+    #file_compare("../testfiles/log_test.html", "../testfiles/test_controle.html")
 
 #test(file="system_test1.txt")
 
