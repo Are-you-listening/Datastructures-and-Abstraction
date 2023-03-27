@@ -171,6 +171,7 @@ class LCTable:
             return self.l.insert(index, val)
         elif isinstance(index, tuple):
             index, index2 = index
+            index = self.__convert_str_int(index)
             current_adt, found = self.l.retrieve(index)
 
             if adt == None or not adt.empty():
@@ -187,6 +188,7 @@ class LCTable:
             return self.l.retrieve(index)
         elif isinstance(index, tuple):
             index, index2 = index
+            index = self.__convert_str_int(index)
             current_adt, found = self.l.retrieve(index)
             if not found:
                 return None, False
@@ -204,9 +206,17 @@ class LCTable:
             return False
         elif isinstance(id, tuple):
             id, id2 = id
-            """
-            TO BE DISCUSSED
-            """
+            for i in range(1, self.l.length+1):
+                adt = self.l.retrieve(i)[0]
+
+                if adt == None:
+                    return False
+                for j in range(1, adt.tableGetLength() + 1):
+                    val = adt.retrieve(j)[0]
+                    if val == None:
+                        return False
+                    if val.get_id() == id:
+                        return val
             return False
 
     def tableDelete(self, index):
@@ -215,6 +225,7 @@ class LCTable:
 
         elif isinstance(index, tuple):
             index, index2 = index
+            index = self.__convert_str_int(index)
             current_adt, found = self.l.retrieve(index)
             if not found:
                 return False
@@ -235,3 +246,12 @@ class LCTable:
 
     def clear(self):
         self.l = LinkedChain()
+
+    @staticmethod
+    def __convert_str_int(key):
+        final_int = 0
+        if isinstance(key, str):
+            for char in key:
+                final_int += ord(char)
+
+        return final_int
