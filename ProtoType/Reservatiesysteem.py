@@ -52,13 +52,8 @@ class Reservatiesysteem:
         self.slots = MyCircularLinkedChainKars.LCTable() #Bijhouden van tijdslots
 
         #Slots beginnen op index 1
-        self.slots.load([14 * 3600 + 30 * 60, 17 * 3600, 20 * 3600,22 * 3600 + 30 * 60 ])
-        #self.slots.tableInsert(1, 14 * 3600 + 30 * 60) #14:30
-        #self.slots.tableInsert(2,  17 * 3600) #17:00
-        #self.slots.tableInsert(3, 20 * 3600) #20:00
-        #self.slots.tableInsert(4, 22 * 3600 + 30 * 60) #22:30 #Initaliseert de huidige slots
-
-        self.VertoningCheckValue = [0,0]
+        self.slots.load([14 * 3600 + 30 * 60, 17 * 3600, 20 * 3600,22 * 3600 + 30 * 60 ]) #14:30 #17:00 #20:00#22:30 #Initaliseert de huidige slots
+        self.VertoningCheckValue = [0,0] #Value om self.__VertoningCheck uit te voeren
 
         self.stack_string = "MyStackKars.MyStackTable()"
         self.log_string = "MyBSTAnas.BSTTable()"
