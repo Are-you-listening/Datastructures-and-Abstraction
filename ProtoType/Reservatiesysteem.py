@@ -442,7 +442,7 @@ class Reservatiesysteem:
                 om nog nieuwe reservaties te ondersteunen resetten we deze bool
                 """
                 datetime = int(str(vertoning_object.datum) + str(vertoning_object.slot))
-                if self.__get_time() < datetime and vertoning_object.afspelend:
+                if self.__get_time() < datetime:
                     return False
 
                 vertoning_object.start()
