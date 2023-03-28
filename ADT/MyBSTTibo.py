@@ -376,36 +376,10 @@ class BSTTable():
         return self.bst.isEmpty()
 
     def tableInsert(self, key, val, adt=None):
-
-        if isinstance(key, int):
-            return self.bst.searchTreeInsert(createTreeItem(key, val))
-        elif isinstance(key, tuple):
-            key, key2 = key
-
-            key = self.__convert_str_int(key)
-
-            current_adt, found = self.bst.searchTreeRetrieve(key)
-
-            if adt == None or not adt.empty():
-                raise Exception("Preconditie BST Tibo: sub-adt niet empty")
-
-            if found:
-                return current_adt.tableInsert(key2, val)
-            else:
-                adt.tableInsert(key2, val)
-                return self.bst.searchTreeInsert(createTreeItem(key,adt))
+        return self.bst.searchTreeInsert(createTreeItem(key, val))
 
     def tableRetrieve(self, key):
-        if isinstance(key, int):
-            return self.bst.searchTreeRetrieve(key)
-        elif isinstance(key, tuple):
-            key, key2 = key
-            key = self.__convert_str_int(key)
-            current_adt, found = self.bst.searchTreeRetrieve(key)
-            if not found:
-                return None, False
-
-            return current_adt.tableRetrieve(key2)
+        return self.bst.searchTreeRetrieve(key)
 
     def traverseTable(self, func):
         self.bst.inorderTraverse(func)
@@ -417,19 +391,7 @@ class BSTTable():
         return self.bst.load(dict)
 
     def tableDelete(self, key):
-        if isinstance(key, int):
-            return self.bst.searchTreeDelete(key)
-        elif isinstance(key, tuple):
-            key, key2 = key
-            key = self.__convert_str_int(key)
-            current_adt, found = self.bst.searchTreeRetrieve(key)
-            if not found:
-                return False
-
-            suc6 = current_adt.tableDelete(key2)
-            if current_adt.tableIsEmpty():
-                self.bst.searchTreeDelete(key)
-            return suc6
+        return self.bst.searchTreeDelete(key)
 
     def clear(self):
         self.bst = BST()

@@ -134,6 +134,8 @@ class BST:
         :return: (treeItem: het item met searchKey als key, True als het gevonden is, anders False)
         """
         currentTree = self
+
+
         while currentTree.content.key.key != searchKey:
             if searchKey < currentTree.content.key.key:
                 currentTree = currentTree.leftchild
