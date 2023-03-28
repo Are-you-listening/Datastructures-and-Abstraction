@@ -655,6 +655,9 @@ class TwoThreeFourTreeTable:
     def tableRetrieve(self, key):
         return self.tree.retrieveItem(key)
 
+    def tableIsEmpty(self):
+        return self.tree.isEmpty()
+
     def tableDelete(self, key):
         return self.tree.deleteItem(key)
 

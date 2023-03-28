@@ -135,17 +135,19 @@ class BST:
         """
         currentTree = self
 
+        if currentTree == None:
+            return tuple([None, False])
 
-        while currentTree.content.key.key != searchKey:
-            if searchKey < currentTree.content.key.key:
+        while True:
+            if currentTree == None:
+                return tuple([None, False])
+            elif searchKey < currentTree.content.key.key:
                 currentTree = currentTree.leftchild
             elif searchKey > currentTree.content.key.key:
                 currentTree = currentTree.rightchild
+            elif searchKey == currentTree.content.key.key:
+                return tuple([currentTree.content.val, True])
 
-        if currentTree == None:
-            return tuple([None, False])
-        else:
-            return tuple([currentTree.content.val, True])
 
     def preorderTraverse(self, visit):
         """
