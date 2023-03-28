@@ -12,10 +12,10 @@ def createTreeItem(key,val):
 
     :return: BinarySearchTree met lege deelbomen die bezit over de doorgekrege key en value
     """
-    if isinstance(key, int):
-        Tree=BST(key,val)
-    else:
-        Tree=None
+    #if isinstance(key, int):
+    Tree=BST(key,val)
+    #else:
+        #Tree=None
     return Tree
 
 class BST:
@@ -43,10 +43,10 @@ class BST:
             self.Lefttree = None
             self.Righttree = None
             self.value = args[1]
-            if isinstance(args[0],int):
-                self.key = args[0]
-            else:
-                self.key=None
+            #if isinstance(args[0],int):
+            self.key = args[0]
+            #else:
+            #self.key=None
 
     ## functionaliteit
     def isEmpty(self):
