@@ -216,10 +216,11 @@ class Reservatiesysteem:
         if not ( tijdstip<starttime ):
             raise Exception("Precondition Error: maak_reservatie, Reservatie voor een vertoning in het verleden")
 
-        ReservatieItem = (tijdstip, Reservatie(id, vertoning_id, aantal_plaatsen, tijdstip, gebruiker_id))
+        ReservatieItem = (tijdstip, Reservatie(vertoning_id, aantal_plaatsen, tijdstip, gebruiker_id))
         self.reservaties.tableInsert(ReservatieItem)
         self.__display(f"maakt reservatie: {vertoning_id} {aantal_plaatsen} {tijdstip} {gebruiker_id}")
         return True
+
     def __get_time(self):
         """
         Geeft het huidige tijdstip terug.
