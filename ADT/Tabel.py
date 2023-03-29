@@ -17,11 +17,10 @@ class Tabel:
         self.traverse_function = None
 
         self.linked_chain = MyCircularLinkedChainAnas.LCTable()
-        self.linked_chain.load(["MyBSTAnas.BSTTable()", "MyBSTEmil.BSTTable()", "MyBSTKars.BSTTable()", "MyBSTTibo.BSTTable()",
+        self.linked_chain.load(["MyBSTAnas.BSTTable()", "MyBSTEmil.BSTTable()", "MyBSTTibo.BSTTable()",
                                 "MyCircularLinkedChainAnas.LCTable()", "MyCircularLinkedChainEmil.LCTable()",
                                 "MyCircularLinkedChainKars.LCTable()", "MyCircularLinkedChainTibo.LCTable()",
                                 "MyRedBlackTreeAnas.RedBlackTreeTable()", "MyTwoThreeFourTreeEmil.TwoThreeFourTreeTable()", "MyTwoThreeFourTreeKars.TwoThreeFourTreeTable()", "MyTwoThreeFourTreeTibo.TwoThreeFourTreeTable()"])
-
 
 
     def tableInsert(self, key, value, sub_adt=None):
@@ -34,7 +33,6 @@ class Tabel:
                 value_id = value[0].get_id()
             else:
                 value_id = value.get_id()
-
             key, key2 = (key, value_id) #Split up keys | key = bv achternaam | key2 = id
 
             if not self.adt.tableIsEmpty(): #Indien niet leeg; er is al een sub_adt om operaties op aan te roepen
@@ -48,9 +46,8 @@ class Tabel:
             else: #Er is nog geen sub_adt, plaats de meegegeven sub_adt
                 #Check up if newly given sub_adt is correct/valid
                 if sub_adt == None:
-                    r = random.randint(0, 7)
+                    r = random.randint(0, 10)
                     sub_adt = eval(self.linked_chain.tableRetrieveIndex(r)[0])
-                    #print(sub_adt, self.adt)
                 if sub_adt == None or not sub_adt.tableIsEmpty():
                     raise Exception("Preconditie Wrapper string compatible: sub-adt niet empty")
 
@@ -71,7 +68,6 @@ class Tabel:
             return local_return_item
 
     def __TraverseRetrieveCall(self, current_adt):
-
         if (isinstance(current_adt, tuple)):  # The only value tuple is (Vertoning,Stack): This is to prevent that we can actually call .get_id()
             current_adt = current_adt[0]
         else:

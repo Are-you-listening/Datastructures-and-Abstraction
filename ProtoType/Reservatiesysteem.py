@@ -210,6 +210,7 @@ class Reservatiesysteem:
                 gebruiker_id,
                 int) and vertoning_id >= 0 and aantal_plaatsen > 0 and gebruiker_id > 0 and tijdstip >= self.tijdsstip and tijdstip>=0:
             raise Exception("Precondition Error: maak_reservatie")
+
         if not self.vertoningen.tableRetrieve(vertoning_id)[1]:
             raise Exception("Precondition Error: maak_reservatie, vertoning bestaat niet")
 

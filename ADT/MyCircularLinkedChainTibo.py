@@ -168,10 +168,11 @@ class LCTable:
         return self.l.isEmpty()
 
     def tableInsert(self, index, val):
+
         if (not isinstance(index, int) or index>=self.tableGetLength()):
-            return self.l.insert(index, val)
-        else:
             return self.l.insert(1, val)
+        else:
+            return self.l.insert(index, val)
 
 
     def tableRetrieveIndex(self, index):
