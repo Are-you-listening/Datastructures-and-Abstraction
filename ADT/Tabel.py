@@ -1,4 +1,8 @@
-from ADT import MyBSTTibo
+import random
+from ADT import MyBSTAnas, MyCircularLinkedChainAnas, MyQueueAnas, MyRedBlackTreeAnas, MyStackAnas
+from ADT import MyBSTEmil, MyCircularLinkedChainEmil, MyQueueEmil, MyTwoThreeFourTreeEmil, MyStackEmil
+from ADT import MyBSTKars, MyCircularLinkedChainKars, MyQueueKars, MyTwoThreeFourTreeKars, MyStackKars
+from ADT import MyBSTTibo, MyCircularLinkedChainTibo, MyQueueTibo, MyTwoThreeFourTreeTibo, MyStackTibo
 from ProtoType.Zaal import Zaal
 
 class Tabel:
@@ -11,6 +15,14 @@ class Tabel:
         self.return_item = (None, False)
 
         self.traverse_function = None
+
+        self.linked_chain = MyCircularLinkedChainAnas.LCTable()
+        self.linked_chain.load(["MyBSTAnas.BSTTable()", "MyBSTEmil.BSTTable()", "MyBSTKars.BSTTable()", "MyBSTTibo.BSTTable()",
+                                "MyCircularLinkedChainAnas.LCTable()", "MyCircularLinkedChainEmil.LCTable()",
+                                "MyCircularLinkedChainKars.LCTable()", "MyCircularLinkedChainTibo.LCTable()",
+                                "MyRedBlackTreeAnas.RedBlackTreeTable()", "MyTwoThreeFourTreeEmil.TwoThreeFourTreeTable()", "MyTwoThreeFourTreeKars.TwoThreeFourTreeTable()", "MyTwoThreeFourTreeTibo.TwoThreeFourTreeTable()"])
+
+
 
     def tableInsert(self, key, value, sub_adt=None):
         if not self.dubbele_key: #Normal Insert on ID
@@ -35,7 +47,10 @@ class Tabel:
                 return current_adt.tableInsert(key2, value)
             else: #Er is nog geen sub_adt, plaats de meegegeven sub_adt
                 #Check up if newly given sub_adt is correct/valid
-                sub_adt = MyBSTTibo.BSTTable()
+                if sub_adt == None:
+                    r = random.randint(0, 7)
+                    sub_adt = eval(self.linked_chain.tableRetrieveIndex(r)[0])
+                    #print(sub_adt, self.adt)
                 if sub_adt == None or not sub_adt.tableIsEmpty():
                     raise Exception("Preconditie Wrapper string compatible: sub-adt niet empty")
 
@@ -58,6 +73,12 @@ class Tabel:
             return local_return_item
 
     def __TraverseRetrieveCall(self, current_adt):
+
+        if (isinstance(current_adt, tuple)):  # The only value tuple is (Vertoning,Stack): This is to prevent that we can actually call .get_id()
+            current_adt = current_adt[0]
+        else:
+            current_adt = current_adt
+
         item, b = current_adt.tableRetrieve(self.key)
         if b:
             self.return_item = (item, b)

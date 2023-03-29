@@ -130,13 +130,13 @@ for i0 in adt_dict.get("0"):
                         for i6 in adt_dict.get("6"):
                             i7 =adt_dict.get("7")[0]
                             i8 = adt_dict.get("8")[0]
-                            i9 = adt_dict.get("9")[0]
-                            if index % 1000 == 0:
-                                print(index)
+                            for i9 in adt_dict.get("9"):
+                                if index % 1000 == 0:
+                                    print(index)
 
-                            # print((i0, i1, i2, i3, i4, i5, i6, i7, i8, i9))
-                            test(file="system_test2.txt", args_tup=(i0, i1, i2, i3, i4, i5, i6, i7, i8, i9))
-                            index += 1
+                                # print((i0, i1, i2, i3, i4, i5, i6, i7, i8, i9))
+                                test(file="system_test2.txt", args_tup=(i0, i1, i2, i3, i4, i5, i6, i7, i8, i9))
+                                index += 1
 
 
 """

@@ -182,7 +182,12 @@ class LCTable:
             val = self.l.retrieve(i)[0]
             if val == None:
                 return (None, False)
-            if val.get_id() == id:
+
+            object = val
+            if isinstance(object, tuple):
+                object = val[0]
+
+            if object.get_id() == id:
                 return (val, True)
         return (None, False)
 
