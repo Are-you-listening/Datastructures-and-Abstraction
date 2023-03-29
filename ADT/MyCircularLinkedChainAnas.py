@@ -262,12 +262,20 @@ class LCTable:
 
     def tableRetrieve(self, id):
         count = 0
-        while self.tableRetrieveIndex(count)[0].get_id() != id:
+
+        object = self.tableRetrieveIndex(count)[0]
+        if (isinstance(object, tuple)):
+             object = object[0]
+
+        while object.get_id() != id:
             if self.tableRetrieveIndex(count)[1] == False:
                 return (None, False)
             count += 1
             if count == self.LC.getLength():
                 return (None, False)
+            object = self.tableRetrieveIndex(count)[0]
+            if (isinstance(object, tuple)): # Tuple(Vertoning,Stack) heeft geen functie .get_id()
+                object = object[0]
         return (self.tableRetrieveIndex(count)[0], True)
 
     def traverseTable(self, arg):
