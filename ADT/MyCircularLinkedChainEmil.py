@@ -204,8 +204,8 @@ class LCTable:
         return False
 
     def traverseTable(self, visitfunction):
-        currentNode = self.chain.dummyhead
-        while currentNode.next != self.chain.dummyhead:
+        currentNode = self.chain.dummyhead.next
+        while currentNode != self.chain.dummyhead:
             visitfunction(currentNode.value)
             currentNode = currentNode.next
 
