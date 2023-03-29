@@ -176,10 +176,10 @@ class LCTable:
         return self.chain.isEmpty()
 
     def tableInsert(self, index, newItem):
-        if isinstance(index, str) or index >= self.chain.getLength():
+        if isinstance(index, int) and index < self.chain.getLength():
+            return self.chain.insert(index, newItem)
+        else:
             return self.chain.insert(1, newItem)
-
-        return self.chain.insert(index, newItem)
 
     def tableRetrieveIndex(self, plaats):
         return self.chain.retrieve(plaats)
