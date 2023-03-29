@@ -3,7 +3,7 @@ import os
 
 def test(**kwargs):
     if "file" in kwargs:
-        r = Reservatiesysteem.Reservatiesysteem(display_mode="print", path=f"../testfiles/{kwargs['file']}")
+        r = Reservatiesysteem.Reservatiesysteem(display_mode="", path=f"../testfiles/{kwargs['file']}")
     else:
         for file in os.listdir("../testfiles"):
             if file.endswith(".txt") and not file == "ADTFiles.txt":
@@ -13,14 +13,14 @@ def test(**kwargs):
                 if "args_tup" in kwargs:
                     r = Reservatiesysteem.Reservatiesysteem(display_mode="", path=f"../testfiles/{file}", adt_args=kwargs["args_tup"])
                 else:
-                    r = Reservatiesysteem.Reservatiesysteem(display_mode="print", path=f"../testfiles/{file}")
+                    r = Reservatiesysteem.Reservatiesysteem(display_mode="", path=f"../testfiles/{file}")
                 #print()
                 #print()
                 #print()
 
                 #print("-" * 50)
 
-    #file_compare("../testfiles/log_test.html", "../testfiles/test_controle.html")
+    file_compare("../testfiles/log_test.html", "../testfiles/test_controle.html")
 
 #test(file="system_test1.txt")
 
@@ -131,10 +131,11 @@ for i0 in adt_dict.get("0"):
                             i7 =adt_dict.get("7")[0]
                             i8 = adt_dict.get("8")[0]
                             i9 = adt_dict.get("9")[0]
-                            print(index)
+                            if index % 1000 == 0:
+                                print(index)
 
                             # print((i0, i1, i2, i3, i4, i5, i6, i7, i8, i9))
-                            test(file="system.txt", args_tup=(i0, i1, i2, i3, i4, i5, i6, i7, i8, i9))
+                            test(file="system_test2.txt", args_tup=(i0, i1, i2, i3, i4, i5, i6, i7, i8, i9))
                             index += 1
 
 

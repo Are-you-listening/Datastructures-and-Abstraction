@@ -39,7 +39,7 @@ class Reservatiesysteem:
         Precondities: Er worden geen andere parameters gegeven.
         Postconditie: Een Reservatiesysteem object wordt aangemaakt.
         """
-        self.keyswap = False
+        self.keyswap = True
 
         self.tijdsstip = 0 #Houdt het tijdstip bij | Format: int( "jaar"+"maand"+"dag"+str(#seconden uit uren,minuten,seconden) )
         self.films = Tabel(MyCircularLinkedChainAnas.LCTable(), self.keyswap )#Verzameling van alle films
@@ -498,6 +498,7 @@ class Reservatiesysteem:
             print(msg)
 
     def __VertoningCheck(self,vertoning):
+
         """
         Hulpfunctie
 
