@@ -424,6 +424,7 @@ class BST:
 class BSTTable:
     def __init__(self):
         self.boom = BST()
+        self.id = None
 
     def tableIsEmpty(self):
         return self.boom.isEmpty()
@@ -448,3 +449,6 @@ class BSTTable:
 
     def clear(self):
         self.boom = BST()
+
+    def get_id(self):
+        return self.id

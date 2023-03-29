@@ -181,9 +181,11 @@ class LCTable:
         return self.chain.isEmpty()
 
     def tableInsert(self, index, val):
+        if( (isinstance(index,str)) or  (index > self.tableGetLength()+1) ):
+            index = 1
         return self.chain.insert(index,val)
 
-    def tableRetrieve(self, index):
+    def tableRetrieveIndex(self, index):
         return self.chain.retrieve(index)
 
     def tableRetrieve(self, id):
@@ -192,11 +194,16 @@ class LCTable:
         while counts<self.chain.getLength():
             tuple = self.chain.retrieve(counts)
             if tuple[1]==False:
-                return False
+                return (None,False)
             if tuple[0].get_id() == id:
-                return value
+                return (value,True)
             counts += 1
-        return False
+        return (None,False)
+
+    def traverseTable(self,function):
+        for i in range(self.chain.getLength()):
+            item = self.tableRetrieveIndex(i)
+            function(item[0])
 
     def tableDelete(self, index):
         return self.chain.delete(index)

@@ -45,7 +45,7 @@ class Log:
         die alle tijdslots chronlogisch plaatst
         """
         for i in range(1, self.resSYS.slots.tableGetLength() + 1):
-            slot = self.resSYS.slots.tableRetrieve(i)[0]
+            slot = self.resSYS.slots.tableRetrieveIndex(i)[0]
             self.sorting_tree.tableInsert(slot, slot)
         self.sorting_tree.traverseTable(self.__log_add_header)
         self.sorting_tree.clear()
@@ -153,12 +153,12 @@ class Log:
             current_index = 1
 
         """we gaan steeds een tijdslot verder totdat de tijdslot matched"""
-        tijd_slot = self.resSYS.slots.tableRetrieve(current_index)[0]
+        tijd_slot = self.resSYS.slots.tableRetrieveIndex(current_index)[0]
         while tijd_slot != tijd:
             self.text_string += f"""\n{tabs}<td></td>"""
 
             current_index += 1
-            tijd_slot = self.resSYS.slots.tableRetrieve(current_index)[0]
+            tijd_slot = self.resSYS.slots.tableRetrieveIndex(current_index)[0]
 
         """voeg de data toe onder de tijdslot"""
         self.text_string += f"\n{tabs}<td>{value[2]}</td>"

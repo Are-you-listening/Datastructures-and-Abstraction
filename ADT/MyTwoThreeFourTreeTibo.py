@@ -1003,6 +1003,7 @@ class TwoThreeFourTree:
 class TwoThreeFourTreeTable:
     def __init__(self):
         self.tree = TwoThreeFourTree()
+        self.id = None
 
     def tableIsEmpty(self):
         return self.tree.isEmpty()
@@ -1027,3 +1028,6 @@ class TwoThreeFourTreeTable:
 
     def clear(self):
         self.tree = TwoThreeFourTree()
+
+    def get_id(self):
+        return self.id

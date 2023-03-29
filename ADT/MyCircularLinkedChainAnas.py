@@ -247,6 +247,7 @@ class LinkedChain:
 class LCTable:
     def __init__(self):
         self.LC = LinkedChain()
+        self.id = None
 
     def tableIsEmpty(self):
         return self.LC.isEmpty()
@@ -258,18 +259,22 @@ class LCTable:
             return self.LC.insert(1,val)
         return self.LC.insert(index,val)
 
-    def tableRetrieve(self, index):
+    def tableRetrieveIndex(self, index):
         return self.LC.retrieve(index)
 
     def tableRetrieve(self, id):
         count = 0
-        while self.tableRetrieve(count)[0].get_id() != id:
-            if self.tableRetrieve(count)[1] == False:
-                return False
+        while self.tableRetrieveIndex(count)[0].get_id() != id:
+            if self.tableRetrieveIndex(count)[1] == False:
+                return (None, False)
             count += 1
             if count == self.LC.getLength():
-                return False
-        return self.tableRetrieve(count)[0]
+                return (None, False)
+        return (self.tableRetrieveIndex(count)[0], True)
+
+    def traverseTable(self, arg):
+        for i in range(self.tableGetLength()):
+            arg(self.tableRetrieveIndex(i)[0])
 
     def tableDelete(self, index):
         return self.LC.delete(index)
@@ -285,3 +290,6 @@ class LCTable:
 
     def clear(self):
         self.LC = LinkedChain()
+
+    def get_id(self):
+        return self.id

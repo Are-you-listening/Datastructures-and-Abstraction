@@ -2375,6 +2375,7 @@ print(t.save())
 class TwoThreeFourTreeTable:
     def __init__(self):
         self.t = TwoThreeFourTree()
+        self.id = None
 
     def tableIsEmpty(self):
         return self.t.isEmpty()
@@ -2400,3 +2401,6 @@ class TwoThreeFourTreeTable:
 
     def clear(self):
         self.t = TwoThreeFourTree()
+
+    def get_id(self):
+        return self.id

@@ -648,6 +648,7 @@ class TwoThreeFourTree:
 class TwoThreeFourTreeTable:
     def __init__(self):
         self.tree = TwoThreeFourTree()
+        self.id = None
 
     def tableInsert(self, key, newItem):
         return self.tree.insertItem(createTreeItem(key, newItem))
@@ -672,3 +673,6 @@ class TwoThreeFourTreeTable:
 
     def clear(self):
         self.tree = TwoThreeFourTree()
+
+    def get_id(self):
+        return self.id

@@ -162,7 +162,7 @@ class Reservatiesysteem:
         if not self.films.tableRetrieve(filmid)[1]:
             raise Exception("Exception in maak_vertoning: Film met identificatie bestaat niet ")
 
-        if not self.slots.tableRetrieve(slot)[0]:
+        if not self.slots.tableRetrieveIndex(slot)[0]:
             raise Exception("Exception in maak_vertoning: Tijdslots met deze index bestaat niet " )
 
         if not (isinstance(filmid, int) and isinstance(zaalnummer, int) and isinstance(slot,
@@ -174,7 +174,7 @@ class Reservatiesysteem:
             raise Exception("Exception in maak_vertoning: Het aantal plaatsen voor deze vertoning past niet in de bijbehorende zaal" + id)
 
         datum = self.convert_date(datum) #Zet datum om in seconden
-        slot = self.slots.tableRetrieve(slot)[0] #Vraag tijd van het slot op
+        slot = self.slots.tableRetrieveIndex(slot)[0] #Vraag tijd van het slot op
 
         #Check if vertoning niet al bestaat op dit moment
         self.VertoningCheckValue[0] = int ( str(datum) + str(slot) ) #Initaliseer de waarde volgens datetime format

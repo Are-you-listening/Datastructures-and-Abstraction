@@ -6,7 +6,9 @@ self.id: positive unsigned integer (id van de vertoning)
 self.zaalnummer: positive unsigned integer (nummer van de overeenkomstige zaal)
 self.slot: positive unsigned integer (tijdslot value waarbij (uur*100)+minuten)
 self.filmid: positive unsigned integer (id van de overeenkomstige film)
-self.vrije_plaatsen: positive unsigned integer (geeft weer hoeveel vrije plaatsen er beschikbaar zijn voor de vertoning)
+self.vrije_plaatsen: positive unsigned integer (geeft weer hoeveel mensen op zijn maximum mogen komen naar de vertoning)
+self.vrije_plaatsenFysiek: geeft weer hoeveel mensen er al in de zaal zitten (te wachten)
+self.vrij_plaatsenVirtueel: geeft weer hoeveel plaatsen er zijn gereserveerd
 self.afspelend: boolean (geeft weer dat de film al dan niet gestart is)
 """
 
@@ -52,6 +54,7 @@ class Vertoning:
 
         preconditie: Er moeten meer plaatsen beschikbaar zijn dan dat er verdwijnen.
         postconditie: Het aantal plaatsen worden verminderd.
+
         :param hoeveelheid: integer (geeft weer hoeveel plaatsen minder er beschikbaar zijn)
         """
         if (self.vrije_plaatsenVirtueel - hoeveelheid >= 0):
@@ -65,6 +68,7 @@ class Vertoning:
 
         preconditie: Er moeten meer plaatsen beschikbaar zijn dan dat er verdwijnen.
         postconditie: Het aantal plaatsen worden verminderd.
+        
         :param hoeveelheid: integer (geeft weer hoeveel plaatsen minder er beschikbaar zijn)
         """
         if self.vrije_plaatsenFysiek + hoeveelheid < self.vrije_plaatsen:

@@ -181,7 +181,7 @@ class LCTable:
 
         return self.chain.insert(index, newItem)
 
-    def tableRetrieve(self, plaats):
+    def tableRetrieveIndex(self, plaats):
         return self.chain.retrieve(plaats)
 
     def tableRetrieve(self, searchkey):
