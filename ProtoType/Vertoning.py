@@ -1,15 +1,14 @@
 """
-Deze ADT geeft een veretoning weer
+Deze ADT geeft een vertoning weer
 
-data:
-self.id: integer (id van de vertoning)
-self.filmid: integer (id van de overeenkomstige film)
-self.zaalnummer: integer (nummer van de overeenkomstige zaal)
-self.slot: integer (tijdslot value waarbij (uur*100)+minuten)
-self.vrije_plaatsen: integer (geeft wee hoeveel vrije plaatsen er beschikbaar zijn voor de vertoning)
-self.gestart: boolean (geeft weer dat de film al dan niet gestart is)
+Data:
+self.id: positive unsigned integer (id van de vertoning)
+self.zaalnummer: positive unsigned integer (nummer van de overeenkomstige zaal)
+self.slot: positive unsigned integer (tijdslot value waarbij (uur*100)+minuten)
+self.filmid: positive unsigned integer (id van de overeenkomstige film)
+self.vrije_plaatsen: positive unsigned integer (geeft weer hoeveel vrije plaatsen er beschikbaar zijn voor de vertoning)
+self.afspelend: boolean (geeft weer dat de film al dan niet gestart is)
 """
-
 
 class Vertoning:
     def __init__(self, id, zaalnummer, slot, datum, filmid, vrije_plaatsen): # contract moet herbekeken worden
@@ -73,15 +72,6 @@ class Vertoning:
             self.vrije_plaatsenFysiek = self.vrije_plaatsenFysiek + hoeveelheid
             return True #Operatie geslaagd
         return False #Operatie niet geslaagd
-
-    def set_plaatsen(self, plaatsen): # dit moet toch niet meer bestaan
-        """
-        Er wordt aangepast hoeveel vrije plaatsen er zijn
-        preconditie: Er wordt 1 parameter gegeven dat een positieve integer is
-        postconditie: Het aantal vrije plaatsen wordt gewijzigd
-        :param plaatsen: integer
-        """
-        pass
 
     def check_vol(self):
         """valideert of alle plaatsen vol is, geeft een bool terug"""
