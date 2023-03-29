@@ -66,9 +66,9 @@ class Vertoning:
         """
         Deze functie verminderd het aantal beschikbare plaatsen voor de vertoning
 
-        preconditie: Er moeten meer plaatsen beschikbaar zijn dan dat er verdwijnen.
-        postconditie: Het aantal plaatsen worden verminderd.
-        
+        Preconditie: Er moeten meer plaatsen beschikbaar zijn dan dat er verdwijnen.
+        Postconditie: Het aantal plaatsen worden verminderd.
+
         :param hoeveelheid: integer (geeft weer hoeveel plaatsen minder er beschikbaar zijn)
         """
         if self.vrije_plaatsenFysiek + hoeveelheid < self.vrije_plaatsen:

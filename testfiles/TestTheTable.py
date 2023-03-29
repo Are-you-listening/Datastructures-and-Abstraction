@@ -1,3 +1,12 @@
+
+from ADT.Tabel import Tabel
+from ProtoType.Zaal import Zaal
+from ADT import MyBSTAnas, MyCircularLinkedChainAnas, MyQueueAnas, MyRedBlackTreeAnas, MyStackAnas
+from ADT import MyBSTEmil, MyCircularLinkedChainEmil, MyQueueEmil, MyTwoThreeFourTreeEmil, MyStackEmil
+from ADT import MyBSTKars, MyCircularLinkedChainKars, MyQueueKars, MyTwoThreeFourTreeKars, MyStackKars
+from ADT import MyBSTTibo, MyCircularLinkedChainTibo, MyQueueTibo, MyTwoThreeFourTreeTibo, MyStackTibo
+
+
 adt_dict = {}
 with open("../testfiles/ADTFiles.txt") as f:
     for file in f.readlines():
