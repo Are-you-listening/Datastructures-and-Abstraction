@@ -1,11 +1,11 @@
 """
 Deze ADT geeft een gebruiker weer
 
-data:
-self.id: integer (id dat overeenkomt met de gebruiker)
+Data:
+self.id: positive unsigned integer (id dat overeenkomt met de gebruiker)
 self.voornaam: string (bewaard de voornaam van de gebruiker)
 self.achternaam: string (bewaard de achternaam van de gebruiker)
-self.mail: string (bewaard de emailvan de gebruiker)
+self.mail: string (bewaard de email van de gebruiker)
 """
 
 
@@ -14,11 +14,11 @@ class Gebruiker:
         """
         Het object gebruiker wordt geïnitialiseerd.
 
-        precondities: Er worden 4 parameters gegeven.
-        id is een integer en voornaam, achternaam, mail zijn strings.
-        postcondities: het object Gebruiker wordt geïnitialiseerd.
+        Precondities: Er worden 4 parameters gegeven.
+        id is een unsigned positive integer en voornaam, achternaam, mail zijn strings.
+        Postcondities: Het object Gebruiker wordt geïnitialiseerd.
 
-        :param id: integer
+        :param id: unsigned positive integer
         :param voornaam: string
         :param achternaam: string
         :param mail: string
@@ -27,15 +27,6 @@ class Gebruiker:
         self.vnaam = voornaam
         self.anaam = achternaam
         self.mail = mail
-
-    def get_gegevens(self):
-        """
-        Deze functie geeft de voornaam, achternaam en e-mail van de gebruiker
-        precondities: Er worden geen parameters gegeven
-        postcondities: de gebruikers gegevens worden in een tuple teruggegeven (voornaam, achternaam, mail)
-        :return: de gebruikersgegevens volgens volgend format (voornaam, achternaam, mail)
-        """
-        return (self.vnaam, self.anaam, self.mail)
 
     def get_id(self):
         return self.id
