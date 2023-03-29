@@ -131,8 +131,8 @@ class MyLinkedChain:
         #if positie>self.getLength() or self.isEmpty(): #Précondities "niet" voldaan
         #    return (False,False)
 
-        if self.isEmpty() or positie>self.getLength() or positie<=0: #Précondities "niet" voldaan
-            return (False,False)
+        if self.isEmpty() or positie>self.getLength() or positie<0: #Précondities "niet" voldaan
+            return (None,False)
 
         else:
             i=0
@@ -182,7 +182,7 @@ class LCTable:
         return self.chain.isEmpty()
 
     def tableInsert(self, index, val):
-        if( (isinstance(index,str)) or  (index > self.tableGetLength()+1) ):
+        if( (isinstance(index,str)) or  (index >= self.tableGetLength()) ):
             index = 1
         return self.chain.insert(index,val)
 
@@ -203,7 +203,7 @@ class LCTable:
 
     def traverseTable(self,function):
         for i in range(self.chain.getLength()):
-            item = self.tableRetrieveIndex(i)
+            item = self.tableRetrieveIndex(i+1)
             function(item[0])
 
     def tableDelete(self, index):

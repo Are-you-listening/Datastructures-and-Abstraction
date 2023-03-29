@@ -2,6 +2,7 @@ from ADT import MyBSTAnas, MyCircularLinkedChainAnas, MyQueueAnas, MyRedBlackTre
 from ADT import MyBSTEmil, MyCircularLinkedChainEmil, MyQueueEmil, MyTwoThreeFourTreeEmil, MyStackEmil
 from ADT import MyBSTKars, MyCircularLinkedChainKars, MyQueueKars, MyTwoThreeFourTreeKars, MyStackKars
 from ADT import MyBSTTibo, MyCircularLinkedChainTibo, MyQueueTibo, MyTwoThreeFourTreeTibo, MyStackTibo
+from ADT.Tabel import Tabel
 
 from Film import Film
 from Zaal import Zaal
@@ -38,11 +39,13 @@ class Reservatiesysteem:
         Precondities: Er worden geen andere parameters gegeven.
         Postconditie: Een Reservatiesysteem object wordt aangemaakt.
         """
+        self.keyswap = False
+
         self.tijdsstip = 0 #Houdt het tijdstip bij | Format: int( "jaar"+"maand"+"dag"+str(#seconden uit uren,minuten,seconden) )
-        self.films = MyCircularLinkedChainAnas.LCTable() #Verzameling van alle films
-        self.zalen = MyCircularLinkedChainAnas.LCTable() #Bijhouden van alle zalen
-        self.gebruikers = MyCircularLinkedChainAnas.LCTable() #Bijhouden van alle gebruikers
-        self.vertoningen = MyBSTAnas.BSTTable() #Bijhouden van alle vertoningen
+        self.films = Tabel(MyCircularLinkedChainAnas.LCTable(), self.keyswap )#Verzameling van alle films
+        self.zalen = Tabel(MyCircularLinkedChainAnas.LCTable() , self.keyswap )#Bijhouden van alle zalen
+        self.gebruikers = Tabel(MyCircularLinkedChainAnas.LCTable(), self.keyswap ) #Bijhouden van alle gebruikers
+        self.vertoningen = Tabel(MyBSTAnas.BSTTable(), self.keyswap ) #Bijhouden van alle vertoningen
         self.reservaties = MyQueueKars.MyQueueTable() #Bijhouden van alle TE verwerken reservaties
         self.reservatie_archief = MyCircularLinkedChainAnas.LCTable() #Opslaan van alle verwerkte reservaties
         self.slots = MyCircularLinkedChainKars.LCTable() #Bijhouden van tijdslots
@@ -183,6 +186,7 @@ class Reservatiesysteem:
 
         vertoning_object = Vertoning(id, zaalnummer, slot, datum, filmid, vrije_plaatsen)
         stack = eval(self.stack_string)
+
         self.vertoningen.tableInsert(id, (vertoning_object,stack) )
         self.__display(f"maakt vertoning: {id} {zaalnummer} {slot} {datum} {filmid}")
         return True

@@ -2,18 +2,20 @@ from ADT import MyBSTTibo
 from ProtoType.Zaal import Zaal
 
 class Tabel:
-    def __init__(self, main_adt):
+    def __init__(self, main_adt, dubbele_key=False):
         self.adt = main_adt
+
+        self.dubbele_key = dubbele_key
 
         self.key = None
         self.return_item = (None, False)
 
-    def TabelInsert(self, key, value, sub_adt=None):
-        if isinstance(key, int): #Normal Insert on ID
+    def tableInsert(self, key, value, sub_adt=MyBSTTibo.BSTTable()):
+        if not self.dubbele_key: #Normal Insert on ID
             return self.adt.tableInsert(key, value)
 
-        elif isinstance(key, tuple): #Insert op bv. achternaam // meerdere keys
-            key, key2 = key #Split up keys | key = bv achternaam | key2 = id
+        else: #Insert op bv. achternaam // meerdere keys
+            key, key2 = (key, value.get_id()) #Split up keys | key = bv achternaam | key2 = id
 
             if not self.adt.tableIsEmpty(): #Indien niet leeg; er is al een sub_adt om operaties op aan te roepen
                 current_adt, found = self.adt.tableRetrieve(key)
@@ -37,8 +39,8 @@ class Tabel:
         if not self.dubbele_key:
             return self.adt.tableRetrieve(key)
 
-        elif isinstance(key, tuple):
-            self.key = key[0]
+        else:
+            self.key = key
             self.adt.traverseTable(self.__TraverseRetrieveCall)
 
             local_return_item = self.return_item

@@ -44,9 +44,9 @@ class Vertoning:
         self.datum = datum
         self.filmid = filmid
         self.afspelend = False #Initaliseer op False
-        self.vrije_plaatsen = vrije_plaatsen
-        self.vrije_plaatsenVirtueel = vrije_plaatsen
-        self.vrije_plaatsenFysiek = 0  # Ingenomen aantal plaatsen
+        self.vrije_plaatsen = vrije_plaatsen #Max aantal plaatsen
+        self.vrije_plaatsenVirtueel = vrije_plaatsen #Gereserveerd aantal plaatsen
+        self.vrije_plaatsenFysiek = 0  # Ingenomen aantal plaatsen in de zaal
 
     def verminder_plaatsenVirtueel(self, hoeveelheid):
         """
@@ -77,20 +77,33 @@ class Vertoning:
         return False #Operatie niet geslaagd
 
     def check_vol(self):
-        """valideert of alle plaatsen vol is, geeft een bool terug"""
+        """
+        Valideert of alle gereserveerde plaatsen zijn ingenomengeeft een bool terug
+
+        :return succes: bool
+        """
         if self.vrije_plaatsenFysiek == self.vrije_plaatsenVirtueel:
             return True
         return False
 
     def start(self):  # Public
         """
-        Start de vertoning
-        preconditie: De vertoning start op het juiste tijdstip en er mag geen andere vertoning bezig zijn in deze zaal
-        postconditie: De vertoning wordt gestart (gestart = true)
+        Start de vertoning.
+
+        Preconditie: De vertoning start op het juiste tijdstip en er mag geen andere vertoning bezig zijn in deze zaal
+        Postconditie: De vertoning wordt gestart (gestart = true)
         """
         self.afspelend = True
 
     def get_id(self):
+        """
+        Geeft het id van de vertoning mee.
+
+        Preconditie: Het object is correct geïnitaliseerd
+        Postconditie: Het object blijft onverandert en het id is meegegeven
+
+        :return: id (van de vertoning)
+        """
         return self.id
 
     def status(self,current_time):
@@ -98,7 +111,8 @@ class Vertoning:
         Geeft de status van een Vertoning in string mee
 
         :param current_time: positive integer (Time van reservatie systeem)
-        :return:
+
+        :return: status string voor de logs
         """
         datetime = int( str(self.datum) + str(self.slot) ) #Date time in seconden volgens format
         if(self.afspelend):
