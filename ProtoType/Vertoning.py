@@ -13,26 +13,25 @@ self.afspelend: boolean (geeft weer dat de film al dan niet gestart is)
 class Vertoning:
     def __init__(self, id, zaalnummer, slot, datum, filmid, vrije_plaatsen): # contract moet herbekeken worden
         """
-        Een vertoning object wordt geinitialiseerd.
-        Een vertoning heeft een id, zaalnummer, tijdslot, datum, filmid, aantal vrije plaatsen, afspelend
+        Een vertoning object wordt geinitialiseerd/geconstrueerd.
 
-        precondities: Er worden 5 parameters gegeven, die allemaal integers en niet None zijn.
+        Precondities: Er worden 5 parameters gegeven, die allemaal positive unsigned integers en niet None zijn.
                       Er bestaat een film die overeenkomt met het gegeven filmid
                       Er bestaat een zaal die overeenkomt met een gegeven zaalnummer
-                      Waasrbij het zaalnummer zelfs een positief integer is.
                       Er wordt een geldige slotwaarde gegeven waarvoor geldt dat:
                       er maximum 4 en minium 3 cijfers zijn.
                       De laatste 2 cijfers hebben als getal samen de volgende range [0, 59] en
                       de andere cijfers hun samengevoegd getal hebben als range [0, 23]
                       vb. 23u30 -> 2330
-        postcondities: Er wordt een nieuwe vertoning aangemaakt
+        Postcondities: Er wordt een nieuwe vertoning aangemaakt/geconstrueerd
 
-        :param id: integer
-        :param zaalnummer: integer
-        :param slot: integer (geeft de slot in seconden weer)
-        :param datum: integer
-        :param filmid: integer
-        :param vrije_plaatsen: integer
+        :param id: positive unsigned integer
+        :param zaalnummer: positive unsigned integer
+        :param slot: positive unsigned integer (geeft de slot in seconden weer)
+        :param datum: positive unsigned integer
+        :param filmid: positive unsigned integer
+        :param vrije_plaatsen: positive unsigned integer
+
         :data afspelend: bool
         :data vrije_plaatsenFysiek
         :data vrije_plaatsenVirtueel
@@ -40,12 +39,12 @@ class Vertoning:
         self.id = id
         self.zaalnummer = zaalnummer
         self.slot = slot
-        self.datum = datum # datum moet waarschijnlijk nog aangepast worden naar juiste formaat
+        self.datum = datum
         self.filmid = filmid
-        self.vrije_plaatsenVirtueel = vrije_plaatsen
-        self.afspelend = False
-        self.vrije_plaatsenFysiek = 0 #Ingenomen aantal plaatsen
+        self.afspelend = False #Initaliseer op False
         self.vrije_plaatsen = vrije_plaatsen
+        self.vrije_plaatsenVirtueel = vrije_plaatsen
+        self.vrije_plaatsenFysiek = 0  # Ingenomen aantal plaatsen
 
     def verminder_plaatsenVirtueel(self, hoeveelheid):
         """
