@@ -187,7 +187,10 @@ class LCTable:
     def tableRetrieve(self, searchkey):
         currentNode = self.chain.dummyhead.next
         while currentNode != self.chain.dummyhead:
-            if currentNode.value.get_id() == searchkey:
+            object = currentNode.value
+            if isinstance(object, tuple):
+                object = object[0]
+            if object.get_id() == searchkey:
                 return (currentNode.value, True)
             currentNode = currentNode.next
         return (None, False)
