@@ -252,6 +252,7 @@ class BST:
 class BSTTable:
     def __init__(self):
         self.BST = BST()
+        self.id = None
 
     def tableIsEmpty(self):
         return self.BST.isEmpty()
@@ -276,3 +277,6 @@ class BSTTable:
 
     def clear(self):
        self.BST = BST()
+
+    def get_id(self):
+        return self.id

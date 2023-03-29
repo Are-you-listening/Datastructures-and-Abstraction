@@ -170,12 +170,16 @@ class LCTable:
 
     def __init__(self):
         self.chain = LinkedChain()
+        self.id = None
 
     def tableIsEmpty(self):
         return self.chain.isEmpty()
 
     def tableInsert(self, index, newItem):
-        self.chain.insert(index, newItem)
+        if isinstance(index, str) or index >= self.chain.getLength():
+            return self.chain.insert(1, newItem)
+
+        return self.chain.insert(index, newItem)
 
     def tableRetrieve(self, plaats):
         return self.chain.retrieve(plaats)
@@ -184,9 +188,9 @@ class LCTable:
         currentNode = self.chain.dummyhead.next
         while currentNode != self.chain.dummyhead:
             if currentNode.value.get_id() == searchkey:
-                return currentNode.value
+                return (currentNode.value, True)
             currentNode = currentNode.next
-        return False
+        return (None, False)
 
     def tableDelete(self, key):
         currentNode = self.chain.dummyhead
@@ -203,6 +207,7 @@ class LCTable:
         currentNode = self.chain.dummyhead
         while currentNode.next != self.chain.dummyhead:
             visitfunction(currentNode.value)
+            currentNode = currentNode.next
 
     def tableGetLength(self):
         return self.chain.getLength()
@@ -215,3 +220,6 @@ class LCTable:
 
     def clear(self):
         self.chain = LinkedChain()
+
+    def get_id(self):
+        return self.id
