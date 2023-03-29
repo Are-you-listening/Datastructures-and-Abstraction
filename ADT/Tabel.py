@@ -1,4 +1,4 @@
-from ADT import MyRedBlackTreeAnas
+from ADT import MyTwoThreeFourTreeKars
 
 class Tabel:
     def __init__(self, main_adt):
@@ -22,7 +22,7 @@ class Tabel:
                     raise Exception("Preconditie Wrapper string compatible: sub-adt niet empty")
 
                 sub_adt.tableInsert(key2, value)
-                return self.adt.tableInsert(key, sub_adt) #hiero
+                return self.adt.tableInsert(key, sub_adt)
 
     def TableRetrieve(self, key):
         if isinstance(key, int):
@@ -36,10 +36,10 @@ class Tabel:
             return current_adt.tableRetrieve(key2)
 
 
-t = Tabel(MyRedBlackTreeAnas.RedBlackTreeTable())
-t.TableInsert(("hermans", 0), 1, MyRedBlackTreeAnas.RedBlackTreeTable())
-t.TableInsert(("hermans", 2), 3, MyRedBlackTreeAnas.RedBlackTreeTable())
-t.TableInsert(("pieter", 4), 5, MyRedBlackTreeAnas.RedBlackTreeTable())
+t = Tabel(MyTwoThreeFourTreeKars.TwoThreeFourTreeTable())
+t.TableInsert(("hermans", 0), 1, MyTwoThreeFourTreeKars.TwoThreeFourTreeTable())
+t.TableInsert(("hermans", 2), 3, MyTwoThreeFourTreeKars.TwoThreeFourTreeTable())
+t.TableInsert(("pieter", 4), 5, MyTwoThreeFourTreeKars.TwoThreeFourTreeTable())
 print(t.TableRetrieve(("hermans", 0)))
 print(t.TableRetrieve(("hermans", 2)))
 print(t.TableRetrieve(("pieter", 4)))

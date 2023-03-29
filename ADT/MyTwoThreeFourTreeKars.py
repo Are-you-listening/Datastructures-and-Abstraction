@@ -2383,7 +2383,8 @@ class TwoThreeFourTreeTable:
         return self.t.insertItem(createTreeItem(key,value))
 
     def tableRetrieve(self,key):
-        return self.t.retrieveItem(key)
+        return_value = self.t.retrieveItem(key)
+        return tuple([return_value[0],return_value[1]])
 
     def tableDelete(self,key):
         return self.t.deleteItem(key)
@@ -2394,8 +2395,8 @@ class TwoThreeFourTreeTable:
     def save(self):
         return self.t.save()
 
-    def load(self,map):
-        return self.t.load(map)
+    def load(self, data):
+        return self.t.load(data)
 
     def clear(self):
         self.t = TwoThreeFourTree()
