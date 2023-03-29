@@ -15,7 +15,7 @@ class Vertoning:
         """
         Een vertoning object wordt geinitialiseerd/geconstrueerd.
 
-        Precondities: Er worden 5 parameters gegeven, die allemaal positive unsigned integers en niet None zijn.
+        Precondities: Er worden 6 parameters gegeven, die allemaal positive unsigned integers en niet None zijn.
                       Er bestaat een film die overeenkomt met het gegeven filmid
                       Er bestaat een zaal die overeenkomt met een gegeven zaalnummer
                       Er wordt een geldige slotwaarde gegeven waarvoor geldt dat:

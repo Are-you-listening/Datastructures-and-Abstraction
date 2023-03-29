@@ -252,12 +252,16 @@ class LCTable:
         return self.LC.isEmpty()
 
     def tableInsert(self, index, val):
+        if isinstance(index, str):
+            return self.LC.insert(1,val)
+        if index>=self.tableGetLength():
+            return self.LC.insert(1,val)
         return self.LC.insert(index,val)
 
     def tableRetrieve(self, index):
         return self.LC.retrieve(index)
 
-    def tableRetrieveTranverse(self, id):
+    def tableRetrieve(self, id):
         count = 0
         while self.tableRetrieve(count)[0].get_id() != id:
             if self.tableRetrieve(count)[1] == False:

@@ -183,17 +183,8 @@ class LCTable:
                 adt.tableInsert(index2, val)
                 return self.l.insert(index, adt)
 
-    def tableRetrieve(self, index):
-        if isinstance(index, int):
-            return self.l.retrieve(index)
-        elif isinstance(index, tuple):
-            index, index2 = index
-            index = self.__convert_str_int(index)
-            current_adt, found = self.l.retrieve(index)
-            if not found:
-                return None, False
-
-            return current_adt.tableRetrieve(index2)
+    def tableRetrieveIndex(self, index):
+        return self.l.retrieve(index)
 
     def tableRetrieveTranverse(self, id):
         if isinstance(id, int):

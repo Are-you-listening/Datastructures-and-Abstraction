@@ -396,11 +396,7 @@ class BSTTable():
     def clear(self):
         self.bst = BST()
 
-    @staticmethod
-    def __convert_str_int(key):
-        final_int = 0
-        if isinstance(key, str):
-            for char in key:
-                final_int += ord(char)
+    def get_id(self):
+        return self.id
 
         return final_int

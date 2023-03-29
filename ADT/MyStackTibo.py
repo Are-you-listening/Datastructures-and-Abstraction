@@ -110,11 +110,7 @@ class MyStack:
         """
         geeft een lijst weer met de volgorde in de stack, met de top als laatste element van de lijst
 
-        preconditie: er zijn geen parameters gegeven, e
-    def add_to_info(self,value): #Private
-        filmnaam = self.films.tableRetrieveTranverse(value[0].filmid)[0].titel
-        current_slot = self.convert_time(self.tijdsstip)[1]*3600 + self.convert_time(self.tijdsstip)[2]*60
-n de stack is niet leeg.
+        preconditie: er zijn geen parameters gegeven, en de stack is niet leeg.
         postconditie: de stack blijft onveranderd
         :return: stackitemstype hun waardes dat zich bevinden in de stack
         """

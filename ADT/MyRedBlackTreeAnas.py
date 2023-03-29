@@ -913,6 +913,7 @@ class RedBlackTree:
 class RedBlackTreeTable:
     def __init__(self):
         self.RBT = RedBlackTree()
+        self.id = None
 
     def tableIsEmpty(self):
         return self.RBT.isEmpty()
@@ -938,3 +939,6 @@ class RedBlackTreeTable:
 
     def clear(self):
         self.RBT = RedBlackTree()
+
+    def get_id(self):
+        return self.id

@@ -186,7 +186,7 @@ class LCTable:
     def tableRetrieve(self, index):
         return self.chain.retrieve(index)
 
-    def tableRetrieveTranverse(self, id):
+    def tableRetrieve(self, id):
         counts = 0
         value = self.chain.head.value
         while counts<self.chain.getLength():

@@ -180,7 +180,7 @@ class LCTable:
     def tableRetrieve(self, plaats):
         return self.chain.retrieve(plaats)
 
-    def tableRetrieveTranverse(self, searchkey):
+    def tableRetrieve(self, searchkey):
         currentNode = self.chain.dummyhead.next
         while currentNode != self.chain.dummyhead:
             if currentNode.value.get_id() == searchkey:

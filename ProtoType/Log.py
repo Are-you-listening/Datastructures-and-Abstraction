@@ -149,7 +149,7 @@ class Log:
             tenp_tabs = "\t" * 5
             self.text_string += f"""\n{tenp_tabs}<tbody> <tr>"""
             self.text_string += f"\n{tabs}<td>{self.resSYS.convert_time(datum)[0]}</td>"
-            self.text_string += f"\n{tabs}<td>{self.resSYS.films.tableRetrieveTranverse(value[1]).titel}</td>"
+            self.text_string += f"\n{tabs}<td>{self.resSYS.films.tableRetrieve(value[1])[0].titel}</td>"
             current_index = 1
 
         """we gaan steeds een tijdslot verder totdat de tijdslot matched"""

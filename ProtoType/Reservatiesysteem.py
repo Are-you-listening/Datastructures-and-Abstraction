@@ -156,10 +156,10 @@ class Reservatiesysteem:
         Precondities: Er worden 6 parameters ingegeven, allemaal zijn ze positieve unsigned integers. Het tijdslot moet bestaan/al zijn toegevoegd. De film met filmid moet bestaan. De zaal met zaalnummer moet bestaan. id is een uniek id. Het aantal vrije_plaatsen moet correspondeen met de resp. plaats in de zaal met zaalnummer. In de zaal  op slot & datum mag niet al een Vertoning gepland zijn.
         Postconditie: Bij succes wordt er een nieuwe vertoningen aangemaakt en bewaard (de self.ertoningen wordt 1 groter)
         """
-        if not self.zalen.tableRetrieveTranverse(zaalnummer):
+        if not self.zalen.tableRetrieve(zaalnummer)[1]:
             raise Exception("Exception in maak_vertoning: Zaal met identificatie bestaat niet ")
 
-        if not self.films.tableRetrieveTranverse(filmid):
+        if not self.films.tableRetrieve(filmid)[1]:
             raise Exception("Exception in maak_vertoning: Film met identificatie bestaat niet ")
 
         if not self.slots.tableRetrieve(slot)[0]:
@@ -169,7 +169,7 @@ class Reservatiesysteem:
                                                                                   int) and filmid > 0 and zaalnummer > 0 and slot > 0 and vrije_plaatsen>0):
             raise Exception("Exception in maak_vertoning: Precondition Failure ")
 
-        zaal = self.zalen.tableRetrieveTranverse(zaalnummer)
+        zaal = self.zalen.tableRetrieve(zaalnummer)[0]
         if(zaal.plaatsen<vrije_plaatsen):
             raise Exception("Exception in maak_vertoning: Het aantal plaatsen voor deze vertoning past niet in de bijbehorende zaal" + id)
 
@@ -207,7 +207,7 @@ class Reservatiesysteem:
         if not self.vertoningen.tableRetrieve(vertoning_id)[1]:
             raise Exception("Precondition Error: maak_reservatie, vertoning bestaat niet")
 
-        if not self.gebruikers.tableRetrieveTranverse(gebruiker_id):  # Subscript operator?
+        if not self.gebruikers.tableRetrieve(gebruiker_id)[1]:  # Subscript operator?
             raise Exception("Precondition Error: maak_reservatie, gebruiker bestaat niet")
 
         Vertoning = self.vertoningen.tableRetrieve(vertoning_id)[0][0]
