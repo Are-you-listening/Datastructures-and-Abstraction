@@ -157,8 +157,10 @@ class Reservatiesysteem:
         :param vrije_plaatsen: positive unsigned int (initieel aantal plaatsen in de vertoning)
 
         Precondities: Er worden 6 parameters ingegeven, allemaal zijn ze positieve unsigned integers. Het tijdslot moet bestaan/al zijn toegevoegd. De film met filmid moet bestaan. De zaal met zaalnummer moet bestaan. id is een uniek id. Het aantal vrije_plaatsen moet correspondeen met de resp. plaats in de zaal met zaalnummer. In de zaal  op slot & datum mag niet al een Vertoning gepland zijn.
-        Postconditie: Bij succes wordt er een nieuwe vertoningen aangemaakt en bewaard (de self.ertoningen wordt 1 groter)
+        Postconditie: Bij succes wordt er een nieuwe vertoningen aangemaakt en bewaard (de self.vertoningen wordt 1 groter)
         """
+        z = self.zalen.tableRetrieve(zaalnummer)[1]
+        #print(z)
         if not self.zalen.tableRetrieve(zaalnummer)[1]:
             raise Exception("Exception in maak_vertoning: Zaal met identificatie bestaat niet ")
 

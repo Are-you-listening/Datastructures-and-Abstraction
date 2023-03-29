@@ -91,15 +91,39 @@ class BST:
             return [True, root, None]
 
         if root[0] > searchKey[0]: #Als kleiner dan root, zoek in leftchild
+
+
             if root[2]!=None:
                 return self.search(root[2], searchKey)
+
+
+            ###########################
+            # Edit on 29-03-2023 | Geeft altijd True mee anders?
+            #elif root[0]!=searchKey[0] :
+             #   return [False, root , True]
+            ####################################
+
             else:
+                if(root[0]!=searchKey[0]): # Edit on 29-03-2023 | Geeft altijd True mee anders?
+                    return [False,root,True] # Edit on 29-03-2023 | Geeft altijd True mee anders?
+                #print("test")
+
                 return [True, root, True]  #Geef True, gevonden positie(root & leftchild=TRUE) mee
 
         elif root[0] < searchKey[0]: #Is dus groter dan root, zoek dan in rightchild=FALSE
             if root[3]!=None:
                 return self.search(root[3], searchKey)
+
+            ###########################
+            # Edit on 29-03-2023 | Geeft altijd True mee anders?
+            #elif root[0]!=searchKey[0]:
+            #    return [False, root, False]
+            ####################################
+
             else:
+                if(root[0]!=searchKey[0]): # Edit on 29-03-2023 | Geeft altijd True mee anders?
+                    return [False,root,True] # Edit on 29-03-2023 | Geeft altijd True mee anders?
+
                 return [True, root, False]
         else:                               #Zoeken faalt, return False
             return [False, False, False]
@@ -120,9 +144,23 @@ class BST:
         node=found[1]       #Node in which left or right has place
         position=found[2]   #Left=True & Right=False
 
-        if succes==False: #Lege Boom
+        if(succes==False and node[0]!=self.root[0]): #Lege Boom #Added "and node==self.root" 29-03-2023
             self.root=NewItem
             return True
+
+        #Added 29-03-2023
+        ##############
+        if succes==False:
+            if position==False: #Left
+                #Insert left
+                node[2] = NewItem #Set child
+                NewItem[4] = node #Set Parent
+                return True
+            else: #right
+                #Insrert right
+                node[3] = NewItem #Set child
+                NewItem[4] = node #Set Parent
+        ##################################
 
         if (succes==True) and (position==True):#Links inserten
             node[2]=NewItem #knoop wordt gelinked aan NewItem
@@ -299,6 +337,7 @@ class BST:
         node = found[1]  # Node in which left or right has place = N
 
         if succes:
+            #print(node[1] , succes , node[1].zaalnummer)
             return (node[1], True)
 
         return (None, False)

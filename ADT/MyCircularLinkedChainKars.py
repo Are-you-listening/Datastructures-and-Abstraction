@@ -141,7 +141,7 @@ class MyLinkedChain:
                 temp=temp.next
                 i+=1
 
-            return(temp.value,True,temp)
+            return (temp.value,True,temp)
 
     def save(self):
         """
@@ -192,11 +192,19 @@ class LCTable:
     def tableRetrieve(self, id):
         counts = 0
         while counts<self.chain.getLength()+1:
-            tuple = self.chain.retrieve(counts)
-            if tuple[1]==False:
+            value = self.chain.retrieve(counts)
+
+            if value[1]==False:
                 return (None,False)
-            if tuple[0].get_id() == id:
-                return (tuple[0],True)
+
+            if isinstance(value[0],tuple): # "Tuple(Vertoning,Stack)" heeft geen functie .get_id()
+                id_check = value[0][0] #Take the inner value
+            else:
+                id_check = value[0]
+
+            if id_check.get_id() == id:
+                return (value[0],True)
+
             counts += 1
         return (None,False)
 

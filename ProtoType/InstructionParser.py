@@ -5,7 +5,7 @@ class InstructionParser:
         Maakt een InstructionParser object aan
         Alle commandos dat door dit object wordt aangeroepen moet publiek zijn
 
-         precondities: Er wordt een geldige ADT gegeven die dezelfde tableinstructies heeft als een queue.
+        Precondities: Er wordt een geldige ADT gegeven die dezelfde tableinstructies heeft als een queue.
                       Ook wordt er een reference gegeven naar het reservatiesysteem vanwaar deze klasse opgeroepen wordt.
                       Deze klasse mag enkel opgeroepen worden vanuit een reservatiesysteem
 

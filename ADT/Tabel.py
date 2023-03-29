@@ -61,7 +61,6 @@ class Tabel:
     def tableRetrieve(self, key):
         if not self.dubbele_key:
             return self.adt.tableRetrieve(key)
-
         else:
             self.key = key
             self.adt.traverseTable(self.__TraverseRetrieveCall)
@@ -69,7 +68,6 @@ class Tabel:
             local_return_item = self.return_item
             self.key = None
             self.return_item = (None, False)
-
             return local_return_item
 
     def __TraverseRetrieveCall(self, current_adt):
