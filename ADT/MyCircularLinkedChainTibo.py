@@ -162,69 +162,33 @@ class LinkedChain:
 class LCTable:
     def __init__(self):
         self.l = LinkedChain()
+        self.id = None
 
     def tableIsEmpty(self):
         return self.l.isEmpty()
 
-    def tableInsert(self, index, val, adt=None):
-        if isinstance(index, int):
-            return self.l.insert(index, val)
-        elif isinstance(index, tuple):
-            index, index2 = index
-            index = self.__convert_str_int(index)
-            current_adt, found = self.l.retrieve(index)
+    def tableInsert(self, index, val):
+        if isinstance(index, str):
+            return self.l.insert(1,val)
+        if index>=self.tableGetLength():
+            return self.l.insert(1,val)
 
-            if adt == None or not adt.empty():
-                raise Exception("Preconditie BST Tibo: sub-adt niet empty")
-
-            if found:
-                return current_adt.tableInsert(index2, val)
-            else:
-                adt.tableInsert(index2, val)
-                return self.l.insert(index, adt)
+        return self.l.insert(index, val)
 
     def tableRetrieveIndex(self, index):
         return self.l.retrieve(index)
 
-    def tableRetrieveTranverse(self, id):
-        if isinstance(id, int):
-            for i in range(1, self.l.length+1):
-                val = self.l.retrieve(i)[0]
-                if val == None:
-                    return False
-                if val.get_id() == id:
-                    return val
-            return False
-        elif isinstance(id, tuple):
-            id, id2 = id
-            for i in range(1, self.l.length+1):
-                adt = self.l.retrieve(i)[0]
-
-                if adt == None:
-                    return False
-                for j in range(1, adt.tableGetLength() + 1):
-                    val = adt.retrieve(j)[0]
-                    if val == None:
-                        return False
-                    if val.get_id() == id:
-                        return val
-            return False
+    def tableRetrieve(self, id):
+        for i in range(1, self.l.length + 1):
+            val = self.l.retrieve(i)[0]
+            if val == None:
+                return (None, False)
+            if val.get_id() == id:
+                return (val, True)
+        return (None, False)
 
     def tableDelete(self, index):
-        if isinstance(index, int):
-            return self.l.delete(index)
-
-        elif isinstance(index, tuple):
-            index, index2 = index
-            index = self.__convert_str_int(index)
-            current_adt, found = self.l.retrieve(index)
-            if not found:
-                return False
-
-            suc6 = current_adt.tableDelete(index2)
-            if current_adt.tableIsEmpty():
-                self.l.delete(index)
-            return suc6
+        return self.l.delete(index)
 
     def tableGetLength(self):
         return self.l.getLength()
@@ -238,11 +202,10 @@ class LCTable:
     def clear(self):
         self.l = LinkedChain()
 
-    @staticmethod
-    def __convert_str_int(key):
-        final_int = 0
-        if isinstance(key, str):
-            for char in key:
-                final_int += ord(char)
+    def traverseTable(self,func):
+        for i in range(self.l.getLength()):
+            item = self.tableRetrieveIndex(i)
+            func(item[0])
 
-        return final_int
+    def get_id(self):
+        return self.id

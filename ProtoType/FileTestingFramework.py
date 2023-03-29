@@ -77,14 +77,14 @@ for i0 in adt_dict.get("0"):
                         for i6 in adt_dict.get("6"):
                             for i7 in adt_dict.get("7"):
                                 for i8 in adt_dict.get("8"):
-                                    for i9 in adt_dict.get("9"):
+                                   # for i9 in adt_dict.get("9"):
                                         print(index, (i0, i1, i2, i3, i4, i5, i6, i7, i8, i9))
 
                                         #print((i0, i1, i2, i3, i4, i5, i6, i7, i8, i9))
                                         test(args_tup=(i0, i1, i2, i3, i4, i5, i6, i7, i8, i9))
                                         index += 1
-"""
 
+"""
 """
 for i in range(0, 40):
     print(i)
@@ -114,7 +114,7 @@ for i in range(0, 40):
     test(args_tup=(i0, i1, i2, i3, i4, i5, i6, i7, i8, i9))
 """
 
-"""
+
 index = 0
 for i0 in adt_dict.get("0"):
     for i1 in adt_dict.get("1"):
@@ -129,9 +129,9 @@ for i0 in adt_dict.get("0"):
                             print(index)
 
                             # print((i0, i1, i2, i3, i4, i5, i6, i7, i8, i9))
-                            test(args_tup=(i0, i1, i2, i3, i4, i5, i6, i7, i8, i9))
+                            test(file="system.txt", args_tup=(i0, i1, i2, i3, i4, i5, i6, i7, i8, i9))
                             index += 1
-"""
+
 
 """
 index = 0
@@ -151,4 +151,4 @@ for i0 in adt_dict.get("0"):
                             test(file="system_test2.txt", args_tup=(i0, i1, i2, i3, i4, i5, i6, i7, i8, i9))
                             index += 1
 """
-test(file="k3.txt")
+#test(file="k3.txt")

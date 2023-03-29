@@ -1025,6 +1025,5 @@ class TwoThreeFourTreeTable:
     def tableDelete(self, key):
         return self.tree.deleteItem(key)
 
-
     def clear(self):
         self.tree = TwoThreeFourTree()

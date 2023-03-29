@@ -399,4 +399,3 @@ class BSTTable():
     def get_id(self):
         return self.id
 
-        return final_int
