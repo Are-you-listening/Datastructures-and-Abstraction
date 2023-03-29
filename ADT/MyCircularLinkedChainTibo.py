@@ -203,7 +203,7 @@ class LCTable:
         self.l = LinkedChain()
 
     def traverseTable(self,func):
-        for i in range(self.l.getLength()):
+        for i in range(1, self.l.getLength()+1):
             item = self.tableRetrieveIndex(i)
             func(item[0])
 

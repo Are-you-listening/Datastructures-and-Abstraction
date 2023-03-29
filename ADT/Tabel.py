@@ -1,4 +1,4 @@
-from ADT import MyCircularLinkedChainAnas, MyRedBlackTreeAnas
+from ADT import MyBSTTibo
 from ProtoType.Zaal import Zaal
 
 class Tabel:
@@ -33,8 +33,8 @@ class Tabel:
                 sub_adt.tableInsert(key2, value)
                 return self.adt.tableInsert(key, sub_adt)
 
-    def TabelRetrieve(self, key):
-        if isinstance(key, int):
+    def tableRetrieve(self, key):
+        if not self.dubbele_key:
             return self.adt.tableRetrieve(key)
 
         elif isinstance(key, tuple):
@@ -51,13 +51,3 @@ class Tabel:
         item, b = current_adt.tableRetrieve(self.key)
         if b:
             self.return_item = (item, b)
-
-t = Tabel(MyCircularLinkedChainAnas.LCTable())
-t.TabelInsert(("hermans", 0), Zaal(0, 200), MyRedBlackTreeAnas.RedBlackTreeTable())
-t.TabelInsert(("hermans", 2), Zaal(2, 200), MyRedBlackTreeAnas.RedBlackTreeTable())
-t.TabelInsert(("pieter", 4), Zaal(4, 200), MyRedBlackTreeAnas.RedBlackTreeTable())
-print(t.TabelRetrieve((0,)))
-print(t.TabelRetrieve((2,)))
-print(t.TabelRetrieve((4,)))
-print(t.TabelRetrieve((1,)))
-

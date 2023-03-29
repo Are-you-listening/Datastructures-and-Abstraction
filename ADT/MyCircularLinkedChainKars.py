@@ -176,6 +176,7 @@ class MyLinkedChain:
 class LCTable:
     def __init__(self):
         self.chain = MyLinkedChain()
+        self.id = None
 
     def tableIsEmpty(self):
         return self.chain.isEmpty()
@@ -219,3 +220,6 @@ class LCTable:
 
     def clear(self):
         self.chain = MyLinkedChain()
+
+    def get_id(self):
+        return self.id
