@@ -162,6 +162,14 @@ class Reservatiesysteem:
         if not self.zalen.tableRetrieve(zaalnummer)[1]:
             raise Exception("Exception in maak_vertoning: Zaal met identificatie bestaat niet ")
 
+        """
+        Controleert dat iedereen in de zaal zou passen indien vol,
+        mag kleiner zijn indien covid
+        """
+        zaal = self.zalen.tableRetrieve(zaalnummer)[0]
+        if zaal.plaatsen < vrije_plaatsen:
+            raise Exception("Exception in maak_vertoning: Er zijn niet genoeg plaatsen in de zaal ")
+
         if not self.films.tableRetrieve(filmid)[1]:
             raise Exception("Exception in maak_vertoning: Film met identificatie bestaat niet ")
 
