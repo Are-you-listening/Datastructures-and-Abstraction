@@ -3,7 +3,7 @@ import os
 
 def test(**kwargs):
     if "file" in kwargs:
-        r = Reservatiesysteem.Reservatiesysteem(display_mode="print", path=f"../testfiles/{kwargs['file']}")
+        r = Reservatiesysteem.Reservatiesysteem(display_mode="", path=f"../testfiles/{kwargs['file']}")
     else:
         for file in os.listdir("../testfiles"):
             if file.endswith(".txt") and not file == "ADTFiles.txt":
@@ -33,6 +33,7 @@ def file_compare(path1, path2):
         raise Exception("not matching log file")
     for line_i in range(len(l1)):
         if l1[i] != l2[i]:
+            print("p", l1[i], l2[i])
             raise Exception("not matching log file")
 
 
@@ -157,4 +158,6 @@ for i0 in adt_dict.get("0"):
                             test(file="system_test2.txt", args_tup=(i0, i1, i2, i3, i4, i5, i6, i7, i8, i9))
                             index += 1
 """
-test(file="system_test5.txt")
+for i in range(1000):
+    print(i)
+    test(file="system_test5.txt")

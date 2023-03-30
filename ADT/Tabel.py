@@ -17,10 +17,10 @@ class Tabel:
         self.traverse_function = None
 
         self.linked_chain = MyCircularLinkedChainAnas.LCTable()
-        self.linked_chain.load(["MyBSTAnas.BSTTable()", "MyBSTEmil.BSTTable()", "MyBSTTibo.BSTTable()", "MyBSTKars.BSTTable()",
+        self.linked_chain.load(["MyBSTAnas.BSTTable()", "MyBSTEmil.BSTTable()", "MyBSTTibo.BSTTable()",
                                 "MyCircularLinkedChainAnas.LCTable()", "MyCircularLinkedChainEmil.LCTable()",
                                 "MyCircularLinkedChainKars.LCTable()", "MyCircularLinkedChainTibo.LCTable()",
-                                "MyRedBlackTreeAnas.RedBlackTreeTable()", "MyTwoThreeFourTreeEmil.TwoThreeFourTreeTable()", "MyTwoThreeFourTreeKars.TwoThreeFourTreeTable()", "MyTwoThreeFourTreeTibo.TwoThreeFourTreeTable()"])
+                                "MyTwoThreeFourTreeEmil.TwoThreeFourTreeTable()", "MyTwoThreeFourTreeKars.TwoThreeFourTreeTable()", "MyTwoThreeFourTreeTibo.TwoThreeFourTreeTable()"])
 
 
     def tableInsert(self, key, value, sub_adt=None):
@@ -28,7 +28,6 @@ class Tabel:
             return self.adt.tableInsert(key, value)
 
         else: #Insert op bv. achternaam // meerdere keys
-
             if (isinstance(value, tuple)): #The only value tuple is (Vertoning,Stack): This is to prevent that we can actually call .get_id()
                 value_id = value[0].get_id()
             else:
@@ -40,17 +39,15 @@ class Tabel:
                 #current_adt, found = self.TabelRetrieve(key_original)
             else: #Indien leeg  (nog geen sub_adt)
                 found = False
-
             if found: #Er is een sub_adt, insert hierop
                 return current_adt.tableInsert(key2, value)
             else: #Er is nog geen sub_adt, plaats de meegegeven sub_adt
                 #Check up if newly given sub_adt is correct/valid
                 if sub_adt == None:
-                    r = random.randint(0, 11)
+                    r = random.randint(0, 10)
                     sub_adt = eval(self.linked_chain.tableRetrieveIndex(r)[0])
                 if sub_adt == None or not sub_adt.tableIsEmpty():
                     raise Exception("Preconditie Wrapper string compatible: sub-adt niet empty")
-
                 sub_adt.id = key #Set First ID
                 sub_adt.tableInsert(key2, value)
                 return self.adt.tableInsert(key, sub_adt)

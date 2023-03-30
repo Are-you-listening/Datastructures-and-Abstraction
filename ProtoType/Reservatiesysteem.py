@@ -102,7 +102,6 @@ class Reservatiesysteem:
         """
         if( (not isinstance(id,int)) or (id<=0) or (not isinstance(voornaam,str)) or (not isinstance(achternaam,str)) or (not isinstance(mail,str)) ):
             raise Exception("Precondition Failure bij maak_gebruiker")
-
         newGebruiker = Gebruiker(id, voornaam, achternaam, mail)
         self.gebruikers.tableInsert(1, newGebruiker)
         self.__display(f"maak gebruiker: {voornaam} {achternaam} {mail}")
