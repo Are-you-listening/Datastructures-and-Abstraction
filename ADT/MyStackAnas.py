@@ -195,6 +195,7 @@ class MyStackTable:
             for i in range(self.Stack.size):
                 item = self.Stack.pop()[0]
                 temp.push(item)
+            temp.push(value)
             for i in range(temp.size):
                 item = temp.pop()[0]
                 temp2.push(item)

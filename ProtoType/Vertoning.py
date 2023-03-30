@@ -71,7 +71,7 @@ class Vertoning:
 
         :param hoeveelheid: integer (geeft weer hoeveel plaatsen minder er beschikbaar zijn)
         """
-        if self.vrije_plaatsenFysiek + hoeveelheid < self.vrije_plaatsen:
+        if self.vrije_plaatsenFysiek + hoeveelheid <= self.vrije_plaatsen:
             self.vrije_plaatsenFysiek = self.vrije_plaatsenFysiek + hoeveelheid
             return True #Operatie geslaagd
         return False #Operatie niet geslaagd

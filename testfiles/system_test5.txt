@@ -39,29 +39,29 @@ gebruiker 8 Student8 INF mail@no_virus.com
 start
 
 #film id 1 is razend populair daarom maken ook vele mensen een reservatie
-2023-10-05 11:00 reserveer 1 1 23
-2023-10-05 11:00 reserveer 1 2 23
+#2023-10-05 11:00 reserveer 1 1 23
+#2023-10-05 11:00 reserveer 1 2 23
 
 #mag een user 2 reservaties maken voor een film op hetzelfde tijdslot, maar in een andere zaal ?
 
-2023-10-05 11:00 reserveer 2 2 49
+#2023-10-05 11:00 reserveer 2 2 49
 2023-10-05 12:00 reserveer 2 6 50
-2023-10-05 12:00 reserveer 3 2 15
+#2023-10-05 12:00 reserveer 3 2 15
 
 #oh nee, deze film zit vol :( ocharme user 3 :(, hij was net te laat
 2023-10-05 12:01 reserveer 3 6 1
 
-2023-10-05 12:01 reserveer 8 5 28
-2023-10-05 12:01 reserveer 7 5 3
+#2023-10-05 12:01 reserveer 8 5 28
+#2023-10-05 12:01 reserveer 7 5 3
 
 #er gaat 1 iemand naar de slechte film, maar die zal nooit komen opdagen, want hij las de rating pas nadien
-2023-10-05 12:02 reserveer 6 7 1
+#2023-10-05 12:02 reserveer 6 7 1
 
 #om zijn slechte keuze te compenseren gaat hij ook naar een medium film
-2023-10-05 12:02 reserveer 6 9 5
+#2023-10-05 12:02 reserveer 6 9 5
 
 #de mensen komen naar de cinema
-2023-10-05 13:00 ticket 2 23
+#2023-10-05 13:00 ticket 2 23
 2023-10-05 13:00 ticket 6 50
 2023-10-05 13:00 ticket 1 23
 2023-10-05 13:00 ticket 2 49
