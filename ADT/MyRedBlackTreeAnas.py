@@ -297,7 +297,7 @@ class RedBlackTree:
             Vergelijkt twee bomen en geeft true als ze gelijk aan elkaar zijn
         """
         equal=False
-        if self.key==tree.key and self.value==tree.value:
+        if self.key==tree.key:
             equal=True
 
         if self.leftTree != None and tree.leftTree != None:

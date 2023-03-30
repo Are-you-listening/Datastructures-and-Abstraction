@@ -103,6 +103,7 @@ class Reservatiesysteem:
         if( (not isinstance(id,int)) or (id<=0) or (not isinstance(voornaam,str)) or (not isinstance(achternaam,str)) or (not isinstance(mail,str)) ):
             raise Exception("Precondition Failure bij maak_gebruiker")
         newGebruiker = Gebruiker(id, voornaam, achternaam, mail)
+        #print("new", newGebruiker)
         self.gebruikers.tableInsert(1, newGebruiker)
         self.__display(f"maak gebruiker: {voornaam} {achternaam} {mail}")
         return True
@@ -158,8 +159,6 @@ class Reservatiesysteem:
         Precondities: Er worden 6 parameters ingegeven, allemaal zijn ze positieve unsigned integers. Het tijdslot moet bestaan/al zijn toegevoegd. De film met filmid moet bestaan. De zaal met zaalnummer moet bestaan. id is een uniek id. Het aantal vrije_plaatsen moet correspondeen met de resp. plaats in de zaal met zaalnummer. In de zaal  op slot & datum mag niet al een Vertoning gepland zijn.
         Postconditie: Bij succes wordt er een nieuwe vertoningen aangemaakt en bewaard (de self.vertoningen wordt 1 groter)
         """
-        z = self.zalen.tableRetrieve(zaalnummer)[1]
-        #print(z)
         if not self.zalen.tableRetrieve(zaalnummer)[1]:
             raise Exception("Exception in maak_vertoning: Zaal met identificatie bestaat niet ")
 

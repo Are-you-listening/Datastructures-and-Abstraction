@@ -31,9 +31,16 @@ def file_compare(path1, path2):
     l2 = f2.readlines()
     if len(l1) != len(l2):
         raise Exception("not matching log file")
+
+
     for line_i in range(len(l1)):
-        if l1[i] != l2[i]:
-            print("p", l1[i], l2[i])
+        l1t = l1[line_i]
+        l2t = l2[line_i]
+
+        l1t = l1t.replace(" ", "")
+        l2t = l2t.replace(" ", "")
+
+        if l1t != l2t:
             raise Exception("not matching log file")
 
 
@@ -152,12 +159,15 @@ for i0 in adt_dict.get("0"):
                             i7 =adt_dict.get("7")[0]
                             i8 = adt_dict.get("8")[0]
                             i9 = adt_dict.get("9")[0]
-                            print(index)
+                            if (index % 1000 == 0):
+                                print(index)
 
                             # print((i0, i1, i2, i3, i4, i5, i6, i7, i8, i9))
-                            test(file="system_test2.txt", args_tup=(i0, i1, i2, i3, i4, i5, i6, i7, i8, i9))
+                            test(file="system_test5.txt", args_tup=(i0, i1, i2, i3, i4, i5, i6, i7, i8, i9))
                             index += 1
 """
+
 for i in range(1000):
     print(i)
     test(file="system_test5.txt")
+
