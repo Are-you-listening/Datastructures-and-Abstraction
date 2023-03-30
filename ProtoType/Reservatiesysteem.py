@@ -54,7 +54,7 @@ class Reservatiesysteem:
         self.slots.load([14 * 3600 + 30 * 60, 17 * 3600, 20 * 3600,22 * 3600 + 30 * 60 ]) #14:30 #17:00 #20:00#22:30 #Initaliseert de huidige slots
         self.VertoningCheckValue = [0,0] #Value om self.__VertoningCheck uit te voeren
 
-        self.stack_string = "MyStackKars.MyStackTable()"
+        self.stack_string = "MyStackTibo.MyStackTable()"
         self.log_string = "MyBSTAnas.BSTTable()"
         self.ip_string = "MyQueueTibo.MyQueueTable()"
 
@@ -378,6 +378,8 @@ class Reservatiesysteem:
         :param aantal_mensen: unsigned int
         :return: bool: succes
         """
+        self.__display(f"lees ticket {vertoningid} {aantal_mensen}")
+
         #Verlaag aantal plaatsen & chance stack
         self.__verlaag_plaatsenFysiek(vertoningid,aantal_mensen)
 
