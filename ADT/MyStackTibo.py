@@ -123,22 +123,24 @@ class MyStack:
 
 class MyStackTable:
     def __init__(self):
-        self.size = 0
-        self.stack = MyStack(10)
+        self.stack = MyStack(1)
 
     def tableIsEmpty(self):
         return self.stack.isEmpty()
 
     def tableInsert(self, value):
         b = self.stack.push(value)
-        if b:
-            self.size += 1
-            if self.size > self.stack.size:
-                stack2 = MyStack(self.size*2)
-                while not self.stack.isEmpty():
-                    stack2.push(self.stack.pop()[0])
+        if not b:
+            stack2 = MyStack(self.stack.size*2)
+            stack3 = MyStack(self.stack.size*2)
+            while not self.stack.isEmpty():
+                stack2.push(self.stack.pop()[0])
 
-                self.stack = stack2
+            while not stack2.isEmpty():
+                stack3.push(stack2.pop()[0])
+
+            self.stack = stack3
+            self.stack.push(value)
 
         return b
 
