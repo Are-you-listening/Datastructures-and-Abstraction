@@ -349,7 +349,7 @@ class Reservatiesysteem:
 
         while self.reservaties.tableIsEmpty() == False: #Zolang er nog onverwerkte reservaties zijn
             reservatie = self.reservaties.tableFirst()[0][1]
-            tijdstip = self.reservaties.tableFirst()[0][0]
+            #tijdstip = self.reservaties.tableFirst()[0][0]
 
             # Verlaag virtuele plaatsen (Independent of dit slaagt of niet)
             self.__verhoog_plaatsenVirtueel(reservatie.vertoning_id, reservatie.aantal_plaatsen)
@@ -534,5 +534,4 @@ class Reservatiesysteem:
                 raise Exception("Precondition Error: maak vertoning, vertoning bestaat al op dit moment in deze zaal")
         return True
 
-if __name__ == '__main__':
-    r = Reservatiesysteem(display_mode="print")
+

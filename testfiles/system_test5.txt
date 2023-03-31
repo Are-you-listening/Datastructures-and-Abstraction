@@ -11,6 +11,7 @@ film 3 "Deze film is wel oke" 0.5
 # klein zaaltje met goede film
 # moeten we checken dat zaal plaatsen en vertoning plaatsen matched?
 # vertoningen van de beste film
+#vertoning: id, zaalnummer, slot, datum, filmid, vrije_plaatsen
 vertoning 1 1 2 2023-10-10 1 50
 vertoning 2 3 1 2023-10-10 1 200
 vertoning 3 3 2 2023-10-10 1 200
@@ -39,10 +40,11 @@ gebruiker 8 Student8 INF mail@no_virus.com
 start
 
 #film id 1 is razend populair daarom maken ook vele mensen een reservatie
+#user id vertoning-id #tickets
 2023-10-05 11:00 reserveer 1 1 23
 2023-10-05 11:00 reserveer 1 2 23
 
-#mag een user 2 reservaties maken voor een film op hetzelfde tijdslot, maar in een andere zaal ?
+#mag een user 2 reservaties maken voor een film op hetzelfde tijdslot, maar in een andere zaal ? - Kars: yes, accounts sharing?
 
 2023-10-05 11:00 reserveer 2 2 49
 2023-10-05 12:00 reserveer 2 6 50

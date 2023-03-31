@@ -41,6 +41,7 @@ class InstructionParser:
         precondities: De file voldoet aan het gevraagde format en bevat geen onbekende instructies
                       De file bevat alle instructies chronologisch
         postcondities: de instructies worden geinitialiseerd/ klaargezet op hun juiste locatie
+        de testfile mag niet het teken dat overeenkomt met \u1000 bevatten
         """
         with open(self.path, 'rt') as f:
             for line in f.readlines():
@@ -66,6 +67,7 @@ class InstructionParser:
                     arguments[i] = arg.replace("_\u1000", " ")
                 """
 
+                """replace tokens van string naar spatie"""
                 arguments = tuple(arg.replace("_\u1000", " ") for arg in arguments)
 
                 """indien lege line, continue"""
