@@ -472,6 +472,7 @@ class Kees:
     def __init__(self, naam):
         self.naam = naam
 
+"""
 t = BSTTable()
 Kees3 = Kees("ka")
 Kees5 = Kees("John no cee me")
@@ -484,5 +485,5 @@ print(t.tableInsert(5,5))
 print(t.tableRetrieve(3))
 print(t.tableRetrieve(5))
 
-print(t.tableRetrieve(4))
+print(t.tableRetrieve(4))"""
 
