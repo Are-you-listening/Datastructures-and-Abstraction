@@ -8,6 +8,8 @@ class InstructionParser:
         Precondities: Er wordt een geldige ADT gegeven die dezelfde tableinstructies heeft als een queue.
                       Ook wordt er een reference gegeven naar het reservatiesysteem vanwaar deze klasse opgeroepen wordt.
                       Deze klasse mag enkel opgeroepen worden vanuit een reservatiesysteem
+                      Via de **kwargs wordt een bestaand path naar een file doorgegeven die aan het juiste file format voldoet.
+                      Indien via **kwargs geen path gegeven is, moet het default path bestaan
 
         :param reservatie_systeem: reference naar reservatiesysteem
         :param use_adt: de adt (queue) dat gebruikt wordt om de toekomstige orders (in tupel vorm) te between
@@ -40,6 +42,16 @@ class InstructionParser:
         de tijd gerelateerde instructies worden bewaard in de gegeven ADT
         precondities: De file voldoet aan het gevraagde format en bevat geen onbekende instructies
                       De file bevat alle instructies chronologisch
+                      Indien de line begint met 'zaal', zal het gevolgd worden door 2 integers
+                      Indien de line begint met 'film', zal het gevolgd worden door 1 integer, 1 string en 1 rating in deze volgorder
+                      Als de string een spatie bevat, zal de string tussen aanhalingstekens geplaatst worden
+                      Indien de line begint met 'vertoning', zal het gevolgd worden door 3 integer, string(datum volgens format jaar-maand-dag), 2 integers
+                      Indien de line begint met 'gebruiker, zal het gevolgd worden door 1 integer, 3 strings
+                      Indien een line na de line 'start' voorkomt zal het beginnen met een datum gevolgd door de tijd (uur:minuten)
+                      nadien komt het commando argument.
+                      Indien dit argument 'reserveer' is, wordt het gevolgd door 3 integers
+                      Indien dit argument 'ticket' is, wordt het gevolgd door 2 integers
+
         postcondities: de instructies worden geinitialiseerd/ klaargezet op hun juiste locatie
         de testfile mag niet het teken dat overeenkomt met \u1000 bevatten
         """
@@ -50,6 +62,7 @@ class InstructionParser:
 
                 """verwijder useless data"""
                 line = line.replace("\n", "")
+                line = line.replace("\u1000", "")
                 line = line.replace("\u2028", "")
                 line = line.replace("â€¨", "")
 
