@@ -1,0 +1,42 @@
+#description: I was bored, no inspiration testcase
+init
+zaal 1 1
+film 1 "Tibo schrijft leuke testcases 2 3D en nog meer fun ofzo(The movie)" 1.00
+
+vertoning 1 1 1 2023-10-05 1 1
+vertoning 2 1 2 2023-10-05 1 1
+vertoning 3 1 3 2023-10-05 1 1
+vertoning 4 1 4 2023-10-05 1 1
+vertoning 5 1 1 2023-10-06 1 1
+vertoning 6 1 2 2023-10-06 1 1
+vertoning 7 1 3 2023-10-06 1 1
+vertoning 8 1 4 2023-10-06 1 1
+vertoning 9 1 1 2023-10-07 1 1
+vertoning 10 1 2 2023-10-07 1 1
+vertoning 11 1 3 2023-10-07 1 1
+vertoning 12 1 4 2023-10-07 1 1
+
+gebruiker 1 Student1 INF mail@no_virus.com
+
+start
+2023-10-05 11:00 reserveer 1 1 1
+2023-10-05 11:00 reserveer 1 2 1
+2023-10-05 11:00 reserveer 1 3 1
+
+2023-10-05 11:00 reserveer 1 5 1
+2023-10-05 11:00 reserveer 1 6 1
+2023-10-05 11:00 reserveer 1 7 1
+
+2023-10-05 11:00 reserveer 1 9 1
+2023-10-05 11:00 reserveer 1 10 1
+2023-10-05 11:00 reserveer 1 11 1
+
+2023-10-05 11:01 ticket 1 1
+2023-10-05 11:01 ticket 5 1
+2023-10-05 11:01 ticket 9 1
+
+2023-10-05 17:00 ticket 2 1
+2023-10-06 17:00 ticket 6 1
+2023-10-07 17:00 ticket 10 1
+
+2023-10-12 18:00 log
