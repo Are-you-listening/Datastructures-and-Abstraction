@@ -115,17 +115,32 @@ class GUI:
         m.pack()
 
     def __setup_buttons(self):
-        b = Button(self.main_dashboard, text="maak vertoning", font=font.Font(size=20))
-        b.pack(side=BOTTOM, anchor=SW)
+        button_frame = Frame(self.main_dashboard)
+        button_frame.pack(side=BOTTOM, anchor=SW)
 
-        b = Button(self.main_dashboard, text="maak zaal", font=font.Font(size=20))
-        b.pack(side=BOTTOM, anchor=SW)
+        self.img_1 = PhotoImage(file="../GUI_images/vertoning.png", width=100, height=100)
+        b = Button(button_frame, image=self.img_1)
+        b.grid(row=0, column=0)
 
-        b = Button(self.main_dashboard, text="maak film", font=font.Font(size=20))
-        b.pack(side=BOTTOM, anchor=SW)
+        self.img_2 = PhotoImage(file="../GUI_images/zaal.png", width=100, height=100)
+        b = Button(button_frame, image=self.img_2)
+        b.grid(row=0, column=1)
 
-        b = Button(self.main_dashboard, text="maak gebruiker", font=font.Font(size=20))
-        b.pack(side=BOTTOM, anchor=SW)
+        self.img_3 = PhotoImage(file="../GUI_images/Film.png", width=100, height=100)
+        b = Button(button_frame, image=self.img_3)
+        b.grid(row=1, column=0)
+
+        self.img_4 = PhotoImage(file="../GUI_images/gebruiker.png", width=100, height=100)
+        b = Button(button_frame, image=self.img_4)
+        b.grid(row=1, column=1)
+
+        self.img_5 = PhotoImage(file="../GUI_images/reserveer.png", width=100, height=100)
+        b = Button(button_frame, image=self.img_5)
+        b.grid(row=0, column=2)
+
+        self.img_6 = PhotoImage(file="../GUI_images/ticket.png", width=100, height=100)
+        b = Button(button_frame, image=self.img_6)
+        b.grid(row=1, column=2)
 
     def start(self):
         self.screen.mainloop()
