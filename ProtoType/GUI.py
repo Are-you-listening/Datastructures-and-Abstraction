@@ -15,23 +15,15 @@ class GUI:
         self.tab_manager = ttk.Notebook(self.screen)
 
         self.main_dashboard = Frame(self.tab_manager)
-        self.time_schema = Frame(self.tab_manager)
-        self.console = Frame(self.tab_manager)
 
         self.tab_manager.add(self.main_dashboard, text="main tab")
-        self.tab_manager.add(self.time_schema, text="time schema")
-        self.tab_manager.add(self.console, text="console")
         self.tab_manager.pack(expand=True, fill=BOTH)
-
-        self.__setup_console()
-        for i in range(100):
-            self.__add_console_message(f"test {i}")
 
         self.vertoning_frame = Frame(self.main_dashboard, width=1920, height=960)
         self.vertoning_frame.pack(side=TOP, anchor=NW)
 
         self.row_col = (0, 0)
-        self.reservatiesysteem.vertoningen.traverseTable(self.__add_vertoning)
+        self.__refresh_vertoningen()
 
         self.button_frame = Frame(self.main_dashboard)
         self.button_frame.pack(side=BOTTOM, anchor=SW)
@@ -42,10 +34,13 @@ class GUI:
 
         self.film_box = None
         self.zaal_box = None
+        self.slots = None
         self.vertoning_box = None
         self.gebruiker_box = None
 
         self.submit_button = None
+
+        self.current_time = self.reservatiesysteem.tijdsstip
         self.__setup_buttons()
 
     def __add_vertoning(self, vertoning_tup):
@@ -73,8 +68,13 @@ class GUI:
         zaal_label = Label(info_frame, text=f"Zaal: {zaalnummer}")
         zaal_label.pack(anchor="w")
 
+        status = vertoning_object.status(self.reservatiesysteem.tijdsstip)
+        status_label = Label(info_frame, text=f"Status: {status}")
+        status_label.pack(anchor="w")
+
         reservaties = vertoning_object.vrije_plaatsen - vertoning_object.vrije_plaatsenVirtueel
         aanwezige = vertoning_object.vrije_plaatsenFysiek
+        print("res", reservaties)
         self.__create_vertoning_diagram(vertoning_frame, aanwezige, reservaties, vertoning_object.vrije_plaatsen)
 
         if self.row_col[1] < 5:
@@ -93,13 +93,13 @@ class GUI:
                             canvas_mid[1] + radius-2, fill="gray", outline="gray")
 
         rPCT = reservaties/plaatsen
-        for i in range(round(rPCT*100)):
-            angle = 2*math.pi*i/100-math.pi/2
+        for i in range(round(rPCT*1000)):
+            angle = 2*math.pi*i/1000-math.pi/2
             diagram.create_line(canvas_mid[0], canvas_mid[1], canvas_mid[0]+math.cos(angle)*radius, canvas_mid[1]+math.sin(angle)*radius, width=10, fill="#006AFF")
 
         tPCT = tickets / plaatsen
-        for i in range(round(tPCT * 100)):
-            angle = 2 * math.pi * i / 100 - math.pi / 2
+        for i in range(round(tPCT * 1000)):
+            angle = 2 * math.pi * i / 1000 - math.pi / 2
             diagram.create_line(canvas_mid[0], canvas_mid[1], canvas_mid[0] + math.cos(angle) * (radius+1),
                                 canvas_mid[1] + math.sin(angle) * (radius+1), width=10, fill="#00FF00")
 
@@ -108,24 +108,6 @@ class GUI:
 
         diagram.create_text(100, 90, text=f"{reservaties}/{plaatsen}")
         diagram.create_text(100, 110, text=f"{tickets}/{reservaties}")
-
-    def __setup_console(self):
-        canvas = Canvas(self.console)
-        canvas.pack(side=LEFT, fill=BOTH, expand=1)
-
-        scrollbar = ttk.Scrollbar(self.console, orient=VERTICAL, command=canvas.yview)
-        scrollbar.pack(side=RIGHT, fill=Y)
-
-        canvas.configure(yscrollcommand=scrollbar.set)
-        canvas.bind("<Configure>", lambda e: canvas.configure(scrollregion=canvas.bbox("all")))
-
-        self.inside_console = Frame(canvas)
-
-        canvas.create_window((0, 0), window=self.inside_console, anchor=NW)
-
-    def __add_console_message(self, msg):
-        m = Label(self.inside_console, text=msg)
-        m.pack()
 
     def __setup_buttons(self):
         self.submit_button = Button(self.button_frame, text="submit", font=font.Font(size=20), command=self.__execute_order)
@@ -147,11 +129,11 @@ class GUI:
         b.grid(row=1, column=1)
 
         self.img_5 = PhotoImage(file="../GUI_images/reserveer.png", width=100, height=100)
-        b = Button(self.button_frame, image=self.img_5)
+        b = Button(self.button_frame, image=self.img_5, command=self.__maak_reservatie_res)
         b.grid(row=0, column=2)
 
         self.img_6 = PhotoImage(file="../GUI_images/ticket.png", width=100, height=100)
-        b = Button(self.button_frame, image=self.img_6)
+        b = Button(self.button_frame, image=self.img_6, command=self.__maak_ticket)
         b.grid(row=1, column=2)
 
     def __maak_film_res(self):
@@ -264,21 +246,104 @@ class GUI:
         film_box_label = Label(self.button_frame, text="Film: ", font=font.Font(size=20))
         film_box_label.grid(row=0, column=3)
 
-        self.film_box = Listbox(self.button_frame, selectmode="single", height=10)
+        self.film_box = Listbox(self.button_frame, selectmode="single", height=10, exportselection=False)
         self.film_box.grid(row=0, column=4, rowspan=2)
 
         self.reservatiesysteem.films.traverseTable(self.__filmbox_add)
 
-        self.entry_labels = (film_box_label,)
-        self.entries = (self.film_box,)
+        zaal_box_label = Label(self.button_frame, text="Zaal: ", font=font.Font(size=20))
+        zaal_box_label.grid(row=0, column=5)
 
-        """
-        needed:
-        -timeslot
-        -zaal
-        -film
-        :return:
-        """
+        self.zaal_box = Listbox(self.button_frame, selectmode="single", height=10, exportselection=False)
+        self.zaal_box.grid(row=0, column=6, rowspan=2)
+
+        self.reservatiesysteem.zalen.traverseTable(self.__zaalbox_add)
+
+        slot_box_label = Label(self.button_frame, text="Slot: ", font=font.Font(size=20))
+        slot_box_label.grid(row=0, column=7)
+
+        self.slot_box = Listbox(self.button_frame, selectmode="single", height=10, exportselection=False)
+        self.slot_box.grid(row=0, column=8, rowspan=2)
+
+        self.reservatiesysteem.slots.traverseTable(self.__slotbox_add)
+
+        datum_label = Label(self.button_frame, text="Datum: (format: jaar-maand-dag)", font=font.Font(size=18))
+        datum_label.grid(row=0, column=9)
+
+        datum_entry = Entry(self.button_frame, width=20, font=font.Font(size=20))
+        datum_entry.focus_set()
+        datum_entry.grid(row=1, column=9)
+
+        self.submit_button.grid(row=1, column=10)
+
+        self.entry_labels = (film_box_label, zaal_box_label, slot_box_label, datum_label)
+        self.entries = (self.film_box, self.zaal_box, self.slot_box, datum_entry)
+
+    def __maak_reservatie_res(self):
+        if self.option_selected == "reservatie":
+            self.option_selected = None
+            self.__reset_entries()
+            return
+
+        self.__reset_entries()
+        self.option_selected = "reservatie"
+
+        gebruiker_box_label = Label(self.button_frame, text="User: ", font=font.Font(size=20))
+        gebruiker_box_label.grid(row=0, column=3)
+
+        self.gebruiker_box = Listbox(self.button_frame, selectmode="single", height=10, exportselection=False)
+        self.gebruiker_box.grid(row=0, column=4, rowspan=2)
+
+        self.reservatiesysteem.gebruikers.traverseTable(self.__gebruikerbox_add)
+
+        vertoning_box_label = Label(self.button_frame, text="Vertoning: ", font=font.Font(size=20))
+        vertoning_box_label.grid(row=0, column=5)
+
+        self.vertoning_box = Listbox(self.button_frame, selectmode="single", height=10, exportselection=False)
+        self.vertoning_box.grid(row=0, column=6, rowspan=2)
+
+        self.reservatiesysteem.vertoningen.traverseTable(self.__vertoningbox_add)
+
+        plaatsen_label = Label(self.button_frame, text="Plaatsen:", font=font.Font(size=18))
+        plaatsen_label.grid(row=0, column=7)
+
+        plaatsen_entry = Entry(self.button_frame, width=10, font=font.Font(size=20))
+        plaatsen_entry.focus_set()
+        plaatsen_entry.grid(row=1, column=7)
+
+        self.submit_button.grid(row=1, column=8)
+
+        self.entry_labels = (gebruiker_box_label, vertoning_box_label, plaatsen_label)
+        self.entries = (self.gebruiker_box, self.vertoning_box, plaatsen_entry)
+
+    def __maak_ticket(self):
+        if self.option_selected == "ticket":
+            self.option_selected = None
+            self.__reset_entries()
+            return
+
+        self.__reset_entries()
+        self.option_selected = "ticket"
+
+        vertoning_box_label = Label(self.button_frame, text="Vertoning: ", font=font.Font(size=20))
+        vertoning_box_label.grid(row=0, column=3)
+
+        self.vertoning_box = Listbox(self.button_frame, selectmode="single", height=10, exportselection=False)
+        self.vertoning_box.grid(row=0, column=4, rowspan=2)
+
+        self.reservatiesysteem.vertoningen.traverseTable(self.__vertoningbox_add)
+
+        plaatsen_label = Label(self.button_frame, text="Plaatsen:", font=font.Font(size=18))
+        plaatsen_label.grid(row=0, column=5)
+
+        plaatsen_entry = Entry(self.button_frame, width=10, font=font.Font(size=20))
+        plaatsen_entry.focus_set()
+        plaatsen_entry.grid(row=1, column=5)
+
+        self.submit_button.grid(row=1, column=6)
+
+        self.entry_labels = (vertoning_box_label, plaatsen_label)
+        self.entries = (self.vertoning_box, plaatsen_entry)
 
     def __reset_entries(self):
         for i in range(len(self.entries)):
@@ -298,7 +363,7 @@ class GUI:
             titel = self.entries[0].get()
             rating = self.entries[1].get()
 
-            start_id = 100
+            start_id = 1
             suc6 = True
             while suc6:
                 start_id += 1
@@ -321,7 +386,7 @@ class GUI:
             ar = self.entries[1].get()
             m = self.entries[1].get()
 
-            start_id = 100
+            start_id = 1
             suc6 = True
             while suc6:
                 start_id += 1
@@ -329,14 +394,75 @@ class GUI:
 
             self.reservatiesysteem.maak_gebruiker(start_id, vr, ar, m)
 
+        elif self.option_selected == "vertoning":
+            if not self.entries[0].curselection():
+                print("film niet geselecteerd")
+                return
+
+            if not self.entries[1].curselection():
+                print("zaal niet geselecteerd")
+                return
+
+            if not self.entries[0].curselection():
+                print("slot niet geselecteerd")
+                return
+
+            filmid = self.entries[0].get(self.entries[0].curselection())[0]
+            zaalid = int(self.entries[1].get(self.entries[1].curselection()).replace("Zaal ", ""))
+            slot_index = int(self.entries[2].curselection()[0])+1
+            datum = self.entries[3].get()
+
+            start_id = 1
+            suc6 = True
+            while suc6:
+                start_id += 1
+                suc6 = self.reservatiesysteem.vertoningen.tableRetrieve(start_id)[1]
+            self.reservatiesysteem.maak_vertoning(start_id, zaalid, slot_index, datum, filmid, self.reservatiesysteem.zalen.tableRetrieve(zaalid)[0].plaatsen)
+
+            self.__refresh_vertoningen()
+
+        elif self.option_selected == "reservatie":
+            gebruikerid = self.entries[0].get(self.entries[0].curselection())[0]
+            vertoningid = int(self.entries[1].get(self.entries[1].curselection()).replace("Vertoning ", ""))
+            plaatsen = int(self.entries[2].get())
+            self.reservatiesysteem.maak_reservatie(vertoningid, plaatsen, self.current_time, gebruikerid)
+
+        elif self.option_selected == "ticket":
+            vertoningid = int(self.entries[0].get(self.entries[0].curselection()).replace("Vertoning ", ""))
+            plaatsen = int(self.entries[1].get())
+            self.reservatiesysteem.lees_ticket(vertoningid, plaatsen)
+            self.__refresh_vertoningen()
+
         self.option_selected = None
         self.__reset_entries()
+        self.current_time += 60  # add 1 minutes after every operation
+        if not self.reservatiesysteem.reservaties.tableIsEmpty():
+            self.reservatiesysteem.lees_reservatie()
+            self.__refresh_vertoningen()
 
+    def __refresh_vertoningen(self):
+        for vertoning in self.vertoning_frame.winfo_children():
+            vertoning.destroy()
+        self.row_col = (0, 0)
+        self.reservatiesysteem.vertoningen.traverseTable(self.__add_vertoning)
     def __filmbox_add(self, value):
         self.film_box.insert(self.film_box.size(), (value.get_id(), value.titel))
 
     def __zaalbox_add(self, value):
-        self.zaal_box.insert(self.zaal_box.size(), (value.get_id(), value.titel))
+        self.zaal_box.insert(self.zaal_box.size(), f"Zaal {value.zaalnummer}")
+
+    def __slotbox_add(self, value):
+        tup = self.reservatiesysteem.convert_time(value)
+        if tup[2] > 10:
+            self.slot_box.insert(self.slot_box.size(), f"{tup[1]}:{tup[2]}")
+        else:
+            self.slot_box.insert(self.slot_box.size(), f"{tup[1]}:0{tup[2]}")
+
+    def __gebruikerbox_add(self, value):
+        self.gebruiker_box.insert(self.gebruiker_box.size(), (value.get_id(), f"{value.vnaam} {value.anaam}"))
+
+    def __vertoningbox_add(self, value):
+        self.vertoning_box.insert(self.vertoning_box.size(), f"Vertoning {value[0].get_id()}")
 
     def start(self):
         self.screen.mainloop()

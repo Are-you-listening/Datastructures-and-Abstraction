@@ -55,6 +55,8 @@ class InstructionParser:
         postcondities: de instructies worden geinitialiseerd/ klaargezet op hun juiste locatie
         de testfile mag niet het teken dat overeenkomt met \u1000 bevatten
         """
+
+        """set not reading behaviour"""
         with open(self.path, 'rt') as f:
             for line in f.readlines():
                 if line[0] == "#":
