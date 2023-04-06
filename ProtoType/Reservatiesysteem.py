@@ -382,6 +382,8 @@ class Reservatiesysteem:
 
         Precondities: vertoningid verwijst naar een bestaande vertoning en is op te vragen via self.vertoningen. aantal_mensen is een unsigned int.
                       Vertoning dat overeenkomt mag nog niet gestart zijn
+                      Het aantal plaatsen dat wordt meegegeven moet zich nog op de stack van reservaties bevinden
+                      Het aantal mensen moet groter zijn dan 0
         Postcondities: Het ticket is verwerkt, het aantal_vrijeplaatsen van de vertoning is geüpdated en de vertoning is eventueel gestart.
 
         :param vertoningid: id van de vertoning, positive unsigned int
@@ -391,11 +393,15 @@ class Reservatiesysteem:
 
         """preconditie controle"""
         vertoning_tup = self.vertoningen.tableRetrieve(vertoningid)
+        if aantal_mensen < 0:
+            raise Exception("Preconditie: aantal mensen is niet groter dan 0")
         if not vertoning_tup[1]:
-            raise Exception("Preconitie: ongeldig vertoningsid")
+            raise Exception("Preconditie: ongeldig vertoningsid")
         vertoning_object = vertoning_tup[0][0]
         if vertoning_object.afspelend:
-            raise Exception("Preconitie: vertoning al gestart")
+            raise Exception("Preconditie: vertoning al gestart")
+        if vertoning_tup[0][1].tableIsEmpty() or vertoning_tup[0][1].tableFirst()[0]+1 < aantal_mensen:
+            raise Exception("Preconditie: meer ticketten dan reservatie")
 
         self.__display(f"lees ticket {vertoningid} {aantal_mensen}")
 
