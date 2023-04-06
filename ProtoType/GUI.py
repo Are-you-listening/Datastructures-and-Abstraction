@@ -7,49 +7,81 @@ from Reservatiesysteem import Reservatiesysteem
 
 class GUI:
     def __init__(self, reservatiesysteem):
+        """
+        setup GUI
+        precondities: Er moet een geldig reservatiesysteem meeegegeven worden
+        postconditie: Er wordt een GUI die het reservatiesysteem weergeeft getoont
+        """
 
         self.reservatiesysteem = reservatiesysteem
 
+        """aanmaken GUI screen"""
         self.screen = Tk()
         self.screen.geometry("1920x1280")
         self.tab_manager = ttk.Notebook(self.screen)
-
         self.main_dashboard = Frame(self.tab_manager)
 
+        """support voor meerdere tabs"""
         self.tab_manager.add(self.main_dashboard, text="main tab")
         self.tab_manager.pack(expand=True, fill=BOTH)
 
+        """define de frame waar alle vertoningen worden gezet"""
         self.vertoning_frame = Frame(self.main_dashboard, width=1920, height=960)
         self.vertoning_frame.pack(side=TOP, anchor=NW)
 
+        """
+        geef de vertoningen een default row en column
+        en gebruik de self.__refresh_vertoningen() om de vertoningen weer te geven
+        """
         self.row_col = (0, 0)
         self.__refresh_vertoningen()
 
+        """
+        Maakt een frame aan voor de commando buttons
+        """
         self.button_frame = Frame(self.main_dashboard)
         self.button_frame.pack(side=BOTTOM, anchor=SW)
 
+        """
+        bewaard de entries van een butoon
+        en welke button aangeklikt is
+        """
         self.entry_labels = ()
         self.entries = ()
         self.option_selected = None
 
+        """
+        boxes voor te kunnen kiezen uit een lijst
+        """
         self.film_box = None
         self.zaal_box = None
         self.slots = None
         self.vertoning_box = None
         self.gebruiker_box = None
 
+        """
+        submit_button: uitvoeren van actie
+        time_label: geeft de tijd weer
+        """
         self.submit_button = None
         self.time_label = None
 
+        """
+        bewaard de huidge tijd in de GUI
+        """
         self.current_time = self.reservatiesysteem.tijdsstip
 
+        """
+        roept setup routine op
+        """
         self.__setup_buttons()
         self.__setup_time()
 
     def __add_vertoning(self, vertoning_tup):
-        """prevent filling the main page to much, add scrollwheel later"""
+        """voorkomt dat de hoofdpagina volledig opgevuld wordt max 25 vertoningen worden weergegeven"""
         if self.row_col[0] > 5:
             return
+        """lesst vertoning object uit"""
         vertoning_object = vertoning_tup[0]
         vertoning_frame = LabelFrame(self.vertoning_frame, text=f"vertoning {vertoning_object.get_id()}")
         vertoning_frame.grid(row=self.row_col[0], column=self.row_col[1])
@@ -61,6 +93,9 @@ class GUI:
         else:
             film_name = film_retrieve_tup[0].titel
 
+        """
+        Geeft info over de vertoning weer
+        """
         info_frame = LabelFrame(vertoning_frame, text=f"Info")
         info_frame.grid(row=0, column=0)
 
@@ -75,40 +110,70 @@ class GUI:
         status_label = Label(info_frame, text=f"Status: {status}")
         status_label.pack(anchor="w")
 
+        """
+        stelt super cool cirkeldiagram op
+        """
         reservaties = vertoning_object.vrije_plaatsen - vertoning_object.vrije_plaatsenVirtueel
         aanwezige = vertoning_object.vrije_plaatsenFysiek
-        print("res", reservaties)
         self.__create_vertoning_diagram(vertoning_frame, aanwezige, reservaties, vertoning_object.vrije_plaatsen)
 
+        """
+        veranderd de volgende row/column positie
+        """
         if self.row_col[1] < 5:
             self.row_col = (self.row_col[0], self.row_col[1]+1)
         else:
             self.row_col = (self.row_col[0]+1, 0)
 
     def __create_vertoning_diagram(self, root, tickets, reservaties, plaatsen):
+        """
+        maakt vertoning diagram
+        """
+
+        """
+        definieer de middenpositie van het diagram en de radius
+        """
         canvas_mid = (100, 100)
         radius = 80
 
+        """
+        canvas wordt aangemaakt
+        """
         diagram = Canvas(root, width=200, height=200)
         diagram.grid(row=0, column=1)
 
+        """
+        de grote cirkel (100%) wordt getekend
+        """
         diagram.create_oval(canvas_mid[0] - radius+2, canvas_mid[1] - radius+2, canvas_mid[0] + radius-2,
                             canvas_mid[1] + radius-2, fill="gray", outline="gray")
 
+        """
+        Een deel van de cirkel wordt in het blauw ingekleurd (overeenkomstig met % reservaties)
+        """
         rPCT = reservaties/plaatsen
         for i in range(round(rPCT*1000)):
             angle = 2*math.pi*i/1000-math.pi/2
             diagram.create_line(canvas_mid[0], canvas_mid[1], canvas_mid[0]+math.cos(angle)*radius, canvas_mid[1]+math.sin(angle)*radius, width=10, fill="#006AFF")
 
+        """
+        Een deel van de cirkel wordt in het groen ingekleurd (overeenkomstig met % tickets)
+        """
         tPCT = tickets / plaatsen
         for i in range(round(tPCT * 1000)):
             angle = 2 * math.pi * i / 1000 - math.pi / 2
             diagram.create_line(canvas_mid[0], canvas_mid[1], canvas_mid[0] + math.cos(angle) * (radius+1),
                                 canvas_mid[1] + math.sin(angle) * (radius+1), width=10, fill="#00FF00")
 
+        """
+        Kleine middencirkel wordt getekend
+        """
         diagram.create_oval(canvas_mid[0]-radius/2, canvas_mid[1]-radius/2, canvas_mid[0]+radius/2,
                             canvas_mid[1]+radius/2, fill="#D9D9D9", outline='#D9D9D9')
 
+        """
+        de waardes worden in die middencirkel weergegeven
+        """
         diagram.create_text(100, 90, text=f"{reservaties}/{plaatsen}")
         diagram.create_text(100, 110, text=f"{tickets}/{reservaties}")
 
@@ -161,10 +226,7 @@ class GUI:
         time = datetime.datetime.strptime(f"{time_tup[0]}-{time_tup[1]}-{time_tup[2]}-{time_tup[3]}", '%Y-%m-%d-%H-%M-%S')
         time += datetime.timedelta(minutes=1)
 
-        self.current_time = self.reservatiesysteem.convert_date(f"{time.year}-{time.month}-{time.day}", time.hour, time.minute, time.second)
-        time_tup = self.reservatiesysteem.convert_time(self.current_time)
-
-        self.time_label.config(text=f"{time_tup[0]}, {time_tup[1]}:{'0'*(2-len(str(time_tup[2])))+str(time_tup[2])}:{'0'*(2-len(str(time_tup[3])))+str(time_tup[3])}")
+        self.__set_new_time(time)
 
     def __speed_up_2(self):
         time_tup = self.reservatiesysteem.convert_time(self.current_time)
@@ -173,12 +235,7 @@ class GUI:
                                           '%Y-%m-%d-%H-%M-%S')
         time += datetime.timedelta(hours=1)
 
-        self.current_time = self.reservatiesysteem.convert_date(f"{time.year}-{time.month}-{time.day}", time.hour,
-                                                                time.minute, time.second)
-        time_tup = self.reservatiesysteem.convert_time(self.current_time)
-
-        self.time_label.config(
-            text=f"{time_tup[0]}, {time_tup[1]}:{'0' * (2 - len(str(time_tup[2]))) + str(time_tup[2])}:{'0' * (2 - len(str(time_tup[3]))) + str(time_tup[3])}")
+        self.__set_new_time(time)
 
     def __speed_up_3(self):
         time_tup = self.reservatiesysteem.convert_time(self.current_time)
@@ -187,6 +244,10 @@ class GUI:
                                           '%Y-%m-%d-%H-%M-%S')
         time += datetime.timedelta(days=1)
 
+        self.__set_new_time(time)
+
+
+    def __set_new_time(self, time):
         year = str(time.year)
         month = str(time.month)
         day = str(time.day)
@@ -196,11 +257,12 @@ class GUI:
 
         self.current_time = self.reservatiesysteem.convert_date(f"{year}-{month}-{day}", time.hour,
                                                                 time.minute, time.second)
-        print("curr_time", self.current_time)
+        self.reservatiesysteem.set_time(self.current_time)
         time_tup = self.reservatiesysteem.convert_time(self.current_time)
-
         self.time_label.config(
             text=f"{time_tup[0]}, {time_tup[1]}:{'0' * (2 - len(str(time_tup[2]))) + str(time_tup[2])}:{'0' * (2 - len(str(time_tup[3]))) + str(time_tup[3])}")
+
+        self.__refresh_vertoningen()
     def __maak_film_res(self):
         if self.option_selected == "film":
             self.option_selected = None

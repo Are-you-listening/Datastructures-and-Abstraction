@@ -195,7 +195,7 @@ class MyQueueTable:
 
     def tableInsert(self, value):
         if not self.Queue.enqueue(value):
-            temp = MyQueue(self.Queue.size + 1)
+            temp = MyQueue(self.Queue.size * 2)
             for i in range(self.Queue.size):
                 item = self.Queue.dequeue()[0]
                 temp.enqueue(item)
