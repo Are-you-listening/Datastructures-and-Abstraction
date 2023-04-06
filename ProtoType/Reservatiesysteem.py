@@ -103,7 +103,6 @@ class Reservatiesysteem:
         if( (not isinstance(id,int)) or (id<=0) or (not isinstance(voornaam,str)) or (not isinstance(achternaam,str)) or (not isinstance(mail,str)) ):
             raise Exception("Precondition Failure bij maak_gebruiker")
         newGebruiker = Gebruiker(id, voornaam, achternaam, mail)
-        #print("new", newGebruiker)
         self.gebruikers.tableInsert(1, newGebruiker)
         self.__display(f"maak gebruiker: {voornaam} {achternaam} {mail}")
         return True
@@ -429,8 +428,12 @@ class Reservatiesysteem:
         if( not self.vertoningen.tableRetrieve(vertoningid)[0][0].verminder_plaatsenVirtueel(plaatsen)): #Indien er teveel plaatsen worden gereserveerd
             return False
 
-        for i in range(plaatsen):
-            stack = self.vertoningen.tableRetrieve(vertoningid)[0][1]#debug
+        stack = self.vertoningen.tableRetrieve(vertoningid)[0][1]
+        value = stack.tableFirst()[0]
+        if stack.tableFirst()[1] == False:
+            value = -1
+        for i in range(value+1, value+plaatsen+1):
+            #debug
             self.vertoningen.tableRetrieve(vertoningid)[0][1].tableInsert(i)  #[0] = value-type, hiervan [1]: de stack
         return True
 

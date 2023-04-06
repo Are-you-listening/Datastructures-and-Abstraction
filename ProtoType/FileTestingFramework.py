@@ -178,10 +178,6 @@ for i in range(1000):
     test(file="system_test5.txt")
 """
 
-
-
-
-
 class testobject:
     def __init__(self):
         self.value = None
@@ -201,10 +197,11 @@ for i0 in adt_dict.get("0"):
                         mytwofourthreeAndRedblacktree = eval(i9)
                         print(index, (i0, i3, i4, i7, i8, i9))
 
-                        sys.setrecursionlimit(30000)
+                        sys.setrecursionlimit(3000)
 
                         for i in range(2000):
                             test2 = testobject
+                            print (i)
                             linkedchain.tableInsert(i,test2)
 
                         linkedchain.clear()
@@ -216,6 +213,7 @@ for i0 in adt_dict.get("0"):
                             value=linkedchain.tableRetrieveIndex(i)
                             if value!=i:
                                 print(i, linkedchain)
+
                         for i in range(2000):
                             test2 = testobject
                             bst.tableInsert(i, test2)
@@ -229,10 +227,13 @@ for i0 in adt_dict.get("0"):
                             value = bst.tableRetrieve(i)
                             if value != i:
                                 print(i, bst)
+
+                        print("test")
                         for i in range(2000):
                             test2 = testobject
+                            print("a",i)
                             queue.tableInsert(test2)
-
+                        print("test")
                         queue.clear()
                         for i in range(2000):
                             test2 = testobject
