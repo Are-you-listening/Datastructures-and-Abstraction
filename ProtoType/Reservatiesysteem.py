@@ -381,12 +381,22 @@ class Reservatiesysteem:
         Leest een ticket bij aankomst in de zaal uit. (Verlaagt plaatsen, en kijkt of de film gestart kan worden)
 
         Precondities: vertoningid verwijst naar een bestaande vertoning en is op te vragen via self.vertoningen. aantal_mensen is een unsigned int.
+                      Vertoning dat overeenkomt mag nog niet gestart zijn
         Postcondities: Het ticket is verwerkt, het aantal_vrijeplaatsen van de vertoning is geüpdated en de vertoning is eventueel gestart.
 
         :param vertoningid: id van de vertoning, positive unsigned int
         :param aantal_mensen: unsigned int
         :return: bool: succes
         """
+
+        """preconditie controle"""
+        vertoning_tup = self.vertoningen.tableRetrieve(vertoningid)
+        if not vertoning_tup[1]:
+            raise Exception("Preconitie: ongeldig vertoningsid")
+        vertoning_object = vertoning_tup[0][0]
+        if vertoning_object.afspelend:
+            raise Exception("Preconitie: vertoning al gestart")
+
         self.__display(f"lees ticket {vertoningid} {aantal_mensen}")
 
         #Verlaag aantal plaatsen & chance stack
