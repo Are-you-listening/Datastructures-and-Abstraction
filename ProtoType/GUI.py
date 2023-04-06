@@ -85,7 +85,7 @@ class GUI:
         """lesst vertoning object uit"""
         vertoning_object = vertoning_tup[0]
         vertoning_frame = LabelFrame(self.vertoning_frame, text=f"vertoning {vertoning_object.get_id()}")
-        vertoning_frame.grid(row=self.row_col[0], column=self.row_col[1])
+        vertoning_frame.grid(row=self.row_col[0], column=self.row_col[1], sticky="news")
 
         film_id = vertoning_object.filmid
         film_retrieve_tup = self.reservatiesysteem.films.tableRetrieve(film_id)
@@ -100,7 +100,7 @@ class GUI:
         info_frame = LabelFrame(vertoning_frame, text=f"Info")
         info_frame.grid(row=0, column=0)
 
-        film_label = Label(info_frame, text=f"Film: {film_name}")
+        film_label = Label(info_frame, text=f"Film: {film_name}", wraplength=120)
         film_label.pack(anchor="w")
 
         zaalnummer = vertoning_object.zaalnummer
@@ -606,6 +606,6 @@ class GUI:
     def start(self):
         self.screen.mainloop()
 
-r = Reservatiesysteem(display_mode="print", path=f"../testfiles/system_test8.txt")
+r = Reservatiesysteem(display_mode="print", path=f"../testfiles/system_test5.txt")
 v = GUI(r)
 v.start()
