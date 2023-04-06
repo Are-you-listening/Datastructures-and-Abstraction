@@ -553,4 +553,6 @@ class Reservatiesysteem:
                 raise Exception("Precondition Error: maak vertoning, vertoning bestaat al op dit moment in deze zaal")
         return True
 
+    def get_time(self):
+        return self.tijdsstip
 

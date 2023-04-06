@@ -2,6 +2,7 @@ from tkinter import *
 from tkinter import ttk, font
 import math
 import datetime
+import threading
 from Reservatiesysteem import Reservatiesysteem
 
 
@@ -69,7 +70,7 @@ class GUI:
         """
         bewaard de huidge tijd in de GUI
         """
-        self.current_time = self.reservatiesysteem.tijdsstip
+        self.current_time = self.reservatiesysteem.get_time()
 
         """
         roept setup routine op
@@ -106,7 +107,7 @@ class GUI:
         zaal_label = Label(info_frame, text=f"Zaal: {zaalnummer}")
         zaal_label.pack(anchor="w")
 
-        status = vertoning_object.status(self.reservatiesysteem.tijdsstip)
+        status = vertoning_object.status(self.reservatiesysteem.get_time())
         status_label = Label(info_frame, text=f"Status: {status}")
         status_label.pack(anchor="w")
 
@@ -496,7 +497,7 @@ class GUI:
                 start_id += 1
                 suc6 = self.reservatiesysteem.films.tableRetrieve(start_id)[1]
 
-            self.reservatiesysteem.maak_film(start_id, titel, rating/100)
+            threading.Thread(target=self.reservatiesysteem.maak_film, args=(start_id, titel, rating/100)).start()
 
         elif self.option_selected == "zaal":
             zaal_nr = eval(self.entries[0].get())
@@ -504,7 +505,8 @@ class GUI:
 
             if isinstance(zaal_nr, int) and (aantal_plaatsen, int) and \
                     not self.reservatiesysteem.zalen.tableRetrieve(zaal_nr)[1]:
-                self.reservatiesysteem.maak_zaal(zaal_nr, aantal_plaatsen)
+
+                threading.Thread(target=self.reservatiesysteem.maak_zaal, args=(zaal_nr, aantal_plaatsen)).start()
             else:
                 print("error geen integer gegeven/ zaal bestaat al")
 
@@ -519,7 +521,7 @@ class GUI:
                 start_id += 1
                 suc6 = self.reservatiesysteem.gebruikers.tableRetrieve(start_id)[1]
 
-            self.reservatiesysteem.maak_gebruiker(start_id, vr, ar, m)
+            threading.Thread(target=self.reservatiesysteem.maak_gebruiker, args=(start_id, vr, ar, m)).start()
 
         elif self.option_selected == "vertoning":
             if not self.entries[0].curselection():
@@ -544,7 +546,12 @@ class GUI:
             while suc6:
                 start_id += 1
                 suc6 = self.reservatiesysteem.vertoningen.tableRetrieve(start_id)[1]
-            self.reservatiesysteem.maak_vertoning(start_id, zaalid, slot_index, datum, filmid, self.reservatiesysteem.zalen.tableRetrieve(zaalid)[0].plaatsen)
+            threading.Thread(target=self.reservatiesysteem.maak_vertoning, args=(start_id,
+                                                                                 zaalid,
+                                                                                 slot_index,
+                                                                                 datum,
+                                                                                 filmid,
+                                                                                 self.reservatiesysteem.zalen.tableRetrieve(zaalid)[0].plaatsen)).start()
 
             self.__refresh_vertoningen()
 
@@ -552,17 +559,22 @@ class GUI:
             gebruikerid = self.entries[0].get(self.entries[0].curselection())[0]
             vertoningid = int(self.entries[1].get(self.entries[1].curselection()).replace("Vertoning ", ""))
             plaatsen = int(self.entries[2].get())
-            self.reservatiesysteem.maak_reservatie(vertoningid, plaatsen, self.current_time, gebruikerid)
+            threading.Thread(target=self.reservatiesysteem.maak_reservatie, args=(vertoningid, plaatsen, self.current_time, gebruikerid)).start()
+            print("heo")
 
         elif self.option_selected == "ticket":
             vertoningid = int(self.entries[0].get(self.entries[0].curselection()).replace("Vertoning ", ""))
             plaatsen = int(self.entries[1].get())
             self.reservatiesysteem.lees_ticket(vertoningid, plaatsen)
+            threading.Thread(target=self.reservatiesysteem.lees_ticket, args=(vertoningid, plaatsen)).start()
             self.__refresh_vertoningen()
 
         self.option_selected = None
         self.__reset_entries()
         self.current_time += 60  # add 1 minutes after every operation
+        threading.Thread(target=self.__check_lees_reservatie).start()
+
+    def __check_lees_reservatie(self):
         if not self.reservatiesysteem.reservaties.tableIsEmpty():
             self.reservatiesysteem.lees_reservatie()
             self.__refresh_vertoningen()
