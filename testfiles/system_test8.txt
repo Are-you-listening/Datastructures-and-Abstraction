@@ -1,0 +1,9 @@
+init
+zaal 1 100
+film 1 "deze titels worden soms heel lang en dat maakt het soms lastig" 1.00
+vertoning 1 1 1 2023-09-31 1 100
+vertoning 2 1 2 2023-10-01 1 100
+
+start
+
+2023-12-13 18:00 log
