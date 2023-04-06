@@ -1,5 +1,11 @@
+import sys
+
 from ProtoType import Reservatiesysteem
 import os
+from ADT import MyBSTAnas, MyCircularLinkedChainAnas, MyQueueAnas, MyRedBlackTreeAnas, MyStackAnas
+from ADT import MyBSTEmil, MyCircularLinkedChainEmil, MyQueueEmil, MyTwoThreeFourTreeEmil, MyStackEmil
+from ADT import MyBSTKars, MyCircularLinkedChainKars, MyQueueKars, MyTwoThreeFourTreeKars, MyStackKars
+from ADT import MyBSTTibo, MyCircularLinkedChainTibo, MyQueueTibo, MyTwoThreeFourTreeTibo, MyStackTibo
 
 def test(**kwargs):
     if "file" in kwargs:
@@ -20,7 +26,7 @@ def test(**kwargs):
 
                 #print("-" * 50)
 
-    file_compare("../testfiles/log_test.html", "../testfiles/test_controle.html")
+    #file_compare("../testfiles/log_test.html", "../testfiles/test_controle.html")
 
 #test(file="system_test1.txt")
 
@@ -147,7 +153,7 @@ for i0 in adt_dict.get("0"):
                                 index += 1
 """
 
-
+"""
 index = 0
 for i0 in adt_dict.get("0"):
     for i1 in adt_dict.get("1"):
@@ -165,10 +171,99 @@ for i0 in adt_dict.get("0"):
                             # print((i0, i1, i2, i3, i4, i5, i6, i7, i8, i9))
                             test(file="system_test7.txt", args_tup=(i0, i1, i2, i3, i4, i5, i6, i7, i8, i9))
                             index += 1
-
+"""
 """
 for i in range(1000):
     print(i)
     test(file="system_test5.txt")
 """
 
+class testobject:
+    def __init__(self):
+        self.value = None
+        self.test = 50
+
+index = 0
+for i0 in adt_dict.get("0"):
+    for i3 in adt_dict.get("3"):
+        for i4 in adt_dict.get("4"):
+            for i7 in adt_dict.get("7"):
+                for i8 in adt_dict.get("8"):
+                    for i9 in adt_dict.get("9"):
+                        linkedchain = eval(i0)
+                        bst = eval(i3)
+                        queue = eval(i4)
+                        stack = eval(i8)
+                        mytwofourthreeAndRedblacktree = eval(i9)
+                        print(index, (i0, i3, i4, i7, i8, i9))
+
+                        sys.setrecursionlimit(99999999)
+
+                        for i in range(2000):
+                            test2 = testobject
+                            linkedchain.tableInsert(i,test2)
+
+                        linkedchain.clear()
+                        for i in range(2000):
+                            test2 = testobject
+                            linkedchain.tableInsert(i,i)
+                            linkedchain.traverseTable(print)
+                        for i in range(2000):
+                            value=linkedchain.tableRetrieveIndex(i)
+                            if value!=i:
+                                print(i, linkedchain)
+
+                        for i in range(2000):
+                            test2 = testobject
+                            bst.tableInsert(i, test2)
+
+                        bst.clear()
+                        for i in range(2000):
+                            test2 = testobject
+                            bst.tableInsert(i, i)
+                            bst.traverseTable(print)
+                        for i in range(2000):
+                            value = bst.tableRetrieve(i)
+                            if value != i:
+                                print(i, bst)
+
+                        for i in range(2000):
+                            test2 = testobject
+                            queue.tableInsert(test2)
+
+                        queue.clear()
+                        for i in range(2000):
+                            test2 = testobject
+                            queue.tableInsert(i)
+                        for i in range(2000):
+                            value = queue.tableDelete()
+                            if value != i:
+                                print(i, queue)
+
+                        for i in range(2000):
+                            test2 = testobject
+                            stack.tableInsert(test2)
+
+                        stack.clear()
+                        for i in range(2000):
+                            test2 = testobject
+                            stack.tableInsert(i)
+                        for i in range(2000):
+                            value = stack.tableDelete()
+                            if value != i:
+                                print(i, stack)
+
+                        for i in range(2000):
+                            test2 = testobject
+                            mytwofourthreeAndRedblacktree.tableInsert(i, test2)
+
+                        mytwofourthreeAndRedblacktree.clear()
+                        for i in range(2000):
+                            test2 = testobject
+                            mytwofourthreeAndRedblacktree.tableInsert(i, i)
+                            mytwofourthreeAndRedblacktree.traverseTable(print)
+                        for i in range(2000):
+                            value = mytwofourthreeAndRedblacktree.tableRetrieve(i)
+                            if value != i:
+                                print(i, mytwofourthreeAndRedblacktree)
+                        index += 1
