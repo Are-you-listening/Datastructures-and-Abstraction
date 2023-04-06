@@ -1,7 +1,7 @@
 from tkinter import *
-import threading
 from tkinter import ttk, font
 import math
+import datetime
 from Reservatiesysteem import Reservatiesysteem
 
 
@@ -39,9 +39,12 @@ class GUI:
         self.gebruiker_box = None
 
         self.submit_button = None
+        self.time_label = None
 
         self.current_time = self.reservatiesysteem.tijdsstip
+
         self.__setup_buttons()
+        self.__setup_time()
 
     def __add_vertoning(self, vertoning_tup):
         """prevent filling the main page to much, add scrollwheel later"""
@@ -136,6 +139,68 @@ class GUI:
         b = Button(self.button_frame, image=self.img_6, command=self.__maak_ticket)
         b.grid(row=1, column=2)
 
+    def __setup_time(self):
+        date_frame = LabelFrame(self.main_dashboard, text=f"Huidig tijdstip")
+        date_frame.pack(side=LEFT, anchor=SW)
+
+        time_tup = self.reservatiesysteem.convert_time(self.current_time)
+        self.time_label = Label(date_frame, text=f"{time_tup[0]}, {time_tup[1]}:{'0'*(2-len(str(time_tup[2])))+str(time_tup[2])}:{'0'*(2-len(str(time_tup[3])))+str(time_tup[3])}", font=font.Font(size=20))
+        self.time_label.pack()
+        self.img_7 = PhotoImage(file="../GUI_images/arrow1.png", width=25, height=25)
+        Button(date_frame, image=self.img_7, command=self.__speed_up_1).pack(side=LEFT)
+
+        self.img_8 = PhotoImage(file="../GUI_images/arrow2.png", width=25, height=25)
+        Button(date_frame, image=self.img_8, command=self.__speed_up_2).pack(side=LEFT)
+
+        self.img_9 = PhotoImage(file="../GUI_images/arrow3.png", width=25, height=25)
+        Button(date_frame, image=self.img_9, command=self.__speed_up_3).pack(side=LEFT)
+
+    def __speed_up_1(self):
+        time_tup = self.reservatiesysteem.convert_time(self.current_time)
+
+        time = datetime.datetime.strptime(f"{time_tup[0]}-{time_tup[1]}-{time_tup[2]}-{time_tup[3]}", '%Y-%m-%d-%H-%M-%S')
+        time += datetime.timedelta(minutes=1)
+
+        self.current_time = self.reservatiesysteem.convert_date(f"{time.year}-{time.month}-{time.day}", time.hour, time.minute, time.second)
+        time_tup = self.reservatiesysteem.convert_time(self.current_time)
+
+        self.time_label.config(text=f"{time_tup[0]}, {time_tup[1]}:{'0'*(2-len(str(time_tup[2])))+str(time_tup[2])}:{'0'*(2-len(str(time_tup[3])))+str(time_tup[3])}")
+
+    def __speed_up_2(self):
+        time_tup = self.reservatiesysteem.convert_time(self.current_time)
+
+        time = datetime.datetime.strptime(f"{time_tup[0]}-{time_tup[1]}-{time_tup[2]}-{time_tup[3]}",
+                                          '%Y-%m-%d-%H-%M-%S')
+        time += datetime.timedelta(hours=1)
+
+        self.current_time = self.reservatiesysteem.convert_date(f"{time.year}-{time.month}-{time.day}", time.hour,
+                                                                time.minute, time.second)
+        time_tup = self.reservatiesysteem.convert_time(self.current_time)
+
+        self.time_label.config(
+            text=f"{time_tup[0]}, {time_tup[1]}:{'0' * (2 - len(str(time_tup[2]))) + str(time_tup[2])}:{'0' * (2 - len(str(time_tup[3]))) + str(time_tup[3])}")
+
+    def __speed_up_3(self):
+        time_tup = self.reservatiesysteem.convert_time(self.current_time)
+
+        time = datetime.datetime.strptime(f"{time_tup[0]}-{time_tup[1]}-{time_tup[2]}-{time_tup[3]}",
+                                          '%Y-%m-%d-%H-%M-%S')
+        time += datetime.timedelta(days=1)
+
+        year = str(time.year)
+        month = str(time.month)
+        day = str(time.day)
+        year = "0" * (4 - len(year)) + year
+        month = "0" * (2 - len(month)) + month
+        day = "0" * (2 - len(day)) + day
+
+        self.current_time = self.reservatiesysteem.convert_date(f"{year}-{month}-{day}", time.hour,
+                                                                time.minute, time.second)
+        print("curr_time", self.current_time)
+        time_tup = self.reservatiesysteem.convert_time(self.current_time)
+
+        self.time_label.config(
+            text=f"{time_tup[0]}, {time_tup[1]}:{'0' * (2 - len(str(time_tup[2]))) + str(time_tup[2])}:{'0' * (2 - len(str(time_tup[3]))) + str(time_tup[3])}")
     def __maak_film_res(self):
         if self.option_selected == "film":
             self.option_selected = None
@@ -363,7 +428,7 @@ class GUI:
             titel = self.entries[0].get()
             rating = self.entries[1].get()
 
-            start_id = 1
+            start_id = 0
             suc6 = True
             while suc6:
                 start_id += 1
@@ -386,7 +451,7 @@ class GUI:
             ar = self.entries[1].get()
             m = self.entries[1].get()
 
-            start_id = 1
+            start_id = 0
             suc6 = True
             while suc6:
                 start_id += 1
@@ -412,7 +477,7 @@ class GUI:
             slot_index = int(self.entries[2].curselection()[0])+1
             datum = self.entries[3].get()
 
-            start_id = 1
+            start_id = 0
             suc6 = True
             while suc6:
                 start_id += 1
