@@ -595,6 +595,6 @@ class GUI:
         self.screen.mainloop()
 
 
-r = Reservatiesysteem(display_mode="print")
+r = Reservatiesysteem(display_mode="print", path=f"../testfiles/system_test8.txt")
 v = GUI(r)
 v.start()

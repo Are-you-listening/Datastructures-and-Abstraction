@@ -1,4 +1,4 @@
-#MyBSTAnas.BSTTable() 3 9
+MyBSTAnas.BSTTable() 3 9
 MyBSTEmil.BSTTable() 3 9
 MyBSTKars.BSTTable() 3 9
 MyBSTTibo.BSTTable() 3 9
