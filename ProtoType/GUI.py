@@ -3,6 +3,7 @@ from tkinter import ttk, font
 import math
 import datetime
 import threading
+import time
 from Reservatiesysteem import Reservatiesysteem
 
 
@@ -66,6 +67,8 @@ class GUI:
         """
         self.submit_button = None
         self.time_label = None
+
+        self.loading = Label(self.main_dashboard, text="Loading...", font=font.Font(size=20))
 
         """
         bewaard de huidge tijd in de GUI
@@ -603,7 +606,21 @@ class GUI:
     def __vertoningbox_add(self, value):
         self.vertoning_box.insert(self.vertoning_box.size(), f"Vertoning {value[0].get_id()}")
 
+    def __check_loading(self):
+        is_loading = False
+        while True:
+            time.sleep(1)
+            if threading.active_count() > 2 and not is_loading:
+                self.loading.pack(anchor=S, side=RIGHT)
+                is_loading = True
+
+            if threading.active_count() <= 2 and is_loading:
+                self.loading.pack_forget()
+                is_loading = False
+
+
     def start(self):
+        threading.Thread(target=self.__check_loading).start()
         self.screen.mainloop()
 
 r = Reservatiesysteem(display_mode="print", path=f"../testfiles/system_test5.txt")
