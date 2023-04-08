@@ -81,6 +81,9 @@ class GUI:
         self.__setup_buttons()
         self.__setup_time()
 
+        self.error_screen = Label(self.main_dashboard, text="", font=font.Font(size=40), fg="red")
+        self.error_screen.pack(side=LEFT, anchor=S)
+
     def __add_vertoning(self, vertoning_tup):
         """voorkomt dat de hoofdpagina volledig opgevuld wordt max 25 vertoningen worden weergegeven"""
         if self.row_col[0] > 5:
@@ -103,15 +106,15 @@ class GUI:
         info_frame = LabelFrame(vertoning_frame, text=f"Info")
         info_frame.grid(row=0, column=0)
 
-        film_label = Label(info_frame, text=f"Film: {film_name}", wraplength=120)
+        film_label = Label(info_frame, text=f"Film: {film_name}", wraplength=150)
         film_label.pack(anchor="w")
 
         zaalnummer = vertoning_object.zaalnummer
-        zaal_label = Label(info_frame, text=f"Zaal: {zaalnummer}")
+        zaal_label = Label(info_frame, text=f"Zaal: {zaalnummer}", wraplength=150)
         zaal_label.pack(anchor="w")
 
         status = vertoning_object.status(self.reservatiesysteem.get_time())
-        status_label = Label(info_frame, text=f"Status: {status}")
+        status_label = Label(info_frame, text=f"Status: {status}", wraplength=150)
         status_label.pack(anchor="w")
 
         """
@@ -124,7 +127,7 @@ class GUI:
         """
         veranderd de volgende row/column positie
         """
-        if self.row_col[1] < 5:
+        if self.row_col[1] < 4:
             self.row_col = (self.row_col[0], self.row_col[1]+1)
         else:
             self.row_col = (self.row_col[0]+1, 0)
@@ -182,7 +185,7 @@ class GUI:
         diagram.create_text(100, 110, text=f"{tickets}/{reservaties}")
 
     def __setup_buttons(self):
-        self.submit_button = Button(self.button_frame, text="submit", font=font.Font(size=20), command=self.__execute_order)
+        self.submit_button = Button(self.button_frame, text="submit", font=font.Font(size=20), command=self.__execute_order_button)
 
         self.img_1 = PhotoImage(file="../GUI_images/vertoning.png", width=100, height=100)
         b = Button(self.button_frame, image=self.img_1, command=self.__maak_vertoning_res)
@@ -477,6 +480,7 @@ class GUI:
         self.entries = (self.vertoning_box, plaatsen_entry)
 
     def __reset_entries(self):
+        self.error_screen.config(text="")
         for i in range(len(self.entries)):
             self.entries[i].grid_remove()
 
@@ -489,93 +493,95 @@ class GUI:
 
         self.submit_button.grid_remove()
 
+    def __execute_order_button(self):
+        threading.Thread(target=self.__execute_order).start()
+
     def __execute_order(self):
-        if self.option_selected == "film":
-            titel = self.entries[0].get()
-            rating = self.entries[1].get()
+        try:
+            if self.option_selected == "film":
+                titel = self.entries[0].get()
+                rating = self.entries[1].get()
 
-            start_id = 0
-            suc6 = True
-            while suc6:
-                start_id += 1
-                suc6 = self.reservatiesysteem.films.tableRetrieve(start_id)[1]
+                start_id = 0
+                suc6 = True
+                while suc6:
+                    start_id += 1
+                    suc6 = self.reservatiesysteem.films.tableRetrieve(start_id)[1]
 
-            threading.Thread(target=self.reservatiesysteem.maak_film, args=(start_id, titel, rating/100)).start()
+                self.reservatiesysteem.maak_film(start_id, titel, rating/100)
 
-        elif self.option_selected == "zaal":
-            zaal_nr = eval(self.entries[0].get())
-            aantal_plaatsen = eval(self.entries[1].get())
+            elif self.option_selected == "zaal":
+                zaal_nr = eval(self.entries[0].get())
+                aantal_plaatsen = eval(self.entries[1].get())
 
-            if isinstance(zaal_nr, int) and (aantal_plaatsen, int) and \
-                    not self.reservatiesysteem.zalen.tableRetrieve(zaal_nr)[1]:
+                if isinstance(zaal_nr, int) and (aantal_plaatsen, int):
 
-                threading.Thread(target=self.reservatiesysteem.maak_zaal, args=(zaal_nr, aantal_plaatsen)).start()
-            else:
-                print("error geen integer gegeven/ zaal bestaat al")
+                    self.reservatiesysteem.maak_zaal(zaal_nr, aantal_plaatsen)
+                else:
+                    raise Exception("error geen integer gegeven")
 
-        elif self.option_selected == "gebruiker":
-            vr = self.entries[0].get()
-            ar = self.entries[1].get()
-            m = self.entries[1].get()
+            elif self.option_selected == "gebruiker":
+                vr = self.entries[0].get()
+                ar = self.entries[1].get()
+                m = self.entries[1].get()
 
-            start_id = 0
-            suc6 = True
-            while suc6:
-                start_id += 1
-                suc6 = self.reservatiesysteem.gebruikers.tableRetrieve(start_id)[1]
+                start_id = 0
+                suc6 = True
+                while suc6:
+                    start_id += 1
+                    suc6 = self.reservatiesysteem.gebruikers.tableRetrieve(start_id)[1]
 
-            threading.Thread(target=self.reservatiesysteem.maak_gebruiker, args=(start_id, vr, ar, m)).start()
+                self.reservatiesysteem.maak_gebruiker(start_id, vr, ar, m)
 
-        elif self.option_selected == "vertoning":
-            if not self.entries[0].curselection():
-                print("film niet geselecteerd")
-                return
+            elif self.option_selected == "vertoning":
+                if not self.entries[0].curselection():
+                    self.error_screen.config(text="film niet geselecteerd")
+                    return
 
-            if not self.entries[1].curselection():
-                print("zaal niet geselecteerd")
-                return
+                if not self.entries[1].curselection():
+                    print("zaal niet geselecteerd")
+                    self.error_screen.config(text="zaal niet geselecteerd")
+                    return
 
-            if not self.entries[0].curselection():
-                print("slot niet geselecteerd")
-                return
+                if not self.entries[0].curselection():
+                    self.error_screen.config(text="slot niet geselecteerd")
+                    return
 
-            filmid = self.entries[0].get(self.entries[0].curselection())[0]
-            zaalid = int(self.entries[1].get(self.entries[1].curselection()).replace("Zaal ", ""))
-            slot_index = int(self.entries[2].curselection()[0])+1
-            datum = self.entries[3].get()
+                filmid = self.entries[0].get(self.entries[0].curselection())[0]
+                zaalid = int(self.entries[1].get(self.entries[1].curselection()).replace("Zaal ", ""))
+                slot_index = int(self.entries[2].curselection()[0])+1
+                datum = self.entries[3].get()
 
-            start_id = 0
-            suc6 = True
-            while suc6:
-                start_id += 1
-                suc6 = self.reservatiesysteem.vertoningen.tableRetrieve(start_id)[1]
-            threading.Thread(target=self.reservatiesysteem.maak_vertoning, args=(start_id,
-                                                                                 zaalid,
-                                                                                 slot_index,
-                                                                                 datum,
-                                                                                 filmid,
-                                                                                 self.reservatiesysteem.zalen.tableRetrieve(zaalid)[0].plaatsen)).start()
+                start_id = 0
+                suc6 = True
+                while suc6:
+                    start_id += 1
+                    suc6 = self.reservatiesysteem.vertoningen.tableRetrieve(start_id)[1]
 
-            self.__refresh_vertoningen()
+                self.reservatiesysteem.maak_vertoning(start_id, zaalid, slot_index, datum, filmid,
+                                                      self.reservatiesysteem.zalen.tableRetrieve(zaalid)[0].plaatsen)
 
-        elif self.option_selected == "reservatie":
-            gebruikerid = self.entries[0].get(self.entries[0].curselection())[0]
-            vertoningid = int(self.entries[1].get(self.entries[1].curselection()).replace("Vertoning ", ""))
-            plaatsen = int(self.entries[2].get())
-            threading.Thread(target=self.reservatiesysteem.maak_reservatie, args=(vertoningid, plaatsen, self.current_time, gebruikerid)).start()
-            print("heo")
+                self.__refresh_vertoningen()
 
-        elif self.option_selected == "ticket":
-            vertoningid = int(self.entries[0].get(self.entries[0].curselection()).replace("Vertoning ", ""))
-            plaatsen = int(self.entries[1].get())
-            self.reservatiesysteem.lees_ticket(vertoningid, plaatsen)
-            threading.Thread(target=self.reservatiesysteem.lees_ticket, args=(vertoningid, plaatsen)).start()
-            self.__refresh_vertoningen()
+            elif self.option_selected == "reservatie":
+                gebruikerid = self.entries[0].get(self.entries[0].curselection())[0]
+                vertoningid = int(self.entries[1].get(self.entries[1].curselection()).replace("Vertoning ", ""))
+                plaatsen = int(self.entries[2].get())
 
-        self.option_selected = None
-        self.__reset_entries()
-        self.current_time += 60  # add 1 minutes after every operation
-        threading.Thread(target=self.__check_lees_reservatie).start()
+                self.reservatiesysteem.maak_reservatie(vertoningid, plaatsen, self.current_time, gebruikerid)
+
+            elif self.option_selected == "ticket":
+                vertoningid = int(self.entries[0].get(self.entries[0].curselection()).replace("Vertoning ", ""))
+                plaatsen = int(self.entries[1].get())
+                self.reservatiesysteem.lees_ticket(vertoningid, plaatsen)
+                self.__refresh_vertoningen()
+
+            self.__check_lees_reservatie()
+            self.option_selected = None
+            self.__reset_entries()
+            self.current_time += 60  # add 1 minutes after every operation
+        except Exception as e:
+            self.error_screen.config(text=str(e))
 
     def __check_lees_reservatie(self):
         if not self.reservatiesysteem.reservaties.tableIsEmpty():

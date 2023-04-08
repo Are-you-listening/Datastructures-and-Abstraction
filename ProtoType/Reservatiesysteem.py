@@ -134,10 +134,13 @@ class Reservatiesysteem:
         :param maxplaatsen: positive unsigned int (max plaatsen van de zaal)
 
         Precondities: Er worden 2 parameters gegeven, beide zijn positieve unsigned integers.
+                      De zaal bestaat not niet
         Postconditie: Bij succes wordt er een nieuwe zaal aangemaakt en bewaard in self.zalen (self.zalen zalen wordt 1 groter).
         """
         if not (isinstance(nummer, int) and isinstance(maxplaatsen, int) and nummer > 0 and maxplaatsen > 0):
             raise Exception("Precondition Failed: in maak_zaal")
+        if self.zalen.tableRetrieve(nummer)[1]:
+            raise Exception("Preconditie Failed: zaal bestaat al")
 
         zaal_object = Zaal(nummer, maxplaatsen)
         self.zalen.tableInsert(1, zaal_object)
