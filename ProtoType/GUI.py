@@ -6,7 +6,6 @@ import threading
 import time
 from Reservatiesysteem import Reservatiesysteem
 
-
 class GUI:
     def __init__(self, reservatiesysteem):
         """
@@ -511,14 +510,10 @@ class GUI:
                 self.reservatiesysteem.maak_film(start_id, titel, rating/100)
 
             elif self.option_selected == "zaal":
-                zaal_nr = eval(self.entries[0].get())
-                aantal_plaatsen = eval(self.entries[1].get())
+                zaal_nr = int(self.entries[0].get())
+                aantal_plaatsen = int(self.entries[1].get())
 
-                if isinstance(zaal_nr, int) and (aantal_plaatsen, int):
-
-                    self.reservatiesysteem.maak_zaal(zaal_nr, aantal_plaatsen)
-                else:
-                    raise Exception("error geen integer gegeven")
+                self.reservatiesysteem.maak_zaal(zaal_nr, aantal_plaatsen)
 
             elif self.option_selected == "gebruiker":
                 vr = self.entries[0].get()
@@ -539,11 +534,10 @@ class GUI:
                     return
 
                 if not self.entries[1].curselection():
-                    print("zaal niet geselecteerd")
                     self.error_screen.config(text="zaal niet geselecteerd")
                     return
 
-                if not self.entries[0].curselection():
+                if not self.entries[2].curselection():
                     self.error_screen.config(text="slot niet geselecteerd")
                     return
 
@@ -551,6 +545,12 @@ class GUI:
                 zaalid = int(self.entries[1].get(self.entries[1].curselection()).replace("Zaal ", ""))
                 slot_index = int(self.entries[2].curselection()[0])+1
                 datum = self.entries[3].get()
+
+                jaar = str(int(datum[:datum.index("-")]))
+                datum_value = str(self.reservatiesysteem.convert_date(datum))
+                if len(datum_value) != 4+len(jaar):
+                    self.error_screen.config(text="datum is invalid/ of tijdreizen is uitgevonden")
+                    return
 
                 start_id = 0
                 suc6 = True
@@ -564,6 +564,15 @@ class GUI:
                 self.__refresh_vertoningen()
 
             elif self.option_selected == "reservatie":
+
+                if not self.entries[0].curselection():
+                    self.error_screen.config(text="gebruiker niet geselecteerd")
+                    return
+
+                if not self.entries[1].curselection():
+                    self.error_screen.config(text="vertoning niet geselecteerd")
+                    return
+
                 gebruikerid = self.entries[0].get(self.entries[0].curselection())[0]
                 vertoningid = int(self.entries[1].get(self.entries[1].curselection()).replace("Vertoning ", ""))
                 plaatsen = int(self.entries[2].get())

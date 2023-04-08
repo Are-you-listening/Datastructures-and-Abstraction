@@ -279,7 +279,9 @@ class Reservatiesysteem:
             #if len(str(int(jaar))) != 4:
             #    raise Exception("precondition error: jaar is niet in het juiste formaat")
             maand = splitted_datum[1]
+            maand += "0"*(2 - len(maand))
             dag = splitted_datum[2]
+            dag += "0" * (2 - len(dag))
             total = jaar + maand + dag
             return int(total)
 
