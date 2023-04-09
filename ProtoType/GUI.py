@@ -231,6 +231,13 @@ class GUI:
         b.grid(row=1, column=2)
 
     def __setup_time(self):
+        """
+        setup time widget
+        bestaand uit 3 widgets
+        1 pijltje: spring 1 minuut vooruit
+        2 pijltje: spring 1 uur vooruit
+        3 pijltje: spring 1 dag vooruit
+        """
         date_frame = LabelFrame(self.main_dashboard, text=f"Huidig tijdstip")
         date_frame.pack(side=LEFT, anchor=SW)
 
@@ -247,14 +254,21 @@ class GUI:
         Button(date_frame, image=self.img_9, command=self.__speed_up_3).pack(side=LEFT)
 
     def __speed_up_1(self):
+        """
+        zet de tijd 1 minuut verder
+        """
         time_tup = self.reservatiesysteem.convert_time(self.current_time)
 
-        time = datetime.datetime.strptime(f"{time_tup[0]}-{time_tup[1]}-{time_tup[2]}-{time_tup[3]}", '%Y-%m-%d-%H-%M-%S')
+        time = datetime.datetime.strptime(f"{time_tup[0]}-{time_tup[1]}-{time_tup[2]}-{time_tup[3]}",
+                                          '%Y-%m-%d-%H-%M-%S')
         time += datetime.timedelta(minutes=1)
 
         self.__set_new_time(time)
 
     def __speed_up_2(self):
+        """
+        zet de tijd 1 uur verder
+        """
         time_tup = self.reservatiesysteem.convert_time(self.current_time)
 
         time = datetime.datetime.strptime(f"{time_tup[0]}-{time_tup[1]}-{time_tup[2]}-{time_tup[3]}",
@@ -264,6 +278,9 @@ class GUI:
         self.__set_new_time(time)
 
     def __speed_up_3(self):
+        """
+        zet de tijd 1 dag verder
+        """
         time_tup = self.reservatiesysteem.convert_time(self.current_time)
 
         time = datetime.datetime.strptime(f"{time_tup[0]}-{time_tup[1]}-{time_tup[2]}-{time_tup[3]}",
@@ -272,8 +289,11 @@ class GUI:
 
         self.__set_new_time(time)
 
-
     def __set_new_time(self, time):
+        """
+        Verander de tijd naar de nieuwe tijd
+        zowel in de GUI als in het reservatiesysteem
+        """
         year = str(time.year)
         month = str(time.month)
         day = str(time.day)
@@ -289,14 +309,10 @@ class GUI:
             text=f"{time_tup[0]}, {time_tup[1]}:{'0' * (2 - len(str(time_tup[2]))) + str(time_tup[2])}:{'0' * (2 - len(str(time_tup[3]))) + str(time_tup[3])}")
 
         self.__refresh_vertoningen()
-    def __maak_film_res(self):
-        if self.option_selected == "film":
-            self.option_selected = None
-            self.__reset_entries()
-            return
 
-        self.__reset_entries()
-        self.option_selected = "film"
+    def __maak_film_res(self):
+        if self.__widget_already_clicked("film"):
+            return
 
         """Titel input"""
         titel_label = Label(self.button_frame, text="Titel: ", font=font.Font(size=20))
@@ -320,13 +336,8 @@ class GUI:
         self.entries = (entry, rat_entry)
 
     def __maak_zaal_res(self):
-        if self.option_selected == "zaal":
-            self.option_selected = None
-            self.__reset_entries()
+        if self.__widget_already_clicked("zaal"):
             return
-
-        self.__reset_entries()
-        self.option_selected = "zaal"
 
         """zaalnummer input"""
         zaal_nr_label = Label(self.button_frame, text="Zaalnummer: ", font=font.Font(size=20))
@@ -350,13 +361,8 @@ class GUI:
         self.entries = (entry, plaatsen_entry)
 
     def __maak_gebruiker_res(self):
-        if self.option_selected == "gebruiker":
-            self.option_selected = None
-            self.__reset_entries()
+        if self.__widget_already_clicked("gebruiker"):
             return
-
-        self.__reset_entries()
-        self.option_selected = "gebruiker"
 
         """Voornaam input"""
         vr_label = Label(self.button_frame, text="Voornaam: ", font=font.Font(size=20))
@@ -388,13 +394,8 @@ class GUI:
         self.entries = (vr_entry, ar_entry, m_entry)
 
     def __maak_vertoning_res(self):
-        if self.option_selected == "vertoning":
-            self.option_selected = None
-            self.__reset_entries()
+        if self.__widget_already_clicked("vertoning"):
             return
-
-        self.__reset_entries()
-        self.option_selected = "vertoning"
 
         film_box_label = Label(self.button_frame, text="Film: ", font=font.Font(size=20))
         film_box_label.grid(row=0, column=3)
@@ -433,13 +434,8 @@ class GUI:
         self.entries = (self.film_box, self.zaal_box, self.slot_box, datum_entry)
 
     def __maak_reservatie_res(self):
-        if self.option_selected == "reservatie":
-            self.option_selected = None
-            self.__reset_entries()
+        if self.__widget_already_clicked("reservatie"):
             return
-
-        self.__reset_entries()
-        self.option_selected = "reservatie"
 
         gebruiker_box_label = Label(self.button_frame, text="User: ", font=font.Font(size=20))
         gebruiker_box_label.grid(row=0, column=3)
@@ -470,13 +466,8 @@ class GUI:
         self.entries = (self.gebruiker_box, self.vertoning_box, plaatsen_entry)
 
     def __maak_ticket(self):
-        if self.option_selected == "ticket":
-            self.option_selected = None
-            self.__reset_entries()
+        if self.__widget_already_clicked("ticket"):
             return
-
-        self.__reset_entries()
-        self.option_selected = "ticket"
 
         vertoning_box_label = Label(self.button_frame, text="Vertoning: ", font=font.Font(size=20))
         vertoning_box_label.grid(row=0, column=3)
@@ -498,7 +489,20 @@ class GUI:
         self.entry_labels = (vertoning_box_label, plaatsen_label)
         self.entries = (self.vertoning_box, plaatsen_entry)
 
+    def __widget_already_clicked(self, option):
+        if self.option_selected == option:
+            self.option_selected = None
+            self.__reset_entries()
+            return True
+
+        self.__reset_entries()
+        self.option_selected = option
+        return False
+
     def __reset_entries(self):
+        """
+        Verwijder alle input widgets en de submit button
+        """
         self.error_screen.config(text="")
         for i in range(len(self.entries)):
             self.entries[i].grid_remove()
@@ -513,9 +517,18 @@ class GUI:
         self.submit_button.grid_remove()
 
     def __execute_order_button(self):
+        """
+        Functie die opgeroepen wordt, indien de submit buttton ingedrukt wordt
+        Roept de echte functie aan als een thread zodat het programma niet crashed indien lange runtime
+        reservatiesysteem
+        """
         threading.Thread(target=self.__execute_order).start()
 
     def __execute_order(self):
+        """
+        Deze functie voert de gevraagde actie uit
+        Indien dit faalt, zal het een error message in de GUI zetten
+        """
         try:
             if self.option_selected == "film":
                 titel = self.entries[0].get()
@@ -608,27 +621,55 @@ class GUI:
             self.__check_lees_reservatie()
             self.option_selected = None
             self.__reset_entries()
-            self.current_time += 60  # add 1 minutes after every operation
+            self.current_time += 60  # voeg 1 min toe na elke actie
         except Exception as e:
             self.error_screen.config(text=str(e))
 
     def __check_lees_reservatie(self):
+        """
+        Check dat er nog een reservatie uitgelezen moet worden
+        indien ja: lees de reservatie handmatig uit
+        nuttig voor direct updating GUI
+        """
         if not self.reservatiesysteem.reservaties.tableIsEmpty():
             self.reservatiesysteem.lees_reservatie()
             self.__refresh_vertoningen()
 
     def __refresh_vertoningen(self):
+        """
+        Herlaad alle vertoningen met hun overeenkomstige values
+        """
         for vertoning in self.vertoning_frame.winfo_children():
             vertoning.destroy()
         self.row_col = (0, 0)
         self.reservatiesysteem.vertoningen.traverseTable(self.__add_vertoning)
     def __filmbox_add(self, value):
+        """
+        functie om door films te kunnen traversen en die toe te voegen aan
+        self.film_box (Listbox)
+
+        zodat gebruikers hier 1 optie kunnen selecteren
+        """
         self.film_box.insert(self.film_box.size(), (value.get_id(), value.titel))
 
     def __zaalbox_add(self, value):
+        """
+        functie om door zalen te kunnen traversen en die toe te voegen aan
+        self.zaal_box (Listbox)
+
+        zodat gebruikers hier 1 optie kunnen selecteren
+        """
         self.zaal_box.insert(self.zaal_box.size(), f"Zaal {value.zaalnummer}")
 
     def __slotbox_add(self, value):
+        """
+        functie om door slots te kunnen traversen en die toe te voegen aan
+        self.slot_box (Listbox)
+
+        zodat gebruikers hier 1 optie kunnen selecteren
+
+        de time wordt hier ook nog omgezet naar een human readable string
+        """
         tup = self.reservatiesysteem.convert_time(value)
         if tup[2] > 10:
             self.slot_box.insert(self.slot_box.size(), f"{tup[1]}:{tup[2]}")
@@ -636,12 +677,31 @@ class GUI:
             self.slot_box.insert(self.slot_box.size(), f"{tup[1]}:0{tup[2]}")
 
     def __gebruikerbox_add(self, value):
+        """
+        functie om door gebruikers te kunnen traversen en die toe te voegen aan
+        self.gebruiker_box (Listbox)
+
+        zodat gebruikers hier 1 optie kunnen selecteren
+        """
         self.gebruiker_box.insert(self.gebruiker_box.size(), (value.get_id(), f"{value.vnaam} {value.anaam}"))
 
     def __vertoningbox_add(self, value):
+        """
+        functie om door vertoningen te kunnen traversen en die toe te voegen aan
+        self.vertoning_box (Listbox)
+
+        zodat gebruikers hier 1 optie kunnen selecteren
+        """
         self.vertoning_box.insert(self.vertoning_box.size(), f"Vertoning {value[0].get_id()}")
 
     def __check_loading(self):
+        """
+        Bepaald dat er een loading moet geplaatst worden
+        Dit wordt gedaan door te checken hoeveel threads er actief zijn
+        1 thread is de main thread en 1 thread is deze functie
+        Elke actie die moet worden uitgevoerd wordt een nieuwe thread
+        Indien er meer dan 2 threads bezig zijn, is er nog een actie bezig (-> loading)
+        """
         is_loading = False
         while True:
             time.sleep(1)
@@ -653,8 +713,12 @@ class GUI:
                 self.loading.pack_forget()
                 is_loading = False
 
-
     def start(self):
+        """
+        Functie om de GUI te activeren
+        precondties: er worden geen parameters gegeven
+        postcondities: de GUI wordt gestart
+        """
         threading.Thread(target=self.__check_loading).start()
         self.screen.mainloop()
 
