@@ -7,13 +7,16 @@ self.text_string: beaard alle data die in de tabel hoort te staan
 self.sorting_tree: bewaard een ADT
 self.current: bewaard current locaties nodig voor te detecteren in het geval van lege slots en onderscheid tussen films
 self.resSYS: reference naar reservatiesysteem
+self.store_path = "path naar het address waar we onze file willen storen
 """
 
+
 class Log:
-    def __init__(self, reservatiesysteem, use_ADT, **kwargs):
+    def __init__(self, reservatiesysteem, use_adt, **kwargs):
         """
         precondities: Er wordt een geldige ADT gegeven die dezelfde tableinstructies heeft als een zoekboom.
-                      Ook wordt er een reference gegeven naar het reservatiesysteem vanwaar deze klasse opgeroepen wordt.
+                      Ook wordt er een reference gegeven naar het reservatiesysteem vanwaar deze klasse
+                      opgeroepen wordt.
                       Deze klasse mag enkel opgeroepen worden vanuit een reservatiesysteem
                       Het path dat meegegeven wordt via **kwargs:path is een geldig path
         postcondities: er wordt een log aangemaakt in html format
@@ -24,7 +27,7 @@ class Log:
 
         self.header_string = ""
         self.text_string = ""
-        self.sorting_tree = use_ADT
+        self.sorting_tree = use_adt
         self.current = (0, 0, -1, 1)
 
         self.resSYS = reservatiesysteem
@@ -34,12 +37,12 @@ class Log:
         else:
             self.store_path = "../testfiles/log_test.html"
 
-
     def create_log(self):  # Public
         """
         maakt een log aan
 
         precondities: er worden geen parameters gegeven
+        postconditie: er is een log aangemaakt
 
         store alle timeslots in een sorting tree, om een gesorteerde string te vormen (header)
         die alle tijdslots chronlogisch plaatst
@@ -85,7 +88,7 @@ class Log:
         result_string += """</h1>
                 <table>
                     <thead>
-                        <td>Datum</td>
+                        <td>Datum</td>use_ADT
                         <td>Film</td>"""
 
         """toevoeging van header"""
@@ -102,6 +105,7 @@ class Log:
             </body>
         </html>"""
 
+        """de log wordt geschreven in de file"""
         with open(self.store_path, 'wt') as f:
             f.write(result_string)
             f.close()
@@ -143,8 +147,6 @@ class Log:
                     self.text_string += """\n<td></td>"""
                     current_index += 1
                 self.text_string += f"""\n</tr> </tbody>"""
-
-
 
             tenp_tabs = "\t" * 5
             self.text_string += f"""\n{tenp_tabs}<tbody> <tr>"""

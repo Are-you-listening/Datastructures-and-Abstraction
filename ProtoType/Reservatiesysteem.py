@@ -25,7 +25,14 @@ self.reservaties: queue van tupels(tijdstip,aangemaakte Reservatie Objecten)
 self.reservaties_archief: ketting van aangemaakte Reservatie objecten die niet meer in de queue zitten 
                           (om later nog steeds reservaties terug te vinden)
 self.slots: bevat alle mogelijke tijdslots
-
+self.VertoningCheckValue: alue om self.__VertoningCheck uit te voeren
+self.stack_string: een string van de adt dat gebruikt wordt voor een stack
+                   Later kan deze door de eval() functie naar dit ADT object omgezet worden (ADT stack)
+self.log_string: een string van de adt dat gebruikt wordt voor het sorteren voor een log_file
+                 Later kan deze door de eval() functie naar dit ADT object omgezet worden (ADT BST, 234Tree, RBTree)
+self.ip_string : dit is een ADT Queue dat gebruikt wordt voor de instruction parser    
+self.display_mode: geeft weer welke display mode er gebruikt wordt    
+self.instruction_parser: instructionparser object dat gebruikt wordt om de file uit te lezen
 Functionaliteit:
 """
 
@@ -37,6 +44,16 @@ class Reservatiesysteem:
         :param **kwargs, kan "displaymode" bevatten die weergeeft hoe we de data weergeven
 
         Precondities: Er worden geen andere parameters gegeven.
+                      self.films, self.zalen, self.gebruikers hebben ADT TABEL met als meegegeven ADT een ADT Linkedchain
+                      (indien self.keyswap == True is ADT BST, 234Tree, RB Tree ook oke)
+                      self.vertoningen heeft ADT BST, 234Tree, RbTree
+                      (indien self.keyswap == True is ADT Linkedchain ook oke)
+                      self.slots, self.reservatie_archief is een ADT linkedchain
+                      self.reservaties, self.ip_string zijn een ADT Queue
+                      self.stack_string is een string dat een ADT stack object beschrijft (dat ook geimporteerd is) eval(deze string) moet dit object geven
+                      self.log_string is een string dat een ADT BST, 234Tree, RbTree object beschrijft (dat ook geimporteerd is) eval(deze string) moet dit object geven
+                      self.instruction_parser is een InstructionParser object
+
         Postconditie: Een Reservatiesysteem object wordt aangemaakt.
         """
         self.keyswap = True
@@ -56,7 +73,7 @@ class Reservatiesysteem:
 
         self.stack_string = "MyStackKars.MyStackTable()"
         self.log_string = "MyBSTAnas.BSTTable()"
-        self.ip_string = "MyQueueTibo.MyQueueTable()"
+        self.ip_string = MyQueueTibo.MyQueueTable()
 
         #If statement to delete
         if "adt_args" in kwargs:
@@ -68,7 +85,7 @@ class Reservatiesysteem:
             self.reservaties = eval(adt_args[4])
             self.reservatie_archief = eval(adt_args[5])
             self.slots = eval(adt_args[6])
-            self.ip_string = adt_args[7]
+            self.ip_string = eval(adt_args[7])
             self.stack_string = adt_args[8]
             self.log_string = adt_args[9]
 
@@ -80,9 +97,9 @@ class Reservatiesysteem:
 
         """init voor InputParser"""
         if "path" in kwargs:
-            self.instruction_parser = InstructionParser(self, eval(self.ip_string), path=kwargs["path"])
+            self.instruction_parser = InstructionParser(self, self.ip_string, path=kwargs["path"])
         else:
-            self.instruction_parser = InstructionParser(self, eval(self.ip_string))
+            self.instruction_parser = InstructionParser(self, self.ip_string)
         self.instruction_parser.read_file()
 
         """main thread voert alles uit"""

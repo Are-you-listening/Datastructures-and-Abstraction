@@ -1,3 +1,8 @@
+"""
+Deze ADT wordt gebruikt om de gegeven file uit te lezen en te initialiseren
+voor het reservatiesysteem
+"""
+
 
 class InstructionParser:
     def __init__(self, reservatie_systeem, use_adt, **kwargs):
@@ -6,17 +11,20 @@ class InstructionParser:
         Alle commandos dat door dit object wordt aangeroepen moet publiek zijn
 
         Precondities: Er wordt een geldige ADT gegeven die dezelfde tableinstructies heeft als een queue.
-                      Ook wordt er een reference gegeven naar het reservatiesysteem vanwaar deze klasse opgeroepen wordt.
+                      Ook wordt er een reference gegeven naar het reservatiesysteem vanwaar deze klasse opgeroepen
+                      wordt.
                       Deze klasse mag enkel opgeroepen worden vanuit een reservatiesysteem
-                      Via de **kwargs wordt een bestaand path naar een file doorgegeven die aan het juiste file format voldoet.
+                      Via de **kwargs wordt een bestaand path naar een file doorgegeven die aan het juiste file format
+                      voldoet.
                       Indien via **kwargs geen path gegeven is, moet het default path bestaan
+                      De file moet het juiste file-format bevatten
 
         :param reservatie_systeem: reference naar reservatiesysteem
         :param use_adt: de adt (queue) dat gebruikt wordt om de toekomstige orders (in tupel vorm) te between
                         volgens format (timestamp, order)
         :param kwargs:kan de key "path" bevatten die een relatief path geeft naar de file die uitgelezen moet worden
 
-        preconditie: de parameters worden correct gegeven, er wordt een correct path gegeven
+        preconditie: de bovenstaande parameters worden correct gegeven
         postcondities: een InstructionParser wordt geinitialiseerd
         """
 
@@ -43,11 +51,14 @@ class InstructionParser:
         precondities: De file voldoet aan het gevraagde format en bevat geen onbekende instructies
                       De file bevat alle instructies chronologisch
                       Indien de line begint met 'zaal', zal het gevolgd worden door 2 integers
-                      Indien de line begint met 'film', zal het gevolgd worden door 1 integer, 1 string en 1 rating in deze volgorder
+                      Indien de line begint met 'film', zal het gevolgd worden door 1 integer, 1 string en 1 rating in
+                      deze volgorde.
                       Als de string een spatie bevat, zal de string tussen aanhalingstekens geplaatst worden
-                      Indien de line begint met 'vertoning', zal het gevolgd worden door 3 integer, string(datum volgens format jaar-maand-dag), 2 integers
+                      Indien de line begint met 'vertoning', zal het gevolgd worden door 3 integer, string(datum volgens
+                      format jaar-maand-dag), 2 integers.
                       Indien de line begint met 'gebruiker, zal het gevolgd worden door 1 integer, 3 strings
-                      Indien een line na de line 'start' voorkomt zal het beginnen met een datum gevolgd door de tijd (uur:minuten)
+                      Indien een line na de line 'start' voorkomt zal het beginnen met een datum gevolgd door de
+                      tijd (uur:minuten)
                       nadien komt het commando argument.
                       Indien dit argument 'reserveer' is, wordt het gevolgd door 3 integers
                       Indien dit argument 'ticket' is, wordt het gevolgd door 2 integers
@@ -105,14 +116,15 @@ class InstructionParser:
                     self.start_mode = True
                     self.init_mode = False
 
-    def __split(self, string, split_string):
+    @staticmethod
+    def __split(string, split_string):
         """
         splits string door een split_string.
         Equivalent van string.split(''), maar dan zonder python list te gebruiken, maar een tuple te maken
         """
         amount = string.count(split_string)
         if amount == 0:
-            return (string,)
+            return tuple(string,)
         tup = ()
         for j in range(1, amount+2):
             if j < amount+1:
@@ -128,8 +140,6 @@ class InstructionParser:
             string = string[s_index+len(split_string):]
 
         return tup
-
-
 
     def __init_commands(self, args):
         """
@@ -163,7 +173,8 @@ class InstructionParser:
             5: filmid
             6: aantal plaatsen
             """
-            self.reservatie_systeem.maak_vertoning(int(args[1]), int(args[2]), int(args[3]), args[4], int(args[5]), int(args[6]))
+            self.reservatie_systeem.maak_vertoning(int(args[1]), int(args[2]), int(args[3]),
+                                                   args[4], int(args[5]), int(args[6]))
         elif args[0] == "gebruiker":
             """
             0: 'gebruiker' order
@@ -207,7 +218,6 @@ class InstructionParser:
         instruction = tup[1]
 
         """zet de tijd in het reservatiesysteem naar de gegeven tijd"""
-        #self.reservatie_systeem.set_time(time)
 
         if self.last_reservatie_time != time and self.reservaties_waiting > 0:
             self.reservatie_systeem.lees_reservatie()
@@ -262,7 +272,8 @@ class InstructionParser:
 
     def main_thread(self):
         """
-        preconditie: wordt 1 keer opgeroepen vanuit hetzelfde reservatiesysteem dat ook werd doorgegeven in de constructor.
+        preconditie: wordt 1 keer opgeroepen vanuit hetzelfde reservatiesysteem dat ook werd doorgegeven in de
+                     constructor.
         postconditie: alle instructies worden chronologisch uitgevoerd
         """
         time = self.__get_time()
