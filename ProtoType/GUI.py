@@ -20,15 +20,34 @@ class GUI:
         self.screen = Tk()
         self.screen.geometry("1920x1280")
         self.tab_manager = ttk.Notebook(self.screen)
-        self.main_dashboard = Frame(self.tab_manager)
+        self.main_dashboard = Frame(self.screen)
 
-        """support voor meerdere tabs"""
+        """maak een main tab"""
         self.tab_manager.add(self.main_dashboard, text="main tab")
         self.tab_manager.pack(expand=True, fill=BOTH)
 
         """define de frame waar alle vertoningen worden gezet"""
-        self.vertoning_frame = Frame(self.main_dashboard, width=1920, height=960)
-        self.vertoning_frame.pack(side=TOP, anchor=NW)
+        upper_vertoning_frame = Frame(self.main_dashboard, width=1920, height=960)
+
+        """tekencanvas dat helpt om de juiste pixels te tonen"""
+        scroll_canvas = Canvas(upper_vertoning_frame, width=1900, height=960)
+
+        """scrollbar om door de vertoningen te scrollen"""
+        scrollbar = Scrollbar(upper_vertoning_frame, orient=VERTICAL, command=scroll_canvas.yview, width=20)
+        self.vertoning_frame = Frame(scroll_canvas)
+
+        """zorgt dat we over de hele frame kunnen scrollen door dynamic te updaten"""
+        scroll_canvas.bind("<Configure>", lambda e: scroll_canvas.configure(scrollregion=scroll_canvas.bbox("all")))
+
+        """start de frame vanboven"""
+        scroll_canvas.create_window((0, 0), window=self.vertoning_frame, anchor="n")
+        """maak canvas y-value afhankelijk van de scrollbar value"""
+        scroll_canvas.configure(yscrollcommand=scrollbar.set)
+
+        """plaats alle onderdelen"""
+        upper_vertoning_frame.pack(side=TOP, anchor=NW)
+        scroll_canvas.pack(side=LEFT)
+        scrollbar.pack(side=RIGHT, fill=Y)
 
         """
         geef de vertoningen een default row en column
@@ -94,6 +113,7 @@ class GUI:
 
         film_id = vertoning_object.filmid
         film_retrieve_tup = self.reservatiesysteem.films.tableRetrieve(film_id)
+        """in het geval dat de film niet te verkrijgen is zal er staat 'not loaded' """
         if not film_retrieve_tup[1]:
             film_name = "not loaded"
         else:
@@ -638,6 +658,6 @@ class GUI:
         threading.Thread(target=self.__check_loading).start()
         self.screen.mainloop()
 
-r = Reservatiesysteem(display_mode="print", path=f"../testfiles/system_test5.txt")
+r = Reservatiesysteem(display_mode="print", path=f"../testfiles/system_test9.txt")
 v = GUI(r)
 v.start()

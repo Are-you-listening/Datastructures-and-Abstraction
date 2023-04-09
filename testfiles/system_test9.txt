@@ -1,0 +1,93 @@
+#hier is een non-existing description
+init
+zaal 1 50
+zaal 2 50
+zaal 3 200
+zaal 4 200
+film 1 "Tibo schrijft leuke testcases (The movie)" 1.00
+film 2 "Een slechte film" 0.01
+film 3 "Deze film is wel oke" 0.5
+
+# klein zaaltje met goede film
+# moeten we checken dat zaal plaatsen en vertoning plaatsen matched?
+# vertoningen van de beste film
+#vertoning: id, zaalnummer, slot, datum, filmid, vrije_plaatsen
+vertoning 1 1 2 2023-10-10 1 50
+vertoning 2 3 1 2023-10-10 1 200
+vertoning 3 3 2 2023-10-10 1 200
+vertoning 4 3 3 2023-10-10 1 200
+vertoning 5 3 4 2023-10-10 1 200
+vertoning 6 2 3 2023-10-10 1 50
+
+slechte film
+vertoning 7 1 1 2023-10-10 2 50
+
+#medium film
+vertoning 8 2 1 2023-10-10 3 50
+vertoning 9 4 3 2023-10-10 3 200
+
+vertoning 10 2 3 2023-10-11 1 50
+vertoning 11 2 3 2023-10-12 1 50
+vertoning 12 2 3 2023-10-13 1 50
+vertoning 13 2 3 2023-10-14 1 50
+vertoning 14 2 3 2023-10-15 1 50
+vertoning 15 2 3 2023-10-16 1 50
+vertoning 16 2 3 2023-10-17 1 50
+vertoning 17 2 3 2023-10-18 1 50
+vertoning 18 2 3 2023-10-19 1 50
+vertoning 19 2 3 2023-10-20 1 50
+vertoning 20 2 3 2023-10-21 1 50
+vertoning 21 2 3 2023-10-22 1 50
+vertoning 22 2 3 2023-10-23 1 50
+vertoning 23 2 3 2023-10-24 1 50
+vertoning 24 2 3 2023-10-25 1 50
+vertoning 25 2 3 2023-10-26 1 50
+vertoning 26 2 3 2023-10-27 1 50
+
+#gebruikers
+gebruiker 1 Student1 INF mail@no_virus.com
+gebruiker 2 Student2 INF mail@no_virus.com
+gebruiker 3 Student3 INF mail@no_virus.com
+gebruiker 4 Student4 INF mail@no_virus.com
+gebruiker 5 Student5 INF mail@no_virus.com
+gebruiker 6 Student6 INF mail@no_virus.com
+gebruiker 7 Student7 INF mail@no_virus.com
+gebruiker 8 Student8 INF mail@no_virus.com
+
+# start het systeem op
+start
+
+#film id 1 is razend populair daarom maken ook vele mensen een reservatie
+#user id vertoning-id #tickets
+2023-10-05 11:00 reserveer 1 1 23
+2023-10-05 11:00 reserveer 1 2 23
+
+#mag een user 2 reservaties maken voor een film op hetzelfde tijdslot, maar in een andere zaal ? - Kars: yes, accounts sharing?
+
+2023-10-05 11:00 reserveer 2 2 49
+2023-10-05 12:00 reserveer 2 6 50
+2023-10-05 12:00 reserveer 3 2 15
+
+#oh nee, deze film zit vol :( ocharme user 3 :(, hij was net te laat
+2023-10-05 12:01 reserveer 3 6 1
+
+2023-10-05 12:01 reserveer 8 5 28
+2023-10-05 12:01 reserveer 7 5 3
+
+#er gaat 1 iemand naar de slechte film, maar die zal nooit komen opdagen, want hij las de rating pas nadien
+2023-10-05 12:02 reserveer 6 7 1
+
+#om zijn slechte keuze te compenseren gaat hij ook naar een medium film
+2023-10-05 12:02 reserveer 6 9 5
+
+#de mensen komen naar de cinema
+2023-10-05 13:00 ticket 2 23
+2023-10-05 13:00 ticket 6 50
+2023-10-05 13:00 ticket 1 23
+2023-10-05 13:00 ticket 2 49
+2023-10-05 13:01 ticket 2 15
+2023-10-05 13:02 ticket 5 28
+2023-10-05 13:02 ticket 5 3
+2023-10-05 13:03 ticket 9 5
+
+2023-10-12 18:00 log
