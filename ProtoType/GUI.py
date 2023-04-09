@@ -21,6 +21,7 @@ self.entries: n-tuple die alle input-velden bevat
 self.option_selected: string dat weergeeft welke commando_button geselecteerd is
 """
 
+
 class GUI:
     def __init__(self, reservatiesysteem):
         """
@@ -172,7 +173,8 @@ class GUI:
         else:
             self.row_col = (self.row_col[0]+1, 0)
 
-    def __create_vertoning_diagram(self, root, tickets, reservaties, plaatsen):
+    @staticmethod
+    def __create_vertoning_diagram(root, tickets, reservaties, plaatsen):
         """
         maakt vertoning diagram
         """
@@ -201,7 +203,7 @@ class GUI:
         rPCT = reservaties/plaatsen
         for i in range(round(rPCT*1000)):
             angle = 2*math.pi*i/1000-math.pi/2
-            diagram.create_line(canvas_mid[0], canvas_mid[1], canvas_mid[0]+math.cos(angle)*radius, canvas_mid[1]+math.sin(angle)*radius, width=10, fill="#006AFF")
+            diagram.create_line(canvas_mid[0], canvas_mid[1], canvas_mid[0]+math.cos(angle)*radius, canvas_mid[1]+math.sin(angle)*radius, width=5, fill="#006AFF")
 
         """
         Een deel van de cirkel wordt in het groen ingekleurd (overeenkomstig met % tickets)
@@ -210,7 +212,7 @@ class GUI:
         for i in range(round(tPCT * 1000)):
             angle = 2 * math.pi * i / 1000 - math.pi / 2
             diagram.create_line(canvas_mid[0], canvas_mid[1], canvas_mid[0] + math.cos(angle) * (radius+1),
-                                canvas_mid[1] + math.sin(angle) * (radius+1), width=10, fill="#00FF00")
+                                canvas_mid[1] + math.sin(angle) * (radius+1), width=5, fill="#00FF00")
 
         """
         Kleine middencirkel wordt getekend
@@ -263,7 +265,8 @@ class GUI:
         date_frame.pack(side=LEFT, anchor=SW)
 
         time_tup = self.reservatiesysteem.convert_time(self.current_time)
-        self.time_label = Label(date_frame, text=f"{time_tup[0]}, {time_tup[1]}:{'0'*(2-len(str(time_tup[2])))+str(time_tup[2])}:{'0'*(2-len(str(time_tup[3])))+str(time_tup[3])}", font=font.Font(size=20))
+        self.time_label = Label(date_frame,
+                                text=f"{time_tup[0]}, {time_tup[1]}:{'0'*(2-len(str(time_tup[2])))+str(time_tup[2])}:{'0'*(2-len(str(time_tup[3])))+str(time_tup[3])}", font=font.Font(size=20))
         self.time_label.pack()
         self.img_7 = PhotoImage(file="../GUI_images/arrow1.png", width=25, height=25)
         Button(date_frame, image=self.img_7, command=self.__speed_up_1).pack(side=LEFT)
@@ -664,6 +667,7 @@ class GUI:
             vertoning.destroy()
         self.row_col = (0, 0)
         self.reservatiesysteem.vertoningen.traverseTable(self.__add_vertoning)
+
     def __filmbox_add(self, value):
         """
         functie om door films te kunnen traversen en die toe te voegen aan
@@ -742,6 +746,7 @@ class GUI:
         """
         threading.Thread(target=self.__check_loading).start()
         self.screen.mainloop()
+
 
 r = Reservatiesysteem(display_mode="print", path=f"../testfiles/system_test9.txt")
 v = GUI(r)

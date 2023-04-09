@@ -124,7 +124,7 @@ class InstructionParser:
         """
         amount = string.count(split_string)
         if amount == 0:
-            return tuple(string,)
+            return (string,)
         tup = ()
         for j in range(1, amount+2):
             if j < amount+1:
