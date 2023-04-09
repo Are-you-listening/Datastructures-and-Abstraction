@@ -6,6 +6,21 @@ import threading
 import time
 from Reservatiesysteem import Reservatiesysteem
 
+
+"""
+Deze ADT is de GUI die grbuikt kan worden om het reservatiesysteem te gebruiken
+
+data:
+self.screen: scherm van de GUI
+self.main_dashboard: de frame waarin alle data geplaatst wordt
+self.vertoning_frame: hierin worden de vertoningen visueel opgelijst
+self.row_col: tuple dat bijhoud in welke rij, kolom de volgende vertoning geplaatst moet worden
+self.button_frame: de frame waarin alle commando buttons gestoken worden (maak film, reserveer, ...)
+self.entry_labels: n-tuple die alle labels bevat van input-velden
+self.entries: n-tuple die alle input-velden bevat
+self.option_selected: string dat weergeeft welke commando_button geselecteerd is
+"""
+
 class GUI:
     def __init__(self, reservatiesysteem):
         """
@@ -19,12 +34,12 @@ class GUI:
         """aanmaken GUI screen"""
         self.screen = Tk()
         self.screen.geometry("1920x1280")
-        self.tab_manager = ttk.Notebook(self.screen)
+        tab_manager = ttk.Notebook(self.screen)
         self.main_dashboard = Frame(self.screen)
 
         """maak een main tab"""
-        self.tab_manager.add(self.main_dashboard, text="main tab")
-        self.tab_manager.pack(expand=True, fill=BOTH)
+        tab_manager.add(self.main_dashboard, text="main tab")
+        tab_manager.pack(expand=True, fill=BOTH)
 
         """define de frame waar alle vertoningen worden gezet"""
         upper_vertoning_frame = Frame(self.main_dashboard, width=1920, height=960)
@@ -86,6 +101,9 @@ class GUI:
         self.submit_button = None
         self.time_label = None
 
+        """
+        Maakt loading message aan
+        """
         self.loading = Label(self.main_dashboard, text="Loading...", font=font.Font(size=20))
 
         """
@@ -99,6 +117,9 @@ class GUI:
         self.__setup_buttons()
         self.__setup_time()
 
+        """
+        setup error_screen in het geval van errors
+        """
         self.error_screen = Label(self.main_dashboard, text="", font=font.Font(size=40), fg="red")
         self.error_screen.pack(side=LEFT, anchor=S)
 
