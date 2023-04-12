@@ -121,7 +121,7 @@ class GUI:
         """
         setup error_screen in het geval van errors
         """
-        self.error_screen = Label(self.main_dashboard, text="", font=font.Font(size=40), fg="red")
+        self.error_screen = Label(self.main_dashboard, text="", font=font.Font(size=30), fg="red", wraplength=1400)
         self.error_screen.pack(side=LEFT, anchor=S)
 
     def __add_vertoning(self, vertoning_tup):
@@ -606,7 +606,12 @@ class GUI:
                 jaar = str(int(datum[:datum.index("-")]))
                 datum_value = str(self.reservatiesysteem.convert_date(datum))
                 if len(datum_value) != 4+len(jaar):
-                    self.error_screen.config(text="datum is invalid/ of tijdreizen is uitgevonden")
+                    self.error_screen.config(text="datum is invalid")
+                    return
+
+                compare_date = str(self.reservatiesysteem.convert_date(datum))+ str(self.reservatiesysteem.slots.tableRetrieveIndex(slot_index)[0])
+                if int(compare_date) < self.reservatiesysteem.get_time():
+                    self.error_screen.config(text="tijdreizen wordt niet ondersteunt")
                     return
 
                 start_id = 0
@@ -647,6 +652,7 @@ class GUI:
             self.__reset_entries()
             self.current_time += 60  # voeg 1 min toe na elke actie
         except Exception as e:
+            print(e)
             self.error_screen.config(text=str(e))
 
     def __check_lees_reservatie(self):

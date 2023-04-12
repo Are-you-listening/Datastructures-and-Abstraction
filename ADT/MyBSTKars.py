@@ -94,8 +94,8 @@ class BST:
             if root[2]!=None:
                 return self.search(root[2], searchKey)
             else:
-                if (root[0] != searchKey[0]):
-                    return [False, root, True]
+                if (root[0] != searchKey[0]): # Edit on 12-04-2023 | Geeft altijd True mee anders?
+                    return [False, root, True] # Edit on 12-04-2023 | Geeft altijd True mee anders?
                 return [True, root, True]  #Geef True, gevonden positie(root & leftchild=TRUE) mee
 
         elif root[0] < searchKey[0]: #Is dus groter dan root, zoek dan in rightchild=FALSE
