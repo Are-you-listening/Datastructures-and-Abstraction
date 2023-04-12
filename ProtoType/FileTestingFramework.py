@@ -26,7 +26,7 @@ def test(**kwargs):
 
                 #print("-" * 50)
 
-    #file_compare("../testfiles/log_test.html", "../testfiles/test_controle.html")
+    file_compare("../testfiles/log_test.html", "../testfiles/test_controle.html")
 
 #test(file="system_test1.txt")
 
@@ -153,7 +153,7 @@ for i0 in adt_dict.get("0"):
                                 index += 1
 """
 
-"""
+
 index = 0
 for i0 in adt_dict.get("0"):
     for i1 in adt_dict.get("1"):
@@ -169,15 +169,15 @@ for i0 in adt_dict.get("0"):
                                 print(index)
 
                             # print((i0, i1, i2, i3, i4, i5, i6, i7, i8, i9))
-                            test(file="system_test8.txt", args_tup=(i0, i1, i2, i3, i4, i5, i6, i7, i8, i9))
+                            test(file="system_test9.txt", args_tup=(i0, i1, i2, i3, i4, i5, i6, i7, i8, i9))
                             index += 1
-"""
+
 """
 for i in range(1000):
     print(i)
     test(file="system_test5.txt")
 """
-
+"""
 class testobject:
     def __init__(self):
         self.value = None
@@ -270,3 +270,4 @@ for i0 in adt_dict.get("0"):
                             if value != i:
                                 print(i, mytwofourthreeAndRedblacktree)
                         index += 1
+"""
