@@ -177,7 +177,7 @@ class Reservatiesysteem:
 
         Precondities: Er worden 6 parameters ingegeven, allemaal zijn ze positieve unsigned integers. Het tijdslot moet bestaan/al zijn toegevoegd.
                       De film met filmid moet bestaan. De zaal met zaalnummer moet bestaan. id is een uniek id. Het aantal vrije_plaatsen moet correspondeen met de resp.
-                      plaats in de zaal met zaalnummer. In de zaal  op slot & datum mag niet al een Vertoning gepland zijn.
+                      plaats in de zaal met zaalnummer (kleiner of gelijk aan het aantal plaatsen in de bijbehorende zaal) In de zaal  op slot & datum mag niet al een Vertoning gepland zijn.
 
         Postconditie: Bij succes wordt er een nieuwe vertoningen aangemaakt en bewaard (de self.vertoningen wordt 1 groter)
         """
