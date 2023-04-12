@@ -34,7 +34,10 @@ class GUI:
 
         """aanmaken GUI screen"""
         self.screen = Tk()
-        self.screen.geometry("1920x1080")
+
+        width = 1920
+        height = 1080
+        self.screen.geometry(f"{width}x{height}")
         tab_manager = ttk.Notebook(self.screen)
         self.main_dashboard = Frame(self.screen)
 
@@ -42,11 +45,12 @@ class GUI:
         tab_manager.add(self.main_dashboard, text="main tab")
         tab_manager.pack(expand=True, fill=BOTH)
 
+
         """define de frame waar alle vertoningen worden gezet"""
-        upper_vertoning_frame = Frame(self.main_dashboard, width=1920, height=760)
+        upper_vertoning_frame = Frame(self.main_dashboard, width=1920, height=height-320)
 
         """tekencanvas dat helpt om de juiste pixels te tonen"""
-        scroll_canvas = Canvas(upper_vertoning_frame, width=1900, height=760)
+        scroll_canvas = Canvas(upper_vertoning_frame, width=1900, height=height-320)
 
         """scrollbar om door de vertoningen te scrollen"""
         scrollbar = Scrollbar(upper_vertoning_frame, orient=VERTICAL, command=scroll_canvas.yview, width=20)
