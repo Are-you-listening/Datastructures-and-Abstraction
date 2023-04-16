@@ -239,8 +239,7 @@ class TwoThreeFourTree:
                 parent.value=[parent_value,None,middle_value]   #Set new parent values
                 #Dia 112b
                 parent.middleleft=TreeItemType(Tree.key[0], Tree.value[0], Tree.left, None, None, Tree.middleleft, parent) #TreeItemType(left key,left value,left tree ,middleleft tree, middleright tree, right tree parent)
-                parent.right=TreeItemType(Tree.key[2], Tree.value[2], Tree.right, None, None, Tree.middleright, parent)
-
+                parent.right=TreeItemType(Tree.key[2], Tree.value[2], Tree.middleright, None, None, Tree.right, parent)
                 #Set new parents - Bij het aanmaken van een nieuw item kan het zijn dat de kind.parent relatie niet vernieuwd wordt, dit bouwt een zekerheid hiervoor in.
                 if Tree.left != None:
                     Tree.left.parent = parent.middleleft

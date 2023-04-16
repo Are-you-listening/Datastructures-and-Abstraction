@@ -570,8 +570,8 @@ class TwoThreeFourTree:
         """
         if self.LLchild != None:
             self.LLchild.inorderTraverse(visit)
-
-        visit(self.content[0].val)
+        if self.content[0] != None:
+            visit(self.content[0].val)
 
         if self.LRchild != None:
             self.LRchild.inorderTraverse(visit)
