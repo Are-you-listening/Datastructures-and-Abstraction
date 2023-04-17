@@ -138,7 +138,7 @@ class Reservatiesysteem:
 
         film_object = Film(filmid, titel, rating)
         self.films.tableInsert(1, film_object)
-        self.__display(f"maakt film {titel} {rating}")
+        self.__display(f"maakt film {titel} met rating: {rating}")
         return True
 
     def maak_zaal(self, nummer, maxplaatsen):
@@ -159,7 +159,7 @@ class Reservatiesysteem:
 
         zaal_object = Zaal(nummer, maxplaatsen)
         self.zalen.tableInsert(1, zaal_object)
-        self.__display(f"maakt zaal {nummer} {maxplaatsen}")
+        self.__display(f"maakt zaal met nummer: {nummer}  , en een aantal beschikbare plaatsen van: {maxplaatsen}")
         return True
 
     def maak_vertoning(self, id, zaalnummer, slot, datum, filmid, vrije_plaatsen):
@@ -216,7 +216,7 @@ class Reservatiesysteem:
         stack = eval(self.stack_string)
 
         self.vertoningen.tableInsert(id, (vertoning_object,stack) )
-        self.__display(f"maakt vertoning: {id} {zaalnummer} {slot} {datum} {filmid}")
+        self.__display(f"maakt vertoning met id: {id} op zaal met nummer: {zaalnummer} om: {slot} {datum} voor film met id: {filmid}")
         return True
 
     def maak_reservatie(self, vertoning_id, aantal_plaatsen, tijdstip, gebruiker_id):
@@ -252,7 +252,7 @@ class Reservatiesysteem:
 
         ReservatieItem = (tijdstip, Reservatie(vertoning_id, aantal_plaatsen, tijdstip, gebruiker_id))
         self.reservaties.tableInsert(ReservatieItem)
-        self.__display(f"maakt reservatie: {vertoning_id} {aantal_plaatsen} {tijdstip} {gebruiker_id}")
+        self.__display(f"maakt reservatie: voor vertoning met id: {vertoning_id} voor:  {aantal_plaatsen} mensen op tijdstip: {tijdstip} ,op naam van: {gebruiker_id}")
         return True
 
     def __get_time(self):
