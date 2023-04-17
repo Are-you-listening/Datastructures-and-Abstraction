@@ -88,7 +88,7 @@ class Log:
         result_string += """</h1>
                 <table>
                     <thead>
-                        <td>Datum</td>use_ADT
+                        <td>Datum</td>
                         <td>Film</td>"""
 
         """toevoeging van header"""

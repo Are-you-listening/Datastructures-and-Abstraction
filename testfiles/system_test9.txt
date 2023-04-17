@@ -19,7 +19,7 @@ vertoning 4 3 3 2023-10-10 1 200
 vertoning 5 3 4 2023-10-10 1 200
 vertoning 6 2 3 2023-10-10 1 50
 
-slechte film
+#slechte film
 vertoning 7 1 1 2023-10-10 2 50
 
 #medium film
