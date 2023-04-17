@@ -1,0 +1,17 @@
+#Test: F:40
+
+init
+zaal 2 200
+film 5 "This is a good test case (the movie)" 0.95
+
+#vertoning: id, zaalnummer, slot, datum, filmid, vrije_plaatsen
+vertoning 22 2 1 2023-12-10 5 200 #start om 14:30
+gebruiker 3 Henry Hendriks no_mail@oei.be
+
+start
+
+2023-11-11 11:30 reserveer 3 22 40
+
+2023-11-11 12:30 ticket 22 40
+
+2023-12-11 15:20 log
