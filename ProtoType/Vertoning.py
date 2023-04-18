@@ -20,11 +20,8 @@ class Vertoning:
         Precondities: Er worden 6 parameters gegeven, die allemaal positive unsigned integers en niet None zijn.
                       Er bestaat een film die overeenkomt met het gegeven filmid
                       Er bestaat een zaal die overeenkomt met een gegeven zaalnummer
-                      Er wordt een geldige slotwaarde gegeven waarvoor geldt dat:
-                      er maximum 4 en minium 3 cijfers zijn.
-                      De laatste 2 cijfers hebben als getal samen de volgende range [0, 59] en
-                      de andere cijfers hun samengevoegd getal hebben als range [0, 23]
-                      vb. 23u30 -> 2330
+                      Er wordt een geldige slotwaarde gegeven wat de tijd in seconden uitdrukt, van dit tijdslot. (9:00 = 9 * 3600)
+                      Datum is een paramater (string) van het formaat jjjjmmdd , dit stelt de datum van de vertoning voor.
         Postcondities: Er wordt een nieuwe vertoning aangemaakt/geconstrueerd
 
         :param id: positive unsigned integer
@@ -50,24 +47,24 @@ class Vertoning:
 
     def verminder_plaatsenVirtueel(self, hoeveelheid):
         """
-        Deze functie verminderd het aantal beschikbare plaatsen voor de vertoning
+        Deze functie verminderd het aantal beschikbare virtuele plaatsen voor de vertoning.
 
-        preconditie: Er moeten meer plaatsen beschikbaar zijn dan dat er verdwijnen.
-        postconditie: Het aantal plaatsen worden verminderd.
+        Preconditie: Er moeten meer plaatsen beschikbaar zijn dan dat er verdwijnen. (hoeveelheid mag niet groter zijn dan de huidige beschikbare virtuele plaatsen)
+        Postconditie: Het aantal beschikbare virtuele plaatsen worden verminderd met de ingegeven hoeveelheid.
 
         :param hoeveelheid: integer (geeft weer hoeveel plaatsen minder er beschikbaar zijn)
         """
         if (self.vrije_plaatsenVirtueel - hoeveelheid >= 0):
             self.vrije_plaatsenVirtueel = self.vrije_plaatsenVirtueel - hoeveelheid
             return True
-        return False
+        return False #Else; error
 
     def verhoog_plaatsenFysiek(self, hoeveelheid):
         """
-        Deze functie verminderd het aantal beschikbare plaatsen voor de vertoning
+        Deze functie verminderd het aantal beschikbare fysieke plaatsen voor de vertoning.
 
-        Preconditie: Er moeten meer plaatsen beschikbaar zijn dan dat er verdwijnen.
-        Postconditie: Het aantal plaatsen worden verminderd.
+        Preconditie: Er moeten meer plaatsen beschikbaar zijn dan dat er worden ingenomen. (hoeveelheid mag niet groter zijn dan het huidige beschikbare fysieke plaatsen)
+        Postconditie: Het aantal beschikbare fysieke plaatsen worden verminderd met de ingegeven hoeveelheid.
 
         :param hoeveelheid: integer (geeft weer hoeveel plaatsen minder er beschikbaar zijn)
         """
@@ -90,7 +87,7 @@ class Vertoning:
         """
         Start de vertoning.
 
-        Preconditie: De vertoning start op het juiste tijdstip en er mag geen andere vertoning bezig zijn in deze zaal
+        Preconditie: De vertoning wordt gestart op het juiste tijdstip en er mag geen andere vertoning bezig zijn in de zaal van deze vertoning.
         Postconditie: De vertoning wordt gestart (gestart = true)
         """
         self.afspelend = True

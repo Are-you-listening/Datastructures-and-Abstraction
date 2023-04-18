@@ -15,12 +15,13 @@ class Reservatie:
 
         Precondities: Er worden 4 parameters gegeven, ze zijn allemaal positieve integers.
                       Het resp. gekoppelde vertoning_id & gebruiker_id komen overeen met een bestaande vertoning & gebruiker.
+                      Tijdstip representeert het tijdstip van reserveren.
         Postcondities: Er wordt een nieuw reservatie object aangemaakt.
 
-        :param vertoning_id: integer
+        :param vertoning_id: unsigned integer
         :param aantal_plaatsen: unsigned integer
-        :param tijdstip: integer
-        :param gebruiker_id: integer
+        :param tijdstip: unsigned integer
+        :param gebruiker_id: unsigned integer
         """
         self.vertoning_id = vertoning_id
         self.aantal_plaatsen = aantal_plaatsen

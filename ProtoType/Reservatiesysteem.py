@@ -465,9 +465,9 @@ class Reservatiesysteem:
         :param vertoningid: integer (id van de vertoning)
         :param plaatsen: integer (aantal plaatsen dat niet meer beschikbaar zijn)
 
-        Precondities: Er zijn voldoende plaatsen in de vertoning. De vertoning met het id bestaat en is correct op te vragen. Plaatsen is een unsigned integer (+ en groter dan 0)
+        Precondities: Er zijn voldoende plaatsen in de vertoning. De vertoning met het id bestaat en is correct op te vragen. Plaatsen is een unsigned integer (en groter dan 0)
         Postconditie: het aantal plaatsen van de vertoning dat overeenkomt met het vertoning id
-                      wordt verminderd met het gegeven aantal plaatsen
+                      wordt verminderd met het ingegeven aantal plaatsen
         """
         notVol = self.vertoningen.tableRetrieve(vertoningid)[0][0].verhoog_plaatsenFysiek(plaatsen)
         if notVol:
@@ -579,4 +579,3 @@ class Reservatiesysteem:
 
     def get_time(self):
         return self.tijdsstip
-

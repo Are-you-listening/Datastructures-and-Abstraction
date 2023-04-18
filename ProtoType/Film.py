@@ -7,7 +7,6 @@ self.titel: (string) de titel van de overeenkomende film
 self.rating: (float) de score van de desbetreffende film
 """
 
-
 class Film:
     def __init__(self, id, titel, rating):
         """
@@ -23,13 +22,6 @@ class Film:
         :param titel: string
         :param rating: positive float ([0-100])
         """
-        if not isinstance(id, int) or id < 0:
-            raise Exception(f"Preconditie Film gefaald: id {id} wordt niet geaccepteerd")
-        if not isinstance(titel, str):
-            raise Exception(f"Preconditie Film gefaald: titel {titel} wordt niet geaccepteerd")
-        if not (isinstance(rating, float) and 0 <= rating <= 100):
-            raise Exception(f"Preconditie Film gefaald: rating {rating} wordt niet geaccepteerd")
-
         self.id = id
         self.titel = titel
         self.rating = rating

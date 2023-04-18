@@ -6,7 +6,6 @@ import threading
 import time
 from Reservatiesysteem import Reservatiesysteem
 
-
 """
 Deze ADT is de GUI die grbuikt kan worden om het reservatiesysteem te gebruiken
 
@@ -20,7 +19,6 @@ self.entry_labels: n-tuple die alle labels bevat van input-velden
 self.entries: n-tuple die alle input-velden bevat
 self.option_selected: string dat weergeeft welke commando_button geselecteerd is
 """
-
 
 class GUI:
     def __init__(self, reservatiesysteem):
