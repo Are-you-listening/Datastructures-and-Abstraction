@@ -263,9 +263,13 @@ class LCTable:
     def tableRetrieve(self, id):
         count = 0
 
-        object = self.tableRetrieveIndex(count)[0]
+        object_tuple = self.tableRetrieveIndex(count)
+        object = object_tuple[0]
+
         if (isinstance(object, tuple)):
              object = object[0]
+        else:
+            return (object, object_tuple[1])
 
         while object.get_id() != id:
             if self.tableRetrieveIndex(count)[1] == False:

@@ -156,8 +156,8 @@ class Reservatiesysteem:
         """
         if not (isinstance(nummer, int) and isinstance(maxplaatsen, int) and nummer > 0 and maxplaatsen > 0):
             raise Exception("Precondition Failed: in maak_zaal")
-        #if self.zalen.tableRetrieve(nummer)[1]:
-        #    raise Exception("Preconditie Failed: zaal bestaat al")
+        if self.zalen.tableRetrieve(nummer)[1]:
+            raise Exception("Preconditie Failed: zaal bestaat al")
 
         zaal_object = Zaal(nummer, maxplaatsen)
         self.zalen.tableInsert(1, zaal_object)
