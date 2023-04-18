@@ -16,7 +16,7 @@ from Log import Log
 Deze ADT geeft een reservatiesysteem weer dat gebruik maakt van de andere ADT's geïmplementeerd bij Toi
 
 Data:
-self.tijdstip: integer (= 0 default)  (geeft weer op welk tijdstip het programma zich bevindt)
+self.tijdstip: unsigned integer (= 0 default)  (geeft weer op welk tijdstip het programma zich bevindt)
 self.films: ketting van Film objecten (de aangemaakte film worden hier bewaard)
 self.zalen: ketting van Zaal objecten (de aangemaakte zaal worden hier bewaard)
 self.gebruikers: ketting van aangemaakte Gebruiker objecten (de aangemaakte gebruiker worden hier bewaard)
@@ -272,7 +272,7 @@ class Reservatiesysteem:
 
         ::param *args: kan ofwel van de vorm {datum, hour, minutes, seconds} of {hour, minutes, seconds} of {datum} zijn
 
-        Preconditie: datum is een string en hour, minutes, seconds zijn integers (de datum bestaat en is van de vorm "jjjjmmdd" en start niet met nullen)
+        Preconditie: datum is een string en hour, minutes, seconds zijn unsigned integers (de datum bestaat en is van de vorm "jjjjmmdd" en start niet met nullen)
         Postconditie: er wordt een integer teruggegeven waarbij de eerste 8 cijfers de datum voorstellen, en de rest stelt hour:minutes:seconds in seconden voor
         """
         if len(args) == 4:
@@ -404,6 +404,7 @@ class Reservatiesysteem:
                       Vertoning dat overeenkomt mag nog niet gestart zijn
                       Het aantal plaatsen dat wordt meegegeven moet zich nog op de stack van reservaties bevinden
                       Het aantal mensen moet groter zijn dan 0
+                      Ieder in te lezen ticket moet overeenkomen met een eerder aangemaakte reservatie waarbij het aantal_mensen van het ticket in totaal <= de gereserveerde plaatsen van die betreffende reservatie bedraagt.
         Postcondities: Het ticket is verwerkt, het aantal_vrijeplaatsen van de vertoning is geüpdated en de vertoning is eventueel gestart.
 
         :param vertoningid: id van de vertoning, positive unsigned int
