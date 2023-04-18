@@ -10,6 +10,11 @@ class InstructionParser:
         Maakt een InstructionParser object aan
         Alle commandos dat door dit object wordt aangeroepen moet publiek zijn
 
+        :param reservatie_systeem: reference naar reservatiesysteem
+        :param use_adt: de adt (queue) dat gebruikt wordt om de toekomstige orders (in tupel vorm) te between
+                        volgens format (timestamp, order)
+        :param kwargs:kan de key "path" bevatten die een relatief path geeft naar de file die uitgelezen moet worden
+
         Precondities: Er wordt een geldige ADT gegeven die dezelfde tableinstructies heeft als een queue.
                       Ook wordt er een reference gegeven naar het reservatiesysteem vanwaar deze klasse opgeroepen
                       wordt.
@@ -17,14 +22,9 @@ class InstructionParser:
                       Via de **kwargs wordt een bestaand path naar een file doorgegeven die aan het juiste file format
                       voldoet.
                       Indien via **kwargs geen path gegeven is, moet het default path bestaan
-                      De file moet het juiste file-format bevatten
-
-        :param reservatie_systeem: reference naar reservatiesysteem
-        :param use_adt: de adt (queue) dat gebruikt wordt om de toekomstige orders (in tupel vorm) te between
-                        volgens format (timestamp, order)
-        :param kwargs:kan de key "path" bevatten die een relatief path geeft naar de file die uitgelezen moet worden
-
-        preconditie: de bovenstaande parameters worden correct gegeven
+                      De file moet het juiste file-format bevatten.
+                      De bovenstaande parameters worden correct gegeven.
+                      Er mogen geen 2 vertoningen met dezelfde film op hetzelfde moment (datum en slot) gepland worden. (oa Niet mogelijk dit correct te plaatsen in de log)
         postcondities: een InstructionParser wordt geinitialiseerd
         """
 

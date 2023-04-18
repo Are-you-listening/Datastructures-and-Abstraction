@@ -128,6 +128,7 @@ class Log:
         filmid = tup[1]
         slot = tup[3]
         key_value = int(datum + str(filmid) + str(slot))
+        print(key_value)
         self.sorting_tree.tableInsert(key_value, tup)
 
     def __log_add_data(self, value):
