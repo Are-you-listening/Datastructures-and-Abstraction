@@ -16,7 +16,7 @@ from Log import Log
 Deze ADT geeft een reservatiesysteem weer dat gebruik maakt van de andere ADT's geïmplementeerd bij Toi
 
 Data:
-self.tijdstip: integer (= 0 default)  (geeft weer op welk tijdstip het programma zich bevindt)
+self.tijdstip: unsigned integer (= 0 default)  (geeft weer op welk tijdstip het programma zich bevindt)
 self.films: ketting van Film objecten (de aangemaakte film worden hier bewaard)
 self.zalen: ketting van Zaal objecten (de aangemaakte zaal worden hier bewaard)
 self.gebruikers: ketting van aangemaakte Gebruiker objecten (de aangemaakte gebruiker worden hier bewaard)
@@ -43,15 +43,13 @@ class Reservatiesysteem:
 
         :param **kwargs, kan "displaymode" bevatten die weergeeft hoe we de data weergeven
 
-        Precondities: Er worden geen andere parameters gegeven.
-                      self.films, self.zalen, self.gebruikers hebben ADT TABEL met als meegegeven ADT een ADT Linkedchain
-                      (indien self.keyswap == True is ADT BST, 234Tree, RB Tree ook oke)
-                      self.vertoningen heeft ADT BST, 234Tree, RbTree
-                      (indien self.keyswap == True is ADT Linkedchain ook oke)
-                      self.slots, self.reservatie_archief is een ADT linkedchain
-                      self.reservaties, self.ip_string zijn een ADT Queue
-                      self.stack_string is een string dat een ADT stack object beschrijft (dat ook geimporteerd is) eval(deze string) moet dit object geven
-                      self.log_string is een string dat een ADT BST, 234Tree, RbTree object beschrijft (dat ook geimporteerd is) eval(deze string) moet dit object geven
+        Precondities: Er worden geen andere parameters gegeven dan de beschreven paramaters.
+                      self.films, self.zalen, self.gebruikers zijn van het type: ADT:TABEL met als input-ADT een LinkedChain(ADT). (Indien self.keyswap == True is een ADT zoals BST, 234Tree, RB Tree wel in orde)
+                      self.vertoningen is een ADT van de volgende types: BST, 234Tree, RbTree (Indien self.keyswap == True is ADT:Linkedchain ook gessuported)
+                      self.slots, self.reservatie_archief is een ADT van het type: LinkedChain
+                      self.reservaties, self.ip_string zijn een ADT van het type: Queue
+                      self.stack_string is een string dat een ADT stack object beschrijft (Moet geïmported zijn) waarmee eval(deze string het corresponderende object mee geeft
+                      self.log_string is een string dat een ADT van het type: BST, 234Tree, RbTree object beschrijft (Moet geïmported zijn) waarmee eval(deze string) het corresponderende object mee geeft
                       self.instruction_parser is een InstructionParser object
 
         Postconditie: Een Reservatiesysteem object wordt aangemaakt.
@@ -114,7 +112,7 @@ class Reservatiesysteem:
         :param achternaam: string (achternaam van de gebruiker)
         :param mail: string (e-mail adres van gebruiker)
 
-        Precondities: Er worden 4 parameters gegeven, id is een positieve integer en voornaam, achternaam en mail zijn strings. Het id is een unieke getal.
+        Precondities: Er worden 4 parameters gegeven, id is een positieve integer en voornaam, achternaam en mail zijn strings. Het id is een uniek getal. (De gebruiker met dit id bestaat nog niet)
         Postconditie: Bij succes wordt een nieuwe gebruiker aangemaakt en bewaard (self.gebruikers wordt 1 groter).
         """
         if( (not isinstance(id,int)) or (id<=0) or (not isinstance(voornaam,str)) or (not isinstance(achternaam,str)) or (not isinstance(mail,str)) ):
@@ -132,7 +130,7 @@ class Reservatiesysteem:
         :param titel: string (titel van film)
         :param rating: float (rating van film)
 
-        Precondities: Er worden 3 parameters gegeven, id is een positieve integer, titel is een string en rating is een float tussen 0 en 100. filmid is een uniek getal.
+        Precondities: Er worden 3 parameters gegeven, id is een positieve integer, titel is een string en rating is een float tussen 0 en 100. filmid is een uniek getal. (De film met dit filmid bestaat nog niet)
         Postconditie: Er wordt een nieuwe film aangemaakt en bewaard (de ketting films wordt 1 groter).
         """
         if not (isinstance(filmid, int) and isinstance(titel, str) and isinstance(rating, float) and filmid > 0 and rating<=100 and rating>=0):
@@ -140,7 +138,7 @@ class Reservatiesysteem:
 
         film_object = Film(filmid, titel, rating)
         self.films.tableInsert(1, film_object)
-        self.__display(f"maakt film {titel} {rating}")
+        self.__display(f"maakt film {titel} met rating: {rating}")
         return True
 
     def maak_zaal(self, nummer, maxplaatsen):
@@ -151,7 +149,7 @@ class Reservatiesysteem:
         :param maxplaatsen: positive unsigned int (max plaatsen van de zaal)
 
         Precondities: Er worden 2 parameters gegeven, beide zijn positieve unsigned integers.
-                      De zaal bestaat not niet
+                      De zaal bestaat not niet, nummer is dus een uniek getal.
         Postconditie: Bij succes wordt er een nieuwe zaal aangemaakt en bewaard in self.zalen (self.zalen zalen wordt 1 groter).
         """
         if not (isinstance(nummer, int) and isinstance(maxplaatsen, int) and nummer > 0 and maxplaatsen > 0):
@@ -161,7 +159,7 @@ class Reservatiesysteem:
 
         zaal_object = Zaal(nummer, maxplaatsen)
         self.zalen.tableInsert(1, zaal_object)
-        self.__display(f"maakt zaal {nummer} {maxplaatsen}")
+        self.__display(f"maakt zaal met nummer: {nummer}  , en een aantal beschikbare plaatsen van: {maxplaatsen}")
         return True
 
     def maak_vertoning(self, id, zaalnummer, slot, datum, filmid, vrije_plaatsen):
@@ -176,10 +174,10 @@ class Reservatiesysteem:
         :param vrije_plaatsen: positive unsigned int (initieel aantal plaatsen in de vertoning)
 
         Precondities: Er worden 6 parameters ingegeven, allemaal zijn ze positieve unsigned integers. Het tijdslot moet bestaan/al zijn toegevoegd.
-                      De film met filmid moet bestaan. De zaal met zaalnummer moet bestaan. id is een uniek id. Het aantal vrije_plaatsen moet correspondeen met de resp.
-                      plaats in de zaal met zaalnummer (kleiner of gelijk aan het aantal plaatsen in de bijbehorende zaal) In de zaal  op slot & datum mag niet al een Vertoning gepland zijn.
+                      De film met filmid moet bestaan. De zaal met zaalnummer moet bestaan. id is een uniek id.(De vertoning met dit id bestaat nog niet) Het aantal vrije_plaatsen moet correspondeen met de resp.
+                      plaats in de zaal met zaalnummer (kleiner of gelijk aan het aantal plaatsen in de bijbehorende zaal) In de zaal  op slot & datum mag niet al een vertoning gepland zijn.
 
-        Postconditie: Bij succes wordt er een nieuwe vertoningen aangemaakt en bewaard (de self.vertoningen wordt 1 groter)
+        Postconditie: Bij succes wordt er een nieuwe vertoningen aangemaakt en bewaard (self.vertoningen wordt 1 groter)
         """
         if not self.zalen.tableRetrieve(zaalnummer)[1]:
             raise Exception("Exception in maak_vertoning: Zaal met identificatie bestaat niet ")
@@ -218,7 +216,7 @@ class Reservatiesysteem:
         stack = eval(self.stack_string)
 
         self.vertoningen.tableInsert(id, (vertoning_object,stack) )
-        self.__display(f"maakt vertoning: {id} {zaalnummer} {slot} {datum} {filmid}")
+        self.__display(f"maakt vertoning met id: {id} op zaal met nummer: {zaalnummer} om: {slot} {datum} voor film met id: {filmid}")
         return True
 
     def maak_reservatie(self, vertoning_id, aantal_plaatsen, tijdstip, gebruiker_id):
@@ -230,7 +228,8 @@ class Reservatiesysteem:
         :param tijdstip: integer>=0 (tijdstip van reservatie)
         :param gebruiker_id: integer>0 (id van de gebruiker dat een reservatie maakt).
 
-        Precondities: Er worden 4 parameters gegeven, allemaal zijn ze positieve integers. De gebruiker moet bestaan met het bijbehorende ID. De vertoning met het bijbehorende ID moet bestaan. Het tijdstip van reserveren moet gebeuren voor
+        Precondities: Er worden 4 parameters gegeven, allemaal zijn ze positieve integers. De gebruiker moet bestaan met het bijbehorende ID en terug op te vragen zijn uit self.gebruikers. De vertoning met het bijbehorende ID moet bestaan en op te vragen zijn in self.vertoningen.
+        Het tijdstip van reserveren moet gebeuren voor
         Postconditie: Bij succes: er wordt een nieuwe reservatie aangemaakt en bewaard (de queue reservaties wordt 1 groter)
         """
         if not isinstance(vertoning_id, int) and isinstance(aantal_plaatsen, int) and isinstance(tijdstip,
@@ -253,7 +252,7 @@ class Reservatiesysteem:
 
         ReservatieItem = (tijdstip, Reservatie(vertoning_id, aantal_plaatsen, tijdstip, gebruiker_id))
         self.reservaties.tableInsert(ReservatieItem)
-        self.__display(f"maakt reservatie: {vertoning_id} {aantal_plaatsen} {tijdstip} {gebruiker_id}")
+        self.__display(f"maakt reservatie: voor vertoning met id: {vertoning_id} voor:  {aantal_plaatsen} mensen op tijdstip: {tijdstip} ,op naam van: {gebruiker_id}")
         return True
 
     def __get_time(self):
@@ -273,7 +272,7 @@ class Reservatiesysteem:
 
         ::param *args: kan ofwel van de vorm {datum, hour, minutes, seconds} of {hour, minutes, seconds} of {datum} zijn
 
-        Preconditie: datum is een string en hour, minutes, seconds zijn integers (de datum bestaat en is van de vorm "jjjjmmdd" en start niet met nullen)
+        Preconditie: datum is een string en hour, minutes, seconds zijn unsigned integers (de datum bestaat en is van de vorm "jjjjmmdd" en start niet met nullen)
         Postconditie: er wordt een integer teruggegeven waarbij de eerste 8 cijfers de datum voorstellen, en de rest stelt hour:minutes:seconds in seconden voor
         """
         if len(args) == 4:
@@ -405,6 +404,7 @@ class Reservatiesysteem:
                       Vertoning dat overeenkomt mag nog niet gestart zijn
                       Het aantal plaatsen dat wordt meegegeven moet zich nog op de stack van reservaties bevinden
                       Het aantal mensen moet groter zijn dan 0
+                      Ieder in te lezen ticket moet overeenkomen met een eerder aangemaakte reservatie waarbij het aantal_mensen van het ticket in totaal <= de gereserveerde plaatsen van die betreffende reservatie bedraagt.
         Postcondities: Het ticket is verwerkt, het aantal_vrijeplaatsen van de vertoning is geüpdated en de vertoning is eventueel gestart.
 
         :param vertoningid: id van de vertoning, positive unsigned int
