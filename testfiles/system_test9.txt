@@ -14,10 +14,10 @@ film 3 "Deze film is wel oke" 0.5
 #vertoning: id, zaalnummer, slot, datum, filmid, vrije_plaatsen
 vertoning 1 1 2 2023-10-10 1 50
 vertoning 2 3 1 2023-10-10 1 200
-vertoning 3 3 2 2023-10-10 1 200
+vertoning 3 3 2 2023-10-11 1 200
 vertoning 4 3 3 2023-10-10 1 200
 vertoning 5 3 4 2023-10-10 1 200
-vertoning 6 2 3 2023-10-10 1 50
+vertoning 6 2 3 2023-10-30 1 50
 
 #slechte film
 vertoning 7 1 1 2023-10-10 2 50
