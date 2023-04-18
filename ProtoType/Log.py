@@ -9,6 +9,7 @@ self.current: bewaard current locaties nodig voor te detecteren in het geval van
 self.resSYS: reference naar reservatiesysteem
 self.store_path = "path naar het address waar we onze file willen storen
 """
+import math
 
 
 class Log:
@@ -28,9 +29,10 @@ class Log:
         self.header_string = ""
         self.text_string = ""
         self.sorting_tree = use_adt
-        self.current = (0, 0, -1, 1)
 
         self.resSYS = reservatiesysteem
+
+        self.current = (0, 0, -1, self.__get_next_time(-1))
 
         if "path" in kwargs:
             self.store_path = kwargs["path"]
@@ -49,7 +51,9 @@ class Log:
         """
         for i in range(1, self.resSYS.slots.tableGetLength() + 1):
             slot = self.resSYS.slots.tableRetrieveIndex(i)[0]
+
             self.sorting_tree.tableInsert(slot, slot)
+
         self.sorting_tree.traverseTable(self.__log_add_header)
         self.sorting_tree.clear()
 
@@ -61,10 +65,10 @@ class Log:
         self.sorting_tree.traverseTable(self.__log_add_data)
 
         """we vullen de niet ingevulde slot aan het einde op"""
-        current_datum, current_tijd, current_film, current_index = self.current
-        while current_index != self.resSYS.slots.tableGetLength() + 1:
+        current_datum, current_tijd, current_film, current_time = self.current
+        while current_time != -1:
             self.text_string += """<td></td>"""
-            current_index += 1
+            current_time = self.__get_next_time(current_time)
 
         result_string = """
         <html>
@@ -136,32 +140,41 @@ class Log:
         """
         datum = value[0]
         tijd = value[3]
-        current_datum, current_tijd, current_film, current_index = self.current
+        current_datum, current_tijd, current_film, current_time = self.current
         tabs = '\t' * 6
 
         """indien de datum/film niet matched gaan we naar een volgende regel"""
         if (datum > current_datum) or (value[1] != current_film):
             if current_datum != 0:
                 """opvullen van huidige regel"""
-                while current_index != self.resSYS.slots.tableGetLength()+1:
+                while current_time != -1:
                     self.text_string += """\n<td></td>"""
-                    current_index += 1
+                    current_time = self.__get_next_time(current_time)
                 self.text_string += f"""\n</tr> </tbody>"""
 
             tenp_tabs = "\t" * 5
             self.text_string += f"""\n{tenp_tabs}<tbody> <tr>"""
             self.text_string += f"\n{tabs}<td>{self.resSYS.convert_time(datum)[0]}</td>"
             self.text_string += f"\n{tabs}<td>{self.resSYS.films.tableRetrieve(value[1])[0].titel}</td>"
-            current_index = 1
+            current_time = self.__get_next_time(-1)
 
         """we gaan steeds een tijdslot verder totdat de tijdslot matched"""
-        tijd_slot = self.resSYS.slots.tableRetrieveIndex(current_index)[0]
-        while tijd_slot != tijd:
+
+        while current_time != tijd:
             self.text_string += f"""\n{tabs}<td></td>"""
 
-            current_index += 1
-            tijd_slot = self.resSYS.slots.tableRetrieveIndex(current_index)[0]
+            current_time = self.__get_next_time(current_time)
 
         """voeg de data toe onder de tijdslot"""
         self.text_string += f"\n{tabs}<td>{value[2]}</td>"
-        self.current = (datum, tijd, value[1], current_index + 1)
+        self.current = (datum, tijd, value[1], self.__get_next_time(current_time))
+
+    def __get_next_time(self, current_time):
+        best_time = -1
+        for i in range(1, self.resSYS.slots.tableGetLength()+1):
+            optional_time = self.resSYS.slots.tableRetrieveIndex(i)[0]
+            if current_time < optional_time:
+                if optional_time < best_time or best_time == -1:
+                    best_time = optional_time
+
+        return best_time
