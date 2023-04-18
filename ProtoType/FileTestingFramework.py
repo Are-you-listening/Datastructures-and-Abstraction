@@ -80,8 +80,8 @@ for i0 in adt_dict.get("0"):
                                         if index % 1000 == 0:
                                             print(index)
 
-                            test(["system_test9.txt", "system.txt", "system_test6.txt"], ["test_controle9.html", "test_controle0.html", "test_controle6.html"],
-                                 args_tup=(i0, i1, i2, i3, i4, i5, i6, i7, i8, i9))
-                            index += 1
+                                        test(["system_test9.txt", "system.txt", "system_test6.txt"], ["test_controle9.html", "test_controle0.html", "test_controle6.html"],
+                                             args_tup=(i0, i1, i2, i3, i4, i5, i6, i7, i8, i9))
+                                        index += 1
 
 
