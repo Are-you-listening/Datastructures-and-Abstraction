@@ -51,6 +51,7 @@ class Reservatiesysteem:
                       self.stack_string is een string dat een ADT stack object beschrijft (Moet geïmported zijn) waarmee eval(deze string het corresponderende object mee geeft
                       self.log_string is een string dat een ADT van het type: BST, 234Tree, RbTree object beschrijft (Moet geïmported zijn) waarmee eval(deze string) het corresponderende object mee geeft
                       self.instruction_parser is een InstructionParser object
+                      De in te laden array met tijdslots moet een array zijn met allemaal geldige tijdslotten zijn en niet leeg zijn.
 
         Postconditie: Een Reservatiesysteem object wordt aangemaakt.
         """
