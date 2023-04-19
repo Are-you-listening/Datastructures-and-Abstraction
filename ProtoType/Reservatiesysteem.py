@@ -88,7 +88,7 @@ class Reservatiesysteem:
 
         self.slots.load([14 * 3600 + 30 * 60, 17 * 3600, 20 * 3600, 22 * 3600 + 30 * 60])#14:30 #17:00 #20:00#22:30 #Initaliseert de huidige slots
 
-        self.display_mode = None
+        self.display_mode = ""
         if "display_mode" in kwargs:
             self.display_mode = kwargs["display_mode"]
 
