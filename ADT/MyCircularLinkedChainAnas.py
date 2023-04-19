@@ -266,12 +266,13 @@ class LCTable:
         object_tuple = self.tableRetrieveIndex(count)
         object = object_tuple[0]
 
+        if not object_tuple[1]:
+            return (None, False)
 
         if (isinstance(object, tuple)):
              object = object[0]
         #else:
         #    return (object, object_tuple[1])
-
 
         while object.get_id() != id:
             if self.tableRetrieveIndex(count)[1] == False:
@@ -280,7 +281,7 @@ class LCTable:
             if count == self.LC.getLength():
                 return (None, False)
             object = self.tableRetrieveIndex(count)[0]
-            if (isinstance(object, tuple)): # Tuple(Vertoning,Stack) heeft geen functie .get_id()
+            if (isinstance(object, tuple)):  # Tuple(Vertoning,Stack) heeft geen functie .get_id()
                 object = object[0]
         return (self.tableRetrieveIndex(count)[0], True)
 
