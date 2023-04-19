@@ -17,14 +17,14 @@ class Tabel:
         self.traverse_function = None
 
         self.linked_chain = MyCircularLinkedChainAnas.LCTable()
-
-        self.linked_chain.load(["MyBSTAnas.BSTTable()", "MyBSTEmil.BSTTable()", "MyBSTTibo.BSTTable()",
-                                "MyCircularLinkedChainAnas.LCTable()", "MyCircularLinkedChainEmil.LCTable()",
-                                "MyCircularLinkedChainKars.LCTable()", "MyCircularLinkedChainTibo.LCTable()",
-                                "MyRedBlackTreeAnas.RedBlackTreeTable()", "MyTwoThreeFourTreeEmil.TwoThreeFourTreeTable()",
-                                "MyTwoThreeFourTreeKars.TwoThreeFourTreeTable()", "MyTwoThreeFourTreeTibo.TwoThreeFourTreeTable()", "MyBSTKars.BSTTable()"])
-
-
+        #"MyTwoThreeFourTreeEmil.TwoThreeFourTreeTable()",
+        #"MyBSTAnas.BSTTable()", "MyBSTEmil.BSTTable()", "MyBSTTibo.BSTTable()",
+        #"MyCircularLinkedChainAnas.LCTable()", "MyCircularLinkedChainEmil.LCTable()",
+        #
+        #"MyRedBlackTreeAnas.RedBlackTreeTable()",
+        #"MyTwoThreeFourTreeEmil.TwoThreeFourTreeTable()"
+        #"MyTwoThreeFourTreeKars.TwoThreeFourTreeTable()", "MyTwoThreeFourTreeTibo.TwoThreeFourTreeTable()", "MyBSTKars.BSTTable()"
+        self.linked_chain.load(["MyCircularLinkedChainKars.LCTable()", "MyCircularLinkedChainTibo.LCTable()", "MyCircularLinkedChainKars.LCTable()", "MyCircularLinkedChainTibo.LCTable()",])
 
     def tableInsert(self, key, value, sub_adt=None):
         if not self.dubbele_key: #Normal Insert on ID
@@ -47,8 +47,9 @@ class Tabel:
             else: #Er is nog geen sub_adt, plaats de meegegeven sub_adt
                 #Check up if newly given sub_adt is correct/valid
                 if sub_adt == None:
-                    r= random.randint(0, 11)
-                    sub_adt = eval(self.linked_chain.tableRetrieveIndex(r)[0])
+                    r= random.randint(0, 3)
+                    debug = self.linked_chain.tableRetrieveIndex(r)
+                    sub_adt = eval(debug[0])
                 if sub_adt == None or not sub_adt.tableIsEmpty():
                     raise Exception("Preconditie Wrapper string compatible: sub-adt niet empty")
                 sub_adt.id = key #Set First ID

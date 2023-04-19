@@ -117,7 +117,7 @@ class Reservatiesysteem:
         if( (not isinstance(id,int)) or (id<=0) or (not isinstance(voornaam,str)) or (not isinstance(achternaam,str)) or (not isinstance(mail,str)) ):
             raise Exception("Precondition Failure bij maak_gebruiker")
         newGebruiker = Gebruiker(id, voornaam, achternaam, mail)
-        self.gebruikers.tableInsert(voornaam, newGebruiker)
+        self.gebruikers.tableInsert(id, newGebruiker)
         self.__display(f"maak gebruiker: {voornaam} {achternaam} {mail}")
         return True
 
@@ -136,7 +136,7 @@ class Reservatiesysteem:
             raise Exception("Precondition Failed: in maak_film")
 
         film_object = Film(filmid, titel, rating)
-        self.films.tableInsert(rating, film_object)
+        self.films.tableInsert(filmid, film_object)
         self.__display(f"maakt film {titel} met rating: {rating}")
         return True
 
@@ -214,7 +214,7 @@ class Reservatiesysteem:
         vertoning_object = Vertoning(id, zaalnummer, slot, datum, filmid, vrije_plaatsen)
         stack = eval(self.stack_string)
 
-        self.vertoningen.tableInsert(datum, (vertoning_object,stack) )
+        self.vertoningen.tableInsert(zaalnummer, (vertoning_object,stack) )
         self.__display(f"maakt vertoning met id: {id} op zaal met nummer: {zaalnummer} om: {slot} {datum} voor film met id: {filmid}")
         return True
 

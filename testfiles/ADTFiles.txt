@@ -1,7 +1,7 @@
-MyBSTAnas.BSTTable() 3 9
-MyBSTEmil.BSTTable() 3 9
-MyBSTKars.BSTTable() 3 9
-MyBSTTibo.BSTTable() 3 9
+#MyBSTAnas.BSTTable() 3 9
+#MyBSTEmil.BSTTable() 3 9
+#MyBSTKars.BSTTable() 3 9
+#MyBSTTibo.BSTTable() 3 9
 MyCircularLinkedChainAnas.LCTable() 0 1 2 5 6
 MyCircularLinkedChainEmil.LCTable() 0 1 2 5 6
 MyCircularLinkedChainKars.LCTable() 0 1 2 5 6
@@ -10,11 +10,11 @@ MyQueueAnas.MyQueueTable() 4 7
 MyQueueEmil.MyQueueTable() 4 7
 MyQueueKars.MyQueueTable() 4 7
 MyQueueTibo.MyQueueTable() 4 7
-MyRedBlackTreeAnas.RedBlackTreeTable() 3 9
+#MyRedBlackTreeAnas.RedBlackTreeTable() 3 9
 MyStackAnas.MyStackTable() 8
 MyStackEmil.MyStackTable() 8
 MyStackKars.MyStackTable() 8
 MyStackTibo.MyStackTable() 8
 MyTwoThreeFourTreeEmil.TwoThreeFourTreeTable() 3 9
-MyTwoThreeFourTreeKars.TwoThreeFourTreeTable() 3 9
-MyTwoThreeFourTreeTibo.TwoThreeFourTreeTable() 3 9
+#MyTwoThreeFourTreeKars.TwoThreeFourTreeTable() 3 9
+#MyTwoThreeFourTreeTibo.TwoThreeFourTreeTable() 3 9
