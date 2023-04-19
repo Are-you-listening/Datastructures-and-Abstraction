@@ -1,3 +1,4 @@
+from ADT.Tabel import MyBSTTibo
 """
 Deze ADT geeft een logsysteem weer
 

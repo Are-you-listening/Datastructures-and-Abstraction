@@ -51,6 +51,7 @@ class Reservatiesysteem:
                       self.stack_string is een string dat een ADT stack object beschrijft (Moet geïmported zijn) waarmee eval(deze string het corresponderende object mee geeft
                       self.log_string is een string dat een ADT van het type: BST, 234Tree, RbTree object beschrijft (Moet geïmported zijn) waarmee eval(deze string) het corresponderende object mee geeft
                       self.instruction_parser is een InstructionParser object
+                      De in te laden array met tijdslots moet een array zijn met allemaal geldige tijdslotten zijn en niet leeg zijn.
 
         Postconditie: Een Reservatiesysteem object wordt aangemaakt.
         """
@@ -88,7 +89,7 @@ class Reservatiesysteem:
 
         self.slots.load([14 * 3600 + 30 * 60, 17 * 3600, 20 * 3600, 22 * 3600 + 30 * 60])#14:30 #17:00 #20:00#22:30 #Initaliseert de huidige slots
 
-        self.display_mode = None
+        self.display_mode = ""
         if "display_mode" in kwargs:
             self.display_mode = kwargs["display_mode"]
 
@@ -157,7 +158,7 @@ class Reservatiesysteem:
             raise Exception("Preconditie Failed: zaal bestaat al")
 
         zaal_object = Zaal(nummer, maxplaatsen)
-        self.zalen.tableInsert(maxplaatsen, zaal_object)
+        self.zalen.tableInsert(nummer, zaal_object)
         self.__display(f"maakt zaal met nummer: {nummer}  , en een aantal beschikbare plaatsen van: {maxplaatsen}")
         return True
 
@@ -214,7 +215,7 @@ class Reservatiesysteem:
         vertoning_object = Vertoning(id, zaalnummer, slot, datum, filmid, vrije_plaatsen)
         stack = eval(self.stack_string)
 
-        self.vertoningen.tableInsert(zaalnummer, (vertoning_object,stack) )
+        self.vertoningen.tableInsert(id, (vertoning_object,stack) )
         self.__display(f"maakt vertoning met id: {id} op zaal met nummer: {zaalnummer} om: {slot} {datum} voor film met id: {filmid}")
         return True
 
