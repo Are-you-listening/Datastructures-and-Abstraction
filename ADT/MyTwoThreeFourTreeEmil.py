@@ -141,6 +141,7 @@ class TwoThreeFourTree:
                     parent.LRchild = newRighttree
                 elif newLefttree.content[0].key > parent.content[0].key and newLefttree.content[0].key < parent.content[1].key:
                     parent.LRchild = newLefttree
+                    parent.RRchild = parent.RLchild
                     parent.RLchild = newRighttree
                 elif newLefttree.content[0].key > parent.content[1].key:
                     parent.RLchild = newLefttree
@@ -155,10 +156,14 @@ class TwoThreeFourTree:
         :param newItem: het Item dat aan de boom moet worden toegevoegd
         :return: True als het gelukt is, anders False
         """
+
         currentTree = self
         previousTree = None
         if self.isFull():
             self.split(previousTree)
+
+        if newItem.key == 15:
+            debug = True
 
         while not currentTree.isLeaf():
             if currentTree.isFull():
@@ -636,14 +641,18 @@ class TwoThreeFourTree:
             if len(currentdict['children']) >= 2:
                 temptree.load(currentdict['children'][0])
                 self.LLchild = copy.deepcopy(temptree)
+                temptree = TwoThreeFourTree()
                 temptree.load(currentdict['children'][1])
                 self.LRchild = copy.deepcopy(temptree)
                 if len(currentdict['children']) >= 3:
+                    temptree = TwoThreeFourTree()
                     temptree.load(currentdict['children'][2])
                     self.RLchild = copy.deepcopy(temptree)
                     if (len(currentdict['children'])) == 4:
+                        temptree = TwoThreeFourTree()
                         temptree.load(currentdict['children'][3])
                         self.RRchild = copy.deepcopy(temptree)
+
 
 class TwoThreeFourTreeTable:
     def __init__(self):
@@ -676,3 +685,10 @@ class TwoThreeFourTreeTable:
 
     def get_id(self):
         return self.id
+
+class O:
+    def __init__(self):
+        pass
+t = TwoThreeFourTreeTable()
+for i in [1, 2, 20, 19, 18, 17, 16, 15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 21]:
+    t.tableInsert(i, O())
