@@ -87,7 +87,7 @@ class LinkedChain:
             index -= 1
             if node.nextNode == None:
                 b = True
-                break;
+                break
             node = node.nextNode
         if b:
             node.nextNode = newNode
