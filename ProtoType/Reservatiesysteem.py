@@ -75,10 +75,10 @@ class Reservatiesysteem:
         #If statement to delete
         if "adt_args" in kwargs:
             adt_args = kwargs["adt_args"]
-            self.films = eval(adt_args[0])
-            self.zalen = eval(adt_args[1])
-            self.gebruikers = eval(adt_args[2])
-            self.vertoningen = eval(adt_args[3])
+            self.films = Tabel(eval(adt_args[0]), self.keyswap)
+            self.zalen = Tabel(eval(adt_args[1]), self.keyswap)
+            self.gebruikers = Tabel(eval(adt_args[2]), self.keyswap)
+            self.vertoningen = Tabel(eval(adt_args[3]), self.keyswap)
             self.reservaties = eval(adt_args[4])
             self.reservatie_archief = eval(adt_args[5])
             self.slots = eval(adt_args[6])

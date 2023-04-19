@@ -47,7 +47,6 @@ class Tabel:
             else: #Er is nog geen sub_adt, plaats de meegegeven sub_adt
                 #Check up if newly given sub_adt is correct/valid
                 if sub_adt == None:
-                    #r = random.randint(0, 10)
                     r= random.randint(0, 11)
                     sub_adt = eval(self.linked_chain.tableRetrieveIndex(r)[0])
                 if sub_adt == None or not sub_adt.tableIsEmpty():
