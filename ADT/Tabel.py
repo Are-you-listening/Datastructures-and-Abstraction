@@ -24,7 +24,7 @@ class Tabel:
         #"MyRedBlackTreeAnas.RedBlackTreeTable()",
         #"MyTwoThreeFourTreeEmil.TwoThreeFourTreeTable()"
         #"MyTwoThreeFourTreeKars.TwoThreeFourTreeTable()", "MyTwoThreeFourTreeTibo.TwoThreeFourTreeTable()", "MyBSTKars.BSTTable()"
-        self.linked_chain.load(["MyCircularLinkedChainKars.LCTable()", "MyCircularLinkedChainTibo.LCTable()", "MyCircularLinkedChainKars.LCTable()", "MyCircularLinkedChainTibo.LCTable()",])
+        self.linked_chain.load(["MyCircularLinkedChainKars.LCTable()", "MyCircularLinkedChainTibo.LCTable()", "MyCircularLinkedChainKars.LCTable()", "MyCircularLinkedChainTibo.LCTable()"])
 
     def tableInsert(self, key, value, sub_adt=None):
         if not self.dubbele_key: #Normal Insert on ID

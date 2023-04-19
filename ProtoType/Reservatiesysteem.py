@@ -157,7 +157,7 @@ class Reservatiesysteem:
             raise Exception("Preconditie Failed: zaal bestaat al")
 
         zaal_object = Zaal(nummer, maxplaatsen)
-        self.zalen.tableInsert(maxplaatsen, zaal_object)
+        self.zalen.tableInsert(nummer, zaal_object)
         self.__display(f"maakt zaal met nummer: {nummer}  , en een aantal beschikbare plaatsen van: {maxplaatsen}")
         return True
 
@@ -214,7 +214,7 @@ class Reservatiesysteem:
         vertoning_object = Vertoning(id, zaalnummer, slot, datum, filmid, vrije_plaatsen)
         stack = eval(self.stack_string)
 
-        self.vertoningen.tableInsert(zaalnummer, (vertoning_object,stack) )
+        self.vertoningen.tableInsert(id, (vertoning_object,stack) )
         self.__display(f"maakt vertoning met id: {id} op zaal met nummer: {zaalnummer} om: {slot} {datum} voor film met id: {filmid}")
         return True
 
