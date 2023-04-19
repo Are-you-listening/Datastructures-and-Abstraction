@@ -54,7 +54,7 @@ class Reservatiesysteem:
 
         Postconditie: Een Reservatiesysteem object wordt aangemaakt.
         """
-        self.keyswap = False
+        self.keyswap = True
 
         self.tijdsstip = 0 #Houdt het tijdstip bij | Format: int( "jaar"+"maand"+"dag"+str(#seconden uit uren,minuten,seconden) )
         self.films = Tabel(MyCircularLinkedChainAnas.LCTable(), self.keyswap )#Verzameling van alle films
