@@ -64,8 +64,6 @@ with open("../testfiles/ADTFiles.txt") as f:
             adt_dict[line_list[i]] = t
 
 
-
-
 index = 0
 for i0 in adt_dict.get("0"):
     for i1 in adt_dict.get("1"):

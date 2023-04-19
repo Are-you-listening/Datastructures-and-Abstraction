@@ -685,10 +685,3 @@ class TwoThreeFourTreeTable:
 
     def get_id(self):
         return self.id
-
-class O:
-    def __init__(self):
-        pass
-t = TwoThreeFourTreeTable()
-for i in [1, 2, 20, 19, 18, 17, 16, 15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 21]:
-    t.tableInsert(i, O())
