@@ -54,7 +54,7 @@ class Reservatiesysteem:
 
         Postconditie: Een Reservatiesysteem object wordt aangemaakt.
         """
-        self.keyswap = False
+        self.keyswap = True
 
         self.tijdsstip = 0 #Houdt het tijdstip bij | Format: int( "jaar"+"maand"+"dag"+str(#seconden uit uren,minuten,seconden) )
         self.films = Tabel(MyCircularLinkedChainAnas.LCTable(), self.keyswap )#Verzameling van alle films
@@ -117,7 +117,7 @@ class Reservatiesysteem:
         if( (not isinstance(id,int)) or (id<=0) or (not isinstance(voornaam,str)) or (not isinstance(achternaam,str)) or (not isinstance(mail,str)) ):
             raise Exception("Precondition Failure bij maak_gebruiker")
         newGebruiker = Gebruiker(id, voornaam, achternaam, mail)
-        self.gebruikers.tableInsert(1, newGebruiker)
+        self.gebruikers.tableInsert(voornaam, newGebruiker)
         self.__display(f"maak gebruiker: {voornaam} {achternaam} {mail}")
         return True
 
@@ -136,7 +136,7 @@ class Reservatiesysteem:
             raise Exception("Precondition Failed: in maak_film")
 
         film_object = Film(filmid, titel, rating)
-        self.films.tableInsert(1, film_object)
+        self.films.tableInsert(rating, film_object)
         self.__display(f"maakt film {titel} met rating: {rating}")
         return True
 
@@ -157,7 +157,7 @@ class Reservatiesysteem:
             raise Exception("Preconditie Failed: zaal bestaat al")
 
         zaal_object = Zaal(nummer, maxplaatsen)
-        self.zalen.tableInsert(1, zaal_object)
+        self.zalen.tableInsert(maxplaatsen, zaal_object)
         self.__display(f"maakt zaal met nummer: {nummer}  , en een aantal beschikbare plaatsen van: {maxplaatsen}")
         return True
 
@@ -214,7 +214,7 @@ class Reservatiesysteem:
         vertoning_object = Vertoning(id, zaalnummer, slot, datum, filmid, vrije_plaatsen)
         stack = eval(self.stack_string)
 
-        self.vertoningen.tableInsert(id, (vertoning_object,stack) )
+        self.vertoningen.tableInsert(datum, (vertoning_object,stack) )
         self.__display(f"maakt vertoning met id: {id} op zaal met nummer: {zaalnummer} om: {slot} {datum} voor film met id: {filmid}")
         return True
 
@@ -237,7 +237,8 @@ class Reservatiesysteem:
                 int) and vertoning_id >= 0 and aantal_plaatsen > 0 and gebruiker_id > 0 and tijdstip >= self.tijdsstip and tijdstip>=0:
             raise Exception("Precondition Error: maak_reservatie")
 
-        if not self.vertoningen.tableRetrieve(vertoning_id)[1]:
+        debug = self.vertoningen.tableRetrieve(vertoning_id)
+        if not debug[1]:
             raise Exception("Precondition Error: maak_reservatie, vertoning bestaat niet")
 
         if not self.gebruikers.tableRetrieve(gebruiker_id)[1]:  # Subscript operator?

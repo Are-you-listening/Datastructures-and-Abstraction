@@ -269,8 +269,8 @@ class LCTable:
 
         if (isinstance(object, tuple)):
              object = object[0]
-        else:
-            return (object, object_tuple[1])
+        #else:
+        #    return (object, object_tuple[1])
 
 
         while object.get_id() != id:
