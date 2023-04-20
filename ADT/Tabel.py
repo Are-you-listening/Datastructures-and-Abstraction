@@ -19,8 +19,8 @@ class Tabel:
         self.linked_chain = MyCircularLinkedChainAnas.LCTable()
 
         self.linked_chain.load(["MyBSTAnas.BSTTable()", "MyBSTEmil.BSTTable()", "MyBSTTibo.BSTTable()", "MyBSTKars.BSTTable()",
-                                "MyRedBlackTreeAnas.RedBlackTreeTable()", "MyTwoThreeFourTreeEmil.TwoThreeFourTreeTable()"
-                                "MyTwoThreeFourTreeKars.TwoThreeFourTreeTable()", "MyTwoThreeFourTreeTibo.TwoThreeFourTreeTable()"
+                                "MyRedBlackTreeAnas.RedBlackTreeTable()", "MyTwoThreeFourTreeEmil.TwoThreeFourTreeTable()",
+                                "MyTwoThreeFourTreeKars.TwoThreeFourTreeTable()", "MyTwoThreeFourTreeTibo.TwoThreeFourTreeTable()",
                                 "MyCircularLinkedChainKars.LCTable()", "MyCircularLinkedChainTibo.LCTable()", "MyCircularLinkedChainKars.LCTable()",
                                 "MyCircularLinkedChainTibo.LCTable()"])
 
