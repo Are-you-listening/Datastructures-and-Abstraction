@@ -63,7 +63,7 @@ with open("../testfiles/ADTFiles.txt") as f:
             t.append(adt)
             adt_dict[line_list[i]] = t
 
-
+"""
 index = 0
 for i0 in adt_dict.get("0"):
     for i1 in adt_dict.get("1"):
@@ -80,6 +80,24 @@ for i0 in adt_dict.get("0"):
                                         test(["system_test9.txt", "system.txt", "system_test6.txt"], ["test_controle9.html", "test_controle0.html", "test_controle6.html"],
                                              args_tup=(i0, i1, i2, i3, i4, i5, i6, i7, i8, i9))
                                         index += 1
+"""
 
+
+for i in range(15):
+    i0 = adt_dict.get("0")[i%len(adt_dict.get("0"))]
+    i1 = adt_dict.get("1")[i%len(adt_dict.get("1"))]
+    i2 = adt_dict.get("2")[i%len(adt_dict.get("2"))]
+    i3 = adt_dict.get("3")[i%len(adt_dict.get("3"))]
+    i4 = adt_dict.get("4")[i%len(adt_dict.get("4"))]
+    i5 = adt_dict.get("5")[i%len(adt_dict.get("5"))]
+    i6 = adt_dict.get("6")[i%len(adt_dict.get("6"))]
+    i7 = adt_dict.get("7")[i%len(adt_dict.get("7"))]
+    i8 = adt_dict.get("8")[i%len(adt_dict.get("8"))]
+    i9 = adt_dict.get("9")[i%len(adt_dict.get("9"))]
+    test(["system_test9.txt", "system.txt", "system_test6.txt"],
+         ["test_controle9.html", "test_controle0.html", "test_controle6.html"],
+         args_tup=(i0, i1, i2, i3, i4, i5, i6, i7, i8, i9))
+
+    print(i)
 
 

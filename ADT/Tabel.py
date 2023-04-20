@@ -17,14 +17,12 @@ class Tabel:
         self.traverse_function = None
 
         self.linked_chain = MyCircularLinkedChainAnas.LCTable()
-        #"MyTwoThreeFourTreeEmil.TwoThreeFourTreeTable()",
-        #"MyBSTAnas.BSTTable()", "MyBSTEmil.BSTTable()", "MyBSTTibo.BSTTable()",
-        #"MyCircularLinkedChainAnas.LCTable()", "MyCircularLinkedChainEmil.LCTable()",
-        #
-        #"MyRedBlackTreeAnas.RedBlackTreeTable()",
-        #"MyTwoThreeFourTreeEmil.TwoThreeFourTreeTable()"
-        #"MyTwoThreeFourTreeKars.TwoThreeFourTreeTable()", "MyTwoThreeFourTreeTibo.TwoThreeFourTreeTable()", "MyBSTKars.BSTTable()"
-        self.linked_chain.load(["MyCircularLinkedChainKars.LCTable()", "MyCircularLinkedChainTibo.LCTable()", "MyCircularLinkedChainKars.LCTable()", "MyCircularLinkedChainTibo.LCTable()"])
+
+        self.linked_chain.load(["MyBSTAnas.BSTTable()", "MyBSTEmil.BSTTable()", "MyBSTTibo.BSTTable()", "MyBSTKars.BSTTable()",
+                                "MyRedBlackTreeAnas.RedBlackTreeTable()", "MyTwoThreeFourTreeEmil.TwoThreeFourTreeTable()"
+                                "MyTwoThreeFourTreeKars.TwoThreeFourTreeTable()", "MyTwoThreeFourTreeTibo.TwoThreeFourTreeTable()"
+                                "MyCircularLinkedChainKars.LCTable()", "MyCircularLinkedChainTibo.LCTable()", "MyCircularLinkedChainKars.LCTable()",
+                                "MyCircularLinkedChainTibo.LCTable()"])
 
     def tableInsert(self, key, value, sub_adt=None):
         if not self.dubbele_key: #Normal Insert on ID
