@@ -34,7 +34,7 @@ class GUI:
         self.screen = Tk()
 
         width = 1920
-        height = 1080
+        height = 1080-200
         self.screen.geometry(f"{width}x{height}")
         tab_manager = ttk.Notebook(self.screen)
         self.main_dashboard = Frame(self.screen)

@@ -18,11 +18,9 @@ class Tabel:
 
         self.linked_chain = MyCircularLinkedChainAnas.LCTable()
 
-        self.linked_chain.load(["MyBSTAnas.BSTTable()", "MyBSTEmil.BSTTable()", "MyBSTTibo.BSTTable()", "MyBSTKars.BSTTable()",
-                                "MyRedBlackTreeAnas.RedBlackTreeTable()", "MyTwoThreeFourTreeEmil.TwoThreeFourTreeTable()",
-                                "MyTwoThreeFourTreeKars.TwoThreeFourTreeTable()", "MyTwoThreeFourTreeTibo.TwoThreeFourTreeTable()",
-                                "MyCircularLinkedChainKars.LCTable()", "MyCircularLinkedChainTibo.LCTable()", "MyCircularLinkedChainKars.LCTable()",
-                                "MyCircularLinkedChainTibo.LCTable()"])
+        self.linked_chain.load(["MyBSTKars.BSTTable()", "MyBSTAnas.BSTTable()", "MyBSTEmil.BSTTable()", "MyBSTTibo.BSTTable()",
+                                "MyRedBlackTreeAnas.RedBlackTreeTable()", "MyTwoThreeFourTreeEmil.TwoThreeFourTreeTable()", "MyTwoThreeFourTreeKars.TwoThreeFourTreeTable()","MyTwoThreeFourTreeTibo.TwoThreeFourTreeTable()",
+                                "MyCircularLinkedChainKars.LCTable()", "MyCircularLinkedChainAnas.LCTable()", "MyCircularLinkedChainEmil.LCTable()", "MyCircularLinkedChainTibo.LCTable()"])
 
     def tableInsert(self, key, value, sub_adt=None):
         if not self.dubbele_key: #Normal Insert on ID
