@@ -6,7 +6,7 @@ The code is licensed under:
 
 # MIT License
 
-Copyright (c) 2024 Anas Stitou, Emil Lambert, Tibo Verreycken, Kars Christian van Velzen
+Copyright (c) 2024 Anas Stitou, Emil Lambert, Tibo Verreycken, Kars van Velzen
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
