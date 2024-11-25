@@ -1,3 +1,7 @@
+# Datastructures-and-Abstraction
+
+By: Anas Stitou, Emil Lambert, Tibo Verreycken, Kars Christian van Velzen
+
 # Course Info
 
 [Fall, 2023 | Gegevensabstractie en -structuren, 1001WETGES]
