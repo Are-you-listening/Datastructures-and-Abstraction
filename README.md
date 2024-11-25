@@ -6,7 +6,7 @@ The goals off this project for this course consists of (but not limited to): Sho
 
 You can find detailed information about the course using this [link](https://www.uantwerpen.be/nl/studeren/aanbod/alle-opleidingen/informatica-studeren/bachelor/studieprogramma/) (Dutch)
 
-# Product Goal
+# Product Requirements
 
 Implementing a backend ticket system for a fictionial theather. 
 
