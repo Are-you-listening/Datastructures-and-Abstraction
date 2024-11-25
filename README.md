@@ -1,5 +1,7 @@
 # Course Info
 
+[Fall, 2023 | Gegevensabstractie en -structuren, 1001WETGES]
+
 The goals off this project for this course consists of (but not limited to): Show expertise in different datastructures, Learning how to program in group, Developing an analytical mindset.
 
 You can find detailed information about the course using this [link](https://www.uantwerpen.be/nl/studeren/aanbod/alle-opleidingen/informatica-studeren/bachelor/studieprogramma/) (Dutch)
