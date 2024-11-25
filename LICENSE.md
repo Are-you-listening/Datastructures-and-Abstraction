@@ -1,6 +1,6 @@
 # Disclaimer
 
-We do not own any rights to the files provided in GUI_Images/*. We call upon the educational use of any potentially copyrighted materials. Throughout our files and code you may find credits to the original authors.
+We do not own any rights to the files provided in GUI_Images/*. Neither do we own any rights to the used libraries. We call upon the educational use of any potentially copyrighted materials. Throughout our files and code you may find credits to the original authors.
 
 The code is licensed under:
 
