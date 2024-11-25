@@ -1,6 +1,6 @@
 # Datastructures-and-Abstraction
-
-By: Anas Stitou, Emil Lambert, Tibo Verreycken, Kars Christian van Velzen
+> A first years assigment to implement a ticket system for a fictional theatre using a set of self-implemented datastructures.
+> > By Anas Stitou, Emil Lambert, Tibo Verreycken & Kars van Velzen
 
 # Course Info
 
